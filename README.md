@@ -2,8 +2,12 @@
 
 Mini-projet *IA for Software Engineering* · Groupe 6
 
-Branche `module-1-users` : **le socle du projet** et le module 1 (gestion des utilisateurs), terminé.
+Ce dépôt contient **le socle du projet** et deux modules terminés :
+le module 1 (gestion des utilisateurs) et le module 2 (planification des voyages).
 **Membres du groupe : lisez [INTEGRATION.md](INTEGRATION.md) pour ajouter votre module.**
+
+Branches : `main` = intégration de tous les modules (**c'est elle qu'on lance**) ·
+`module-1-users` = module 1 seul (socle) · `module-2-trips` = module 2 seul · une branche par module.
 
 - **Backend** : Spring Boot 3.5 (Java 21), Spring Security + JWT, JPA + MySQL (XAMPP)
 - **Frontend** : Angular 20 + Angular Material, thème de la charte TravelMate
@@ -80,9 +84,13 @@ Module 1 (`users/`) :
 | `users/event` | `UserDeletedEvent` : prévient les autres modules qu'un utilisateur est supprimé |
 | `users/config` | `DataSeeder` : comptes de test |
 
+Module 2 (`trips/`) : même organisation `entity / repository / dto / service / controller`.
+La logique est dans `TripService` (voyages) et `TripAiService` (tâche IA).
+
 ### Frontend (`frontend/src/app`)
 | Dossier | Rôle |
 |---|---|
+| `trips` | Module 2 : page « Mes voyages » (bloc IA, créer / modifier, liste, supprimer) |
 | `pages/login`, `pages/register` | Connexion et inscription |
 | `pages/preferences` | Préférences de voyage + **bloc IA** |
 | `pages/profile` | Modifier ses infos, son mot de passe, supprimer son compte |
@@ -108,14 +116,17 @@ Module 1 (`users/`) :
 | PUT | `/api/admin/users/{id}/role` | ADMIN | `{ "role": "ADMIN" }` |
 | PUT | `/api/admin/users/{id}/status` | ADMIN | `{ "active": false }` |
 | DELETE | `/api/admin/users/{id}` | ADMIN | Supprimer un utilisateur |
+| GET / POST | `/api/trips` | connecté | Module 2 : mes voyages / créer un voyage |
+| PUT / DELETE | `/api/trips/{id}` | connecté | Module 2 : modifier / supprimer un de mes voyages |
+| POST | `/api/trips/ai/fill-form` | connecté | **Tâche IA du module 2** |
 
 Les requêtes protégées doivent contenir l'en-tête `Authorization: Bearer <jeton>`.
 
 ---
 
-## 4. La tâche IA expliquée
+## 4. Les tâches IA expliquées
 
-Une tâche IA suit 3 étapes. L'étape 2 est commune à tous les modules : `ai/OllamaClient.java`
+Les deux tâches suivent les mêmes 3 étapes. L'étape 2 est commune : `ai/OllamaClient.java`
 appelle `POST http://localhost:11434/api/generate` avec `"format": "json"` (le modèle doit
 répondre en JSON) et `"temperature": 0` (réponses stables).
 
@@ -145,9 +156,41 @@ POST /api/ai/analyze-profile
 « Appliquer », peut encore modifier, puis enregistre. C'est la règle de la charte
 « Review every suggestion before adding it ».
 
+### Module 2 : le voyage en texte libre
+
+> L'utilisateur écrit sa demande en texte libre (« 5 jours à Rome, 800 € ») et l'IA remplit le formulaire.
+
+Tout se passe dans `backend/.../trips/service/TripAiService.java`. Idée clé : **le modèle extrait,
+Java calcule**. Un modèle de langage se trompe facilement en calcul de dates ou en divisions ;
+on lui demande seulement de lire la phrase, et le code fait le reste.
+
+1. **Le prompt** : on donne la date du jour et on demande la destination, la date de début,
+   la durée, le budget, les centres d'intérêt (liste fermée), sans rien inventer.
+2. **L'appel à Ollama** via `OllamaClient`.
+3. **La vérification et les calculs** :
+   - destination écrite proprement (« ROME » → « Rome ») ;
+   - date de début absente ou passée → dans 7 jours ;
+   - date de fin = début + durée (« 5 jours » du 31/10 au 04/11) ; durée absente → 7 jours, confiance baissée ;
+   - niveau de budget calculé à partir du **budget par jour** : moins de 80 € → ECONOMIQUE,
+     jusqu'à 200 € → MOYEN, au-delà → LUXE. Sans montant, on garde le niveau déduit des mots (« pas cher »).
+
+Exemple :
+```
+POST /api/trips/ai/fill-form
+{ "text": "5 jours à Rome, 800 €" }
+
+→ { "destination": "Rome", "startDate": "2026-10-31", "endDate": "2026-11-04",
+    "budget": 800, "budgetLevel": "MOYEN", "interests": [], "confidence": 0.75,
+    "explanation": "5 jours à Rome ; budget de 800 €." }
+```
+
+Là aussi, rien n'est enregistré : l'utilisateur clique « Remplir le formulaire », vérifie, puis crée le voyage.
+Si l'IA ne trouve aucun centre d'intérêt, le formulaire garde ceux des préférences du module 1.
+
 ### Les tests
 
-L'étape 3 est testée **sans lancer Ollama** dans `AiServiceTest.java` :
+Les étapes 3 des deux tâches sont testées **sans lancer Ollama** (8 tests) :
+`AiServiceTest.java` (module 1) et `TripAiServiceTest.java` (module 2).
 ```
 cd backend
 mvn test

@@ -5,6 +5,7 @@ import { LoginComponent } from './pages/login/login.component';
 import { PreferencesComponent } from './pages/preferences/preferences.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { RegisterComponent } from './pages/register/register.component';
+import { TripsComponent } from './trips/trips.component';
 
 export const routes: Routes = [
   // ----- Module 1 : utilisateurs -----
@@ -14,7 +15,10 @@ export const routes: Routes = [
   { path: 'profil', component: ProfileComponent, canActivate: [authGuard] },
   { path: 'admin', component: AdminComponent, canActivate: [authGuard, adminGuard] },
 
-  // ----- Modules 2 a 6 : ajoutez vos routes ici, avec canActivate: [authGuard] -----
+  // ----- Module 2 : planification des voyages -----
+  { path: 'voyages', component: TripsComponent, canActivate: [authGuard] },
+
+  // ----- Modules 3 a 6 : ajoutez vos routes ici, avec canActivate: [authGuard] -----
 
   { path: '', redirectTo: 'preferences', pathMatch: 'full' },
   { path: '**', redirectTo: 'preferences' },

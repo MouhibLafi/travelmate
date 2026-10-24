@@ -1,0 +1,177 @@
+<div class="page page-narrow">
+  <header class="page-header">
+    <p class="caption">Planification</p>
+    <h1>Mes voyages</h1>
+    <p>Décrivez votre voyage en une phrase ou remplissez le formulaire vous-même.</p>
+  </header>
+
+  <!-- ===================== Bloc IA (violet = reserve a l'IA) ===================== -->
+  <section class="ai-card">
+    <div class="ai-inner">
+      <p class="ai-label"><tm-icon name="sparkles" [size]="16"></tm-icon> TravelMate AI</p>
+      <h3>Votre voyage en une phrase</h3>
+      <p class="ai-sub">L'IA (llama3, en local) remplit le formulaire à votre place. Vous vérifiez avant de créer le voyage.</p>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Où et comment voulez-vous partir ?</mat-label>
+        <textarea matInput rows="2" maxlength="500" name="aiText" [(ngModel)]="aiText"
+                  placeholder="Ex. : 5 jours à Rome, 800 €, pour visiter les musées."></textarea>
+        <mat-hint align="end">{{ aiText.length }} / 500</mat-hint>
+      </mat-form-field>
+
+      <button mat-flat-button class="btn-ai" (click)="analyze()" [disabled]="analyzing || aiText.trim().length < 5">
+        <tm-icon name="sparkles"></tm-icon>
+        {{ analyzing ? 'Analyse en cours…' : 'Remplir avec l’IA' }}
+      </button>
+
+      @if (analyzing) {
+        <mat-progress-bar mode="indeterminate" class="ai-progress"></mat-progress-bar>
+        <p class="small muted">Le premier appel peut prendre quelques secondes (chargement du modèle).</p>
+      }
+
+      @if (aiError) {
+        <div class="alert alert-error"><tm-icon name="alert"></tm-icon> {{ aiError }}</div>
+      }
+
+      <!-- Resultat de l'IA : une SUGGESTION que l'utilisateur accepte ou ignore -->
+      @if (suggestion) {
+        <div class="suggestion">
+          <h4>Suggestion de l'IA</h4>
+
+          <dl class="summary">
+            <dt>Destination</dt>
+            <dd>{{ suggestion.destination ?? 'Non trouvée, à compléter' }}</dd>
+            <dt>Dates</dt>
+            <dd>{{ formatDate(suggestion.startDate) }} → {{ formatDate(suggestion.endDate) }} ({{ getDuration(suggestion) }} jours)</dd>
+            <dt>Budget</dt>
+            <dd>
+              @if (suggestion.budget) { {{ suggestion.budget }} € · {{ getBudgetLabel(suggestion.budgetLevel) }} }
+              @else { Non indiqué }
+            </dd>
+          </dl>
+
+          @if (suggestion.interests.length > 0) {
+            <p class="caption muted">Centres d'intérêt</p>
+            <div class="chips">
+              @for (interest of suggestion.interests; track interest) {
+                <span class="chip chip-ai">{{ getInterestLabel(interest) }}</span>
+              }
+            </div>
+          }
+
+          <p class="caption muted">Confiance du modèle : {{ getConfidencePercent() }} %</p>
+          <div class="meter"><span [style.width.%]="getConfidencePercent()"></span></div>
+
+          @if (suggestion.explanation) {
+            <p class="explanation">« {{ suggestion.explanation }} »</p>
+          }
+
+          <div class="form-actions">
+            <button mat-stroked-button (click)="ignoreSuggestion()">Ignorer</button>
+            <button mat-flat-button class="btn-ai" (click)="applySuggestion()">
+              <tm-icon name="check"></tm-icon> Remplir le formulaire
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+  </section>
+
+  @if (successMessage) { <div class="alert alert-success"><tm-icon name="check"></tm-icon> {{ successMessage }}</div> }
+  @if (errorMessage) { <div class="alert alert-error"><tm-icon name="alert"></tm-icon> {{ errorMessage }}</div> }
+
+  <!-- ===================== Formulaire : creer ou modifier ===================== -->
+  <section class="card">
+    <div class="card-header">
+      <span class="icon-badge"><tm-icon [name]="editingId === null ? 'plus' : 'edit'"></tm-icon></span>
+      <div>
+        <h3>{{ editingId === null ? 'Nouveau voyage' : 'Modifier le voyage' }}</h3>
+        <p class="small muted">
+          {{ editingId === null ? 'Centres d’intérêt et budget préremplis avec vos préférences.' : 'Modifiez puis enregistrez.' }}
+        </p>
+      </div>
+    </div>
+
+    <form #tripForm="ngForm" (ngSubmit)="save()">
+      <mat-form-field appearance="outline">
+        <mat-label>Destination</mat-label>
+        <input matInput name="destination" [(ngModel)]="destination" required />
+      </mat-form-field>
+      <div class="form-row">
+        <mat-form-field appearance="outline">
+          <mat-label>Date de début</mat-label>
+          <input matInput type="date" name="startDate" [(ngModel)]="startDate" required />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Date de fin</mat-label>
+          <input matInput type="date" name="endDate" [(ngModel)]="endDate" [min]="startDate" required />
+        </mat-form-field>
+      </div>
+      <mat-form-field appearance="outline">
+        <mat-label>Budget total (€)</mat-label>
+        <input matInput type="number" min="1" name="budget" [(ngModel)]="budget" />
+      </mat-form-field>
+
+      <h4>Centres d'intérêt</h4>
+      <div class="chips">
+        @for (interest of interestsList; track interest.value) {
+          <button type="button" class="interest" [class.selected]="interests.includes(interest.value)"
+                  (click)="toggleInterest(interest.value)">
+            <tm-icon [name]="interests.includes(interest.value) ? 'check' : interest.icon" [size]="18"></tm-icon>
+            {{ interest.label }}
+          </button>
+        }
+      </div>
+
+      <h4>Niveau de budget</h4>
+      <div class="chips">
+        @for (b of budgetsList; track b.value) {
+          <button type="button" class="interest" [class.selected]="budgetLevel === b.value"
+                  (click)="budgetLevel = b.value">
+            <tm-icon name="wallet" [size]="18"></tm-icon> {{ b.label }}
+          </button>
+        }
+      </div>
+
+      <div class="form-actions">
+        @if (editingId !== null) {
+          <button mat-stroked-button type="button" (click)="cancelEdit()">Annuler</button>
+        }
+        <button mat-flat-button type="submit" [disabled]="tripForm.invalid">
+          {{ editingId === null ? 'Créer le voyage' : 'Enregistrer les modifications' }}
+        </button>
+      </div>
+    </form>
+  </section>
+
+  <!-- ===================== Liste ===================== -->
+  <section class="card">
+    <h3>Mes voyages ({{ trips.length }})</h3>
+    @for (trip of trips; track trip.id) {
+      <div class="trip" [class.editing]="editingId === trip.id">
+        <div>
+          <strong>{{ trip.destination }}</strong>
+          <p class="small muted">
+            {{ formatDate(trip.startDate) }} → {{ formatDate(trip.endDate) }} · {{ getDuration(trip) }} jours
+            @if (trip.budget) { · {{ trip.budget }} € } · {{ getBudgetLabel(trip.budgetLevel) }}
+          </p>
+          <div class="chips">
+            @for (interest of trip.interests; track interest) {
+              <span class="chip chip-navy">{{ getInterestLabel(interest) }}</span>
+            }
+          </div>
+        </div>
+        <div class="trip-actions">
+          <button class="icon-btn" (click)="edit(trip)" title="Modifier" aria-label="Modifier le voyage">
+            <tm-icon name="edit"></tm-icon>
+          </button>
+          <button class="icon-btn danger" (click)="delete(trip)" title="Supprimer" aria-label="Supprimer le voyage">
+            <tm-icon name="trash"></tm-icon>
+          </button>
+        </div>
+      </div>
+    } @empty {
+      <p class="small muted">Aucun voyage pour le moment.</p>
+    }
+  </section>
+</div>

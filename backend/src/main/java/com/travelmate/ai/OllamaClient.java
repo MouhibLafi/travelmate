@@ -12,7 +12,7 @@ import java.util.Map;
 /*
  * Client Ollama COMMUN a tous les modules (llama3 en local).
  * Chaque module ecrit son prompt, appelle generateJson(prompt), puis verifie la reponse.
- * Exemple : users/service/AiService.java (module 1).
+ * Exemples : users/service/AiService.java (module 1), trips/service/TripAiService.java (module 2).
  */
 @Component
 public class OllamaClient {

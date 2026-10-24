@@ -115,7 +115,7 @@ Un seul backend (port **8080**), un seul frontend (port **4200**), une seule bas
 4. `cd frontend` puis `npm install` (une seule fois) et `ng serve`.
 5. http://localhost:4200, connexion `admin@travelmate.tn` / `admin123`.
 
-Le module 2 (`trips/`) n'existe que sur les branches `module-2-trips` et `main`.
+Pour lancer l'application, utilisez toujours la branche **`main`** : c'est la seule qui contient tout.
 
 ---
 
@@ -125,42 +125,87 @@ Dépôt : https://github.com/MouhibLafi/travelmate
 
 | Branche | Contenu |
 |---|---|
-| `main` | **Intégration** : le socle + tous les modules fusionnés. C'est la version qu'on présente. |
-| `module-1-users` | Module 1 seul (le socle) |
-| `module-2-trips` | Module 2 (part du module 1) |
-| `module-3-activities` | Module 3 (à créer) |
-| `module-4-restaurants` | Module 4 (à créer) |
-| `module-5-stays` | Module 5 (à créer) |
-| `module-6-itinerary` | Module 6 (à créer) |
+| `main` | **Intégration** : le socle + tous les modules + leur branchement (routes, menu). C'est la version qu'on lance et qu'on présente. |
+| `module-1-users` | Module 1 seul, qui est aussi le socle (security, exception, ai, styles) |
+| `module-2-trips` | **Uniquement** le code du module 2 (`trips/`) + `docs/module-2-trips.md` |
+| `module-3-activities` | **Uniquement** le code du module 3 (à créer) |
+| `module-4-restaurants` | **Uniquement** le code du module 4 (à créer) |
+| `module-5-stays` | **Uniquement** le code du module 5 (à créer) |
+| `module-6-itinerary` | **Uniquement** le code du module 6 (à créer) |
 
-**On ne travaille jamais directement sur `main`.** Chacun travaille sur la branche de son module :
+Une branche de module ne contient **que les dossiers de ce module** : on voit clairement le travail
+de chacun. Elle ne se lance pas seule (elle a besoin du module 1) ; c'est `main` qui assemble tout.
+Exemple à suivre : la branche `module-2-trips`.
+
+### a) Développer son module (sur sa machine)
+
+On développe sur une branche locale qui part de `main`, pour pouvoir lancer et tester l'application :
 
 ```
 git clone https://github.com/MouhibLafi/travelmate.git
 cd travelmate
-git checkout -b module-3-activities main      # votre branche part de main (le module 1 y est deja)
-# ... travail, puis :
+git checkout -b dev-module-3 main
+# ... travail dans backend/.../activities/ et frontend/src/app/activities/
+#     (ajoutez aussi votre route et votre lien de menu pour tester)
 git add .
 git commit -m "Module 3 : catalogue des activités"
-git push -u origin module-3-activities
 ```
 
-**Intégrer son module** : sur GitHub, ouvrez une **Pull Request** de votre branche vers `main`.
-Avant de la fusionner :
-- `mvn test` passe dans `backend`
-- `ng build` passe dans `frontend`
-- vous avez testé votre module **et** la connexion / suppression d'un utilisateur
+### b) Publier son module seul sur sa branche
 
-**Récupérer le travail des autres** (à faire souvent, pour éviter les conflits) :
+**La première fois** : on crée la branche `module-3-activities` avec uniquement ses dossiers.
+
+```
+git checkout --orphan module-3-activities
+git rm -r -q --cached .
+git add backend/src/main/java/com/travelmate/activities backend/src/test/java/com/travelmate/activities frontend/src/app/activities docs/module-3-activities.md
+git commit -m "Module 3 : catalogue des activités"
+git push -u origin module-3-activities
+git checkout -f dev-module-3
+```
+
+**Les fois suivantes** (après avoir commité dans `dev-module-3`) :
+
+```
+git checkout module-3-activities
+git checkout dev-module-3 -- backend/src/main/java/com/travelmate/activities backend/src/test/java/com/travelmate/activities frontend/src/app/activities docs/module-3-activities.md
+git commit -m "Module 3 : recherche et filtres"
+git push
+git checkout dev-module-3
+```
+
+Dans `docs/module-3-activities.md`, décrivez votre module et **les lignes à ajouter dans `main`**
+pour le brancher : votre route (`app.routes.ts`), votre lien de menu (`navbar.component.html`),
+et tout changement demandé au socle (ex. une nouvelle valeur d'`Interest`).
+Modèle : `docs/module-2-trips.md`.
+
+### c) Intégrer un module dans `main` (responsable de l'intégration)
+
 ```
 git checkout main
 git pull
-git checkout module-3-activities
-git merge main
+git fetch origin
+git merge --allow-unrelated-histories --no-commit origin/module-3-activities   # la 1re fois
+# git merge --no-commit origin/module-3-activities                             # les fois suivantes
+# ajouter la route et le lien de menu indiqués dans docs/module-3-activities.md, puis :
+#   mvn test (backend)  ·  ng build (frontend)  ·  tester le module et la suppression d'un utilisateur
+git add .
+git commit -m "Intégration du module 3"
+git push
 ```
 
-Fichiers partagés où les conflits sont fréquents : `app.routes.ts`, `navbar.component.html`, `README.md`.
-En cas de conflit, gardez les lignes des **deux** modules.
+### d) Récupérer le travail des autres
+
+Sur votre branche de développement, à faire souvent :
+
+```
+git checkout dev-module-3
+git fetch origin
+git merge origin/main
+```
+
+**On ne pousse jamais directement sur `main`** sans avoir testé l'ensemble.
+En cas de conflit dans `app.routes.ts` ou `navbar.component.html`, gardez les lignes des **deux** modules.
 
 ---
 
@@ -170,6 +215,7 @@ En cas de conflit, gardez les lignes des **deux** modules.
 - [ ] Mes routes commencent par `/api/<module>`
 - [ ] J'utilise `User`, `Interest` et `BudgetLevel` du module 1 (pas de copie)
 - [ ] Si mes données sont liées à un utilisateur : `@EventListener onUserDeleted` ajouté
-- [ ] Ma page est protégée par `authGuard` et a un lien dans la navbar
+- [ ] Ma page est protégée par `authGuard` ; ma route et mon lien de menu sont indiqués dans `docs/module-X-….md`
+- [ ] Ma branche `module-X-…` ne contient que mes dossiers et ma fiche `docs/`
 - [ ] Couleurs et composants de la charte, violet seulement pour l'IA
 - [ ] `mvn test` et `ng build` passent
