@@ -8,7 +8,7 @@
   <!-- ===================== Bloc IA (violet = reserve a l'IA) ===================== -->
   <section class="ai-card">
     <div class="ai-inner">
-      <p class="ai-label"><tm-icon name="sparkles" [size]="16"></tm-icon> TravelMate AI</p>
+      <p class="ai-label"><tm-icon name="sparkles"></tm-icon> TravelMate AI</p>
       <h3>Votre voyage en une phrase</h3>
       <p class="ai-sub">L'IA (llama3, en local) remplit le formulaire à votre place. Vous vérifiez avant de créer le voyage.</p>
 
@@ -95,7 +95,9 @@
     <form #tripForm="ngForm" (ngSubmit)="save()">
       <mat-form-field appearance="outline">
         <mat-label>Destination</mat-label>
-        <input matInput name="destination" [(ngModel)]="destination" required />
+        <tm-icon matPrefix name="map-pin"></tm-icon>
+        <input matInput name="destination" [(ngModel)]="destination" required placeholder="Lisbonne, Portugal" />
+        <mat-hint>Où voulez-vous aller ?</mat-hint>
       </mat-form-field>
       <div class="form-row">
         <mat-form-field appearance="outline">
@@ -109,7 +111,8 @@
       </div>
       <mat-form-field appearance="outline">
         <mat-label>Budget total (€)</mat-label>
-        <input matInput type="number" min="1" name="budget" [(ngModel)]="budget" />
+        <input matInput type="number" min="1" name="budget" [(ngModel)]="budget" placeholder="800" />
+        <mat-hint>Pour tout le voyage (transport, logement, activités)</mat-hint>
       </mat-form-field>
 
       <h4>Centres d'intérêt</h4>
@@ -137,41 +140,53 @@
         @if (editingId !== null) {
           <button mat-stroked-button type="button" (click)="cancelEdit()">Annuler</button>
         }
-        <button mat-flat-button type="submit" [disabled]="tripForm.invalid">
+        <button mat-flat-button class="btn-coral" type="submit" [disabled]="tripForm.invalid">
           {{ editingId === null ? 'Créer le voyage' : 'Enregistrer les modifications' }}
         </button>
       </div>
     </form>
   </section>
 
-  <!-- ===================== Liste ===================== -->
-  <section class="card">
-    <h3>Mes voyages ({{ trips.length }})</h3>
+  <!-- ===================== Liste : une carte par voyage (modele "Your next adventure" de la charte) ===================== -->
+  <h2 class="list-title">Mes voyages ({{ trips.length }})</h2>
+  <div class="trip-grid">
     @for (trip of trips; track trip.id) {
-      <div class="trip" [class.editing]="editingId === trip.id">
-        <div>
-          <strong>{{ trip.destination }}</strong>
-          <p class="small muted">
-            {{ formatDate(trip.startDate) }} → {{ formatDate(trip.endDate) }} · {{ getDuration(trip) }} jours
-            @if (trip.budget) { · {{ trip.budget }} € } · {{ getBudgetLabel(trip.budgetLevel) }}
-          </p>
-          <div class="chips">
-            @for (interest of trip.interests; track interest) {
-              <span class="chip chip-navy">{{ getInterestLabel(interest) }}</span>
-            }
-          </div>
+      <article class="card trip-card" [class.editing]="editingId === trip.id">
+        <p class="caption trip-caption">
+          <tm-icon name="compass"></tm-icon> {{ isPast(trip) ? 'Voyage terminé' : 'Votre prochaine aventure' }}
+        </p>
+        <h3>{{ getDuration(trip) }} jours à {{ trip.destination }}</h3>
+
+        <p class="trip-meta">
+          <tm-icon name="calendar"></tm-icon>
+          {{ formatRange(trip.startDate, trip.endDate) }}
+          @if (trip.budget) { · {{ trip.budget }} € }
+        </p>
+
+        <!-- Chips comme la charte : niveau de budget en teal clair, centres d'interet en gris clair -->
+        <div class="chips">
+          @if (trip.budgetLevel) {
+            <span class="chip chip-teal">{{ getBudgetLabel(trip.budgetLevel) }}</span>
+          }
+          @for (interest of trip.interests; track interest) {
+            <span class="chip chip-cloud">{{ getInterestLabel(interest) }}</span>
+          }
         </div>
+
         <div class="trip-actions">
-          <button class="icon-btn" (click)="edit(trip)" title="Modifier" aria-label="Modifier le voyage">
-            <tm-icon name="edit"></tm-icon>
-          </button>
           <button class="icon-btn danger" (click)="delete(trip)" title="Supprimer" aria-label="Supprimer le voyage">
             <tm-icon name="trash"></tm-icon>
           </button>
+          <button mat-stroked-button (click)="edit(trip)">
+            <tm-icon name="edit"></tm-icon> Modifier
+          </button>
         </div>
-      </div>
+      </article>
     } @empty {
-      <p class="small muted">Aucun voyage pour le moment.</p>
+      <section class="card empty">
+        <span class="icon-badge"><tm-icon name="map-pin"></tm-icon></span>
+        <p>Aucun voyage pour le moment. Décrivez votre prochain voyage à l'IA ou remplissez le formulaire.</p>
+      </section>
     }
-  </section>
+  </div>
 </div>

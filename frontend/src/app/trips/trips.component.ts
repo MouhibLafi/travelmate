@@ -205,6 +205,21 @@ export class TripsComponent implements OnInit {
     return `${day}/${month}/${year}`;
   }
 
+  // "2026-12-12" + "2026-12-15" -> "12–15 déc. 2026" (format court de la charte : "Jun 12–16")
+  formatRange(start: string, end: string): string {
+    const day = (d: string) => new Date(d + 'T00:00').toLocaleDateString('fr-FR', { day: 'numeric' });
+    const dayMonth = (d: string) => new Date(d + 'T00:00').toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
+    const full = (d: string) => new Date(d + 'T00:00').toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' });
+    if (start.slice(0, 7) === end.slice(0, 7)) return `${day(start)}–${full(end)}`;     // meme mois
+    if (start.slice(0, 4) === end.slice(0, 4)) return `${dayMonth(start)} – ${full(end)}`; // meme annee
+    return `${full(start)} – ${full(end)}`;
+  }
+
+  // Voyage deja termine ? (date de fin avant aujourd'hui)
+  isPast(trip: Trip): boolean {
+    return trip.endDate < new Date().toISOString().slice(0, 10);
+  }
+
   // Nombre de jours, jour de depart compris
   getDuration(trip: { startDate: string; endDate: string }): number {
     const ms = new Date(trip.endDate).getTime() - new Date(trip.startDate).getTime();
