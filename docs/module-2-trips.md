@@ -47,3 +47,7 @@ utilisez la branche **`main`**, qui contient tous les modules intégrés.
 - route `voyages` dans `frontend/src/app/app.routes.ts`, protégée par `authGuard`
 - lien « Mes voyages » dans la barre de navigation
 - `TripService.onUserDeleted` : les voyages sont supprimés avec l'utilisateur
+
+## Contributrice
+
+Module développé et intégré par **aniaduor** (Roudaina Saoudi).
