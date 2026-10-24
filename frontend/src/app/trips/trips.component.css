@@ -1,0 +1,38 @@
+/* Le bloc IA (.ai-card, .suggestion, .meter...) est dans styles.scss */
+h4 { margin: 16px 0 12px; font-size: 16px; }
+h3 { margin-bottom: 16px; }
+.page > .alert { margin-bottom: 24px; }
+
+/* Resume de la suggestion de l'IA */
+.summary { display: grid; grid-template-columns: max-content 1fr; gap: 8px 16px; margin: 16px 0 0; font-size: 14px; }
+.summary dt { font-weight: 600; color: var(--tm-navy); }
+.summary dd { margin: 0; }
+
+/* Chips selectionnables (meme style que la page Preferences) */
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.interest {
+  display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 16px;
+  border: 1px solid var(--tm-mist); border-radius: var(--radius-full); background: #fff;
+  font: 500 14px var(--font-body); color: var(--tm-ink); cursor: pointer;
+}
+.interest:hover { border-color: var(--ocean-300); }
+.interest.selected { background: var(--ocean-100); border-color: var(--tm-teal); color: var(--ocean-800); }
+
+form .form-actions { margin-top: 24px; }
+
+/* Une ligne par voyage */
+.trip {
+  display: flex; justify-content: space-between; align-items: flex-start; gap: 16px;
+  padding: 16px 0; border-top: 1px solid var(--tm-mist);
+}
+.trip.editing { background: var(--ocean-50); margin: 0 -24px; padding: 16px 24px; }
+.trip p { margin: 4px 0 8px; }
+.trip-actions { display: flex; gap: 4px; flex: none; }
+.icon-btn {
+  width: 48px; height: 48px; display: grid; place-items: center;
+  border: none; border-radius: var(--radius-8); background: none; color: var(--tm-teal); cursor: pointer;
+}
+.icon-btn:hover { background: var(--ocean-50); }
+.icon-btn.danger { color: var(--tm-error); }
+.icon-btn.danger:hover { background: var(--tint-error); }
+.icon-btn:focus-visible { outline: 2px solid var(--tm-teal); outline-offset: 2px; }
