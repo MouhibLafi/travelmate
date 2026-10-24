@@ -1,0 +1,94 @@
+<div class="page page-narrow">
+  <header class="page-header">
+    <p class="caption">Mon compte</p>
+    <h1>Mon profil</h1>
+    @if (user) {
+      <p>{{ user.email }} · {{ user.role === 'ADMIN' ? 'Administrateur' : 'Voyageur' }}</p>
+    }
+  </header>
+
+  <!-- Informations personnelles -->
+  <section class="card">
+    <div class="card-header">
+      <span class="icon-badge"><tm-icon name="user"></tm-icon></span>
+      <div>
+        <h3>Informations personnelles</h3>
+        <p class="small muted">Ces informations apparaissent sur vos voyages.</p>
+      </div>
+    </div>
+
+    @if (profileMessage) { <div class="alert alert-success"><tm-icon name="check"></tm-icon> {{ profileMessage }}</div> }
+    @if (profileError) { <div class="alert alert-error"><tm-icon name="alert"></tm-icon> {{ profileError }}</div> }
+
+    <form #profileForm="ngForm" (ngSubmit)="saveProfile()">
+      <div class="form-row">
+        <mat-form-field appearance="outline">
+          <mat-label>Prénom</mat-label>
+          <input matInput name="firstName" [(ngModel)]="firstName" required />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Nom</mat-label>
+          <input matInput name="lastName" [(ngModel)]="lastName" required />
+        </mat-form-field>
+      </div>
+      <div class="form-row">
+        <mat-form-field appearance="outline">
+          <mat-label>Email</mat-label>
+          <input matInput [value]="user?.email ?? ''" disabled />
+          <mat-hint>L'email ne peut pas être modifié</mat-hint>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Téléphone</mat-label>
+          <input matInput type="tel" name="phone" [(ngModel)]="phone" />
+        </mat-form-field>
+      </div>
+      <div class="form-actions">
+        <button mat-flat-button type="submit" [disabled]="profileForm.invalid">Enregistrer</button>
+      </div>
+    </form>
+  </section>
+
+  <!-- Mot de passe -->
+  <section class="card">
+    <div class="card-header">
+      <span class="icon-badge"><tm-icon name="lock"></tm-icon></span>
+      <div>
+        <h3>Mot de passe</h3>
+        <p class="small muted">Au moins 6 caractères.</p>
+      </div>
+    </div>
+
+    @if (passwordMessage) { <div class="alert alert-success"><tm-icon name="check"></tm-icon> {{ passwordMessage }}</div> }
+    @if (passwordError) { <div class="alert alert-error"><tm-icon name="alert"></tm-icon> {{ passwordError }}</div> }
+
+    <form #passwordForm="ngForm" (ngSubmit)="changePassword()">
+      <div class="form-row">
+        <mat-form-field appearance="outline">
+          <mat-label>Mot de passe actuel</mat-label>
+          <input matInput type="password" name="currentPassword" [(ngModel)]="currentPassword" required />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Nouveau mot de passe</mat-label>
+          <input matInput type="password" name="newPassword" [(ngModel)]="newPassword" required minlength="6" />
+        </mat-form-field>
+      </div>
+      <div class="form-actions">
+        <button mat-stroked-button type="submit" [disabled]="passwordForm.invalid">Changer le mot de passe</button>
+      </div>
+    </form>
+  </section>
+
+  <!-- Zone dangereuse -->
+  <section class="card">
+    <div class="card-header">
+      <span class="icon-badge danger"><tm-icon name="trash"></tm-icon></span>
+      <div>
+        <h3>Supprimer mon compte</h3>
+        <p class="small muted">Votre compte et vos préférences seront supprimés définitivement.</p>
+      </div>
+    </div>
+    <div class="form-actions">
+      <button mat-stroked-button class="btn-danger" (click)="deleteAccount()">Supprimer mon compte</button>
+    </div>
+  </section>
+</div>

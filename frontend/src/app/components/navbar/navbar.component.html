@@ -1,0 +1,33 @@
+<header class="navbar">
+  <div class="inner">
+    <a routerLink="/preferences" class="logo">
+      <img src="favicon.svg" width="32" height="32" alt="" />
+      <span class="logo-text">TravelMate</span>
+    </a>
+
+    <nav>
+      <a routerLink="/preferences" routerLinkActive="active">
+        <tm-icon name="compass"></tm-icon> <span>Préférences</span>
+      </a>
+      <a routerLink="/profil" routerLinkActive="active">
+        <tm-icon name="user"></tm-icon> <span>Mon profil</span>
+      </a>
+      @if (authService.isAdmin()) {
+        <a routerLink="/admin" routerLinkActive="active">
+          <tm-icon name="users"></tm-icon> <span>Administration</span>
+        </a>
+      }
+    </nav>
+
+    <div class="account">
+      <span class="avatar">{{ getInitials() }}</span>
+      <span class="who">
+        <strong>{{ authService.getUser()?.firstName }}</strong>
+        <small>{{ authService.isAdmin() ? 'Administrateur' : 'Voyageur' }}</small>
+      </span>
+      <button class="logout" (click)="authService.logout()" title="Se déconnecter" aria-label="Se déconnecter">
+        <tm-icon name="log-out"></tm-icon>
+      </button>
+    </div>
+  </div>
+</header>

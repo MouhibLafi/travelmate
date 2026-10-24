@@ -1,0 +1,54 @@
+<div class="auth-page">
+  <!-- Panneau de gauche : la marque -->
+  <aside class="auth-brand">
+    <div class="logo">
+      <img src="favicon.svg" width="40" height="40" alt="" />
+      <span class="logo-text">TravelMate</span>
+    </div>
+    <div>
+      <p class="caption tagline">Planifiez mieux, voyagez mieux.</p>
+      <h1>Un monde de possibilités.<br />Une seule direction.</h1>
+      <p class="lead">Dites-nous qui vous êtes en une phrase : notre IA prépare vos centres d'intérêt et votre budget.</p>
+    </div>
+    <ul>
+      <li><tm-icon name="map-pin"></tm-icon> Vos envies de voyage au même endroit</li>
+      <li><tm-icon name="wallet"></tm-icon> Un budget adapté à votre façon de voyager</li>
+      <li><tm-icon name="sparkles" class="ai"></tm-icon> Des préférences suggérées par l'IA, validées par vous</li>
+    </ul>
+  </aside>
+
+  <!-- Panneau de droite : le formulaire -->
+  <main class="auth-form">
+    <div class="box">
+      <h2>Bon retour parmi nous</h2>
+      <p class="sub">Connectez-vous pour retrouver vos préférences de voyage.</p>
+
+      @if (errorMessage) {
+        <div class="alert alert-error"><tm-icon name="alert"></tm-icon> {{ errorMessage }}</div>
+      }
+
+      <form #loginForm="ngForm" (ngSubmit)="login()">
+        <mat-form-field appearance="outline">
+          <mat-label>Email</mat-label>
+          <input matInput type="email" name="email" [(ngModel)]="email" required email />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Mot de passe</mat-label>
+          <input matInput type="password" name="password" [(ngModel)]="password" required />
+        </mat-form-field>
+
+        <button mat-flat-button class="full" type="submit" [disabled]="loginForm.invalid || loading">
+          {{ loading ? 'Connexion…' : 'Se connecter' }}
+        </button>
+      </form>
+
+      <p class="switch">Pas encore de compte ? <a routerLink="/inscription">Créer un compte</a></p>
+
+      <div class="alert alert-info small">
+        <tm-icon name="info"></tm-icon>
+        <span>Comptes de test : admin&#64;travelmate.tn / admin123 — yasmine&#64;example.com / password123</span>
+      </div>
+    </div>
+  </main>
+</div>

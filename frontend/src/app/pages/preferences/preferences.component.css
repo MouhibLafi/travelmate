@@ -1,0 +1,36 @@
+/* Le bloc IA (.ai-card, .suggestion, .meter...) est dans styles.scss : partage par tous les modules */
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+
+/* ----- Preferences ----- */
+.grow { flex: 1; }
+h4 { margin: 24px 0 12px; font-size: 16px; }
+.card-header + h4 { margin-top: 0; }
+
+/* Centres d'interet : boutons arrondis (chips) */
+.interests { display: flex; flex-wrap: wrap; gap: 8px; }
+.interest {
+  display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 16px;
+  border: 1px solid var(--tm-mist); border-radius: 999px; background: #fff;
+  font: 500 14px var(--font-body); color: var(--tm-ink); cursor: pointer;
+}
+.interest:hover { border-color: var(--ocean-300); }
+.interest.selected { background: var(--ocean-100); border-color: var(--tm-teal); color: var(--ocean-800); }
+
+/* Budget : 3 cartes */
+.budgets { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.budget {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 4px; padding: 16px;
+  border: 1px solid var(--tm-mist); border-radius: 8px; background: #fff; cursor: pointer;
+  text-align: left; font-family: var(--font-body); color: var(--tm-teal);
+}
+.budget strong { font: 600 16px var(--font-heading); color: var(--tm-navy); }
+.budget small { font-size: 12px; color: var(--tm-ink); }
+.budget:hover { border-color: var(--ocean-300); }
+.budget.selected { border: 2px solid var(--tm-teal); background: var(--ocean-50); padding: 15px; }
+
+.card .alert { margin-top: 24px; }
+.card > .form-actions { margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--tm-mist); }
+
+@media (max-width: 640px) {
+  .budgets { grid-template-columns: 1fr; }
+}

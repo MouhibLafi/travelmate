@@ -1,0 +1,84 @@
+<div class="page">
+  <header class="page-header">
+    <p class="caption">Administration</p>
+    <h1>Utilisateurs</h1>
+    <p>Gérez les rôles et l'accès des comptes TravelMate.</p>
+  </header>
+
+  <!-- Statistiques -->
+  <div class="stats">
+    <div class="card stat"><span>Total</span><strong>{{ users.length }}</strong></div>
+    <div class="card stat"><span>Voyageurs</span><strong>{{ countByRole('VOYAGEUR') }}</strong></div>
+    <div class="card stat"><span>Administrateurs</span><strong>{{ countByRole('ADMIN') }}</strong></div>
+    <div class="card stat"><span>Comptes désactivés</span><strong>{{ countInactive() }}</strong></div>
+  </div>
+
+  <section class="card">
+    <!-- Recherche -->
+    <form class="search" (ngSubmit)="loadUsers()">
+      <mat-form-field appearance="outline">
+        <mat-label>Rechercher (nom, prénom, email)</mat-label>
+        <input matInput name="search" [(ngModel)]="search" />
+      </mat-form-field>
+      <button mat-flat-button type="submit"><tm-icon name="search"></tm-icon> Rechercher</button>
+    </form>
+
+    @if (errorMessage) {
+      <div class="alert alert-error"><tm-icon name="alert"></tm-icon> {{ errorMessage }}</div>
+    }
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Utilisateur</th>
+            <th>Rôle</th>
+            <th>Statut</th>
+            <th class="right">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (user of users; track user.id) {
+            <tr [class.inactive]="!user.active">
+              <td>
+                <div class="person">
+                  <span class="avatar">{{ user.firstName[0] }}{{ user.lastName[0] }}</span>
+                  <div>
+                    <strong>{{ user.firstName }} {{ user.lastName }}</strong>
+                    @if (isMe(user)) { <span class="chip chip-navy">Vous</span> }
+                    <div class="muted">{{ user.email }}</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <select [ngModel]="user.role" (ngModelChange)="changeRole(user, $event)" [disabled]="isMe(user)"
+                        [name]="'role' + user.id" aria-label="Rôle">
+                  <option value="VOYAGEUR">Voyageur</option>
+                  <option value="ADMIN">Administrateur</option>
+                </select>
+              </td>
+              <td>
+                @if (user.active) {
+                  <span class="chip chip-ok"><tm-icon name="check" [size]="14"></tm-icon> Actif</span>
+                } @else {
+                  <span class="chip chip-off"><tm-icon name="lock" [size]="14"></tm-icon> Désactivé</span>
+                }
+              </td>
+              <td class="right">
+                <button mat-stroked-button (click)="toggleStatus(user)" [disabled]="isMe(user)">
+                  {{ user.active ? 'Désactiver' : 'Activer' }}
+                </button>
+                <button class="icon-btn" (click)="deleteUser(user)" [disabled]="isMe(user)"
+                        title="Supprimer" aria-label="Supprimer l'utilisateur">
+                  <tm-icon name="trash"></tm-icon>
+                </button>
+              </td>
+            </tr>
+          } @empty {
+            <tr><td colspan="4" class="empty">Aucun utilisateur trouvé.</td></tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>

@@ -1,0 +1,260 @@
+@use '@angular/material' as mat;
+
+/* =====================================================================
+   TravelMate Design System v1.0 -> Angular Material
+   Couleurs, typo, espacements et rayons repris de la charte graphique.
+   ===================================================================== */
+
+:root {
+  /* Marque */
+  --tm-teal: #0E7C86;          /* Primary Ocean Teal : actions, liens, etats actifs */
+  --tm-navy: #12263A;          /* Secondary Deep Navy : titres, navigation */
+  --tm-coral: #FF6B4A;         /* Accent Sunset Coral : CTA de conversion (texte navy) */
+  --tm-violet: #7C5CFF;        /* AI Violet : UNIQUEMENT pour l'IA */
+  --tm-ai-gradient: linear-gradient(90deg, #7C5CFF 0%, #0E7C86 100%);
+
+  /* Echelle ocean */
+  --ocean-50: #EFF9F9;  --ocean-100: #D8EFF0; --ocean-200: #B1DFE2; --ocean-300: #7CC9CE;
+  --ocean-400: #40ABB4; --ocean-500: #188F99; --ocean-600: #0E7C86; --ocean-700: #10636D;
+  --ocean-800: #124E57; --ocean-900: #123F47;
+
+  /* Neutres */
+  --tm-white: #FFFFFF; --tm-cloud: #F6F8FA; --tm-mist: #E4E8EE; --tm-slate: #8A94A6; --tm-ink: #1F2933;
+
+  /* Feedback (toujours avec un mot + une icone) */
+  --tm-success: #22A06B; --tm-warning: #F5A524; --tm-error: #E5484D; --tm-info: #3B82F6;
+
+  /* Teintes claires calculees a partir des couleurs de la charte (fonds d alertes et de chips) */
+  --tint-error: color-mix(in srgb, var(--tm-error) 10%, #FFFFFF);
+  --tint-success: color-mix(in srgb, var(--tm-success) 10%, #FFFFFF);
+  --tint-warning: color-mix(in srgb, var(--tm-warning) 12%, #FFFFFF);
+  --tint-info: color-mix(in srgb, var(--tm-info) 10%, #FFFFFF);
+  --tint-ai: color-mix(in srgb, var(--tm-violet) 12%, #FFFFFF);
+  --tint-ai-soft: color-mix(in srgb, var(--tm-violet) 5%, #FFFFFF);
+  --tint-ai-line: color-mix(in srgb, var(--tm-violet) 25%, #FFFFFF);
+
+  /* Espacements (grille 8px, micro-pas 4px) */
+  --space-4: 4px; --space-8: 8px; --space-12: 12px; --space-16: 16px;
+  --space-24: 24px; --space-32: 32px; --space-48: 48px; --space-64: 64px;
+
+  /* Rayons et elevations */
+  --radius-8: 8px; --radius-16: 16px; --radius-full: 999px;
+  --shadow-sm: 0 2px 4px 0 rgba(18, 38, 58, .08);
+  --shadow-md: 0 8px 24px 0 rgba(18, 38, 58, .12);
+  --shadow-lg: 0 16px 48px 0 rgba(18, 38, 58, .16);
+
+  --font-heading: 'Poppins', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+}
+
+html {
+  color-scheme: light;
+  @include mat.theme((
+    color: (primary: mat.$cyan-palette, tertiary: mat.$orange-palette, theme-type: light),
+    typography: (plain-family: 'Inter', brand-family: 'Poppins'),
+    density: 0,
+  ));
+
+  /* On remplace les couleurs systeme Material par celles de la charte */
+  --mat-sys-primary: #0E7C86;
+  --mat-sys-on-primary: #FFFFFF;
+  --mat-sys-primary-container: #D8EFF0;
+  --mat-sys-on-primary-container: #123F47;
+  --mat-sys-secondary-container: #D8EFF0;   /* chips selectionnees = ocean-100 */
+  --mat-sys-on-secondary-container: #123F47;
+  --mat-sys-surface: #FFFFFF;
+  --mat-sys-surface-container-lowest: #FFFFFF;
+  --mat-sys-surface-container-low: #FFFFFF;
+  --mat-sys-surface-container: #FFFFFF;
+  --mat-sys-surface-container-high: #FFFFFF;
+  --mat-sys-on-surface: #1F2933;
+  --mat-sys-on-surface-variant: #1F2933;    /* Ink : labels et aides des champs (petit texte essentiel) */
+  --mat-sys-outline: #8A94A6;               /* Slate : bordure des champs, contraste 3:1 sur blanc */
+  --mat-sys-outline-variant: #E4E8EE;
+  --mat-sys-error: #E5484D;
+
+  /* Rayons de la charte : 8px pour boutons et champs (Material 3 les arrondit par defaut) */
+  --mat-button-filled-container-shape: 8px;
+  --mat-button-outlined-container-shape: 8px;
+  --mat-button-text-container-shape: 8px;
+  --mat-button-protected-container-shape: 8px;
+  --mdc-filled-button-container-shape: 8px;
+  --mdc-outlined-button-container-shape: 8px;
+  --mdc-text-button-container-shape: 8px;
+  --mat-form-field-outlined-container-shape: 8px;
+  --mdc-outlined-text-field-container-shape: 8px;
+  --mat-dialog-container-shape: 16px;
+  --mdc-dialog-container-shape: 16px;
+}
+
+* { box-sizing: border-box; }
+
+html, body { height: 100%; }
+body {
+  margin: 0;
+  background: var(--tm-cloud);
+  color: var(--tm-ink);
+  font: 400 16px/24px var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 { font-family: var(--font-heading); color: var(--tm-navy); margin: 0; }
+h1 { font-size: 36px; line-height: 48px; font-weight: 600; }
+h2 { font-size: 28px; line-height: 40px; font-weight: 600; }
+h3 { font-size: 22px; line-height: 32px; font-weight: 600; }
+h4 { font-size: 18px; line-height: 28px; font-weight: 500; }
+p { margin: 0; }
+a { color: var(--tm-teal); font-weight: 500; text-decoration: none; }
+a:hover { color: var(--ocean-700); text-decoration: underline; }
+
+.small { font-size: 14px; line-height: 20px; }
+.caption { font-size: 12px; line-height: 16px; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; }
+.muted { color: var(--tm-ink); }   /* petit texte : Ink (Slate est trop clair, voir charte) */
+
+/* Boutons : 48px de haut, 24px de marge interne, Inter 14/20 600 */
+.mat-mdc-button-base.mdc-button {
+  height: 48px;
+  padding: 0 var(--space-24);
+  border-radius: var(--radius-8);
+  font: 600 14px/20px var(--font-body);
+  letter-spacing: 0;
+}
+.mat-mdc-button-base tm-icon { margin-right: var(--space-8); }
+.mat-mdc-button-base:focus-visible { outline: 2px solid var(--tm-teal); outline-offset: 2px; }
+
+/* CTA de conversion : coral + texte navy (jamais blanc) */
+.btn-coral.mat-mdc-button-base.mdc-button {
+  background: var(--tm-coral);
+  color: var(--tm-navy);
+}
+.btn-coral.mat-mdc-button-base.mdc-button:hover { box-shadow: var(--shadow-md); }
+
+/* Bouton IA : degrade violet -> teal, reserve aux fonctions IA */
+.btn-ai.mat-mdc-button-base.mdc-button {
+  background: var(--tm-ai-gradient);
+  color: #fff;
+}
+.btn-ai.mat-mdc-button-base.mdc-button:disabled { opacity: .55; color: #fff; }
+
+/* Bloc IA (tous les modules) : bordure en degrade violet -> teal */
+.ai-card { padding: 2px; border-radius: var(--radius-16); background: var(--tm-ai-gradient); box-shadow: var(--shadow-md); margin-bottom: var(--space-24); }
+.ai-inner { border-radius: var(--radius-16); padding: var(--space-24); background: linear-gradient(180deg, var(--tint-ai-soft) 0%, #FFFFFF 120px); }
+.ai-label {
+  display: inline-flex; align-items: center; gap: 8px; margin-bottom: 8px;
+  font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--tm-violet);
+}
+.ai-sub { color: var(--tm-ink); margin: 8px 0 24px; font-size: 14px; line-height: 20px; }
+.ai-card .btn-ai { margin-top: 8px; }
+.ai-progress { margin: 16px 0 8px; }
+.ai-inner .alert { margin-top: 16px; }
+
+/* Suggestion de l'IA : l'utilisateur la verifie avant de l'appliquer */
+.suggestion { margin-top: 24px; padding: 24px; border: 1px solid var(--tint-ai-line); border-radius: var(--radius-16); background: #fff; }
+.suggestion .caption { margin: 16px 0 8px; }
+.suggestion .form-actions { margin-top: 24px; }
+.meter { height: 8px; border-radius: var(--radius-full); background: var(--tint-ai); overflow: hidden; }
+.meter span { display: block; height: 100%; background: var(--tm-ai-gradient); }
+.explanation { margin-top: 16px; font-style: italic; color: var(--tm-ink); font-size: 14px; }
+
+.btn-danger.mat-mdc-button-base.mdc-button { color: var(--tm-error); border-color: var(--tm-error); }
+
+/* Champs : 56px, label persistant, aide/erreur en dessous */
+.mat-mdc-form-field { width: 100%; }
+.mat-mdc-form-field tm-icon { color: var(--tm-slate); }
+
+/* Cartes : rayon 16, padding 24, ombre sm */
+.card {
+  background: var(--tm-white);
+  border-radius: var(--radius-16);
+  padding: var(--space-24);
+  box-shadow: var(--shadow-sm);
+}
+.card + .card { margin-top: var(--space-24); }
+.card-header { display: flex; align-items: flex-start; gap: var(--space-16); margin-bottom: var(--space-24); }
+.card-header .icon-badge {
+  flex: none; display: grid; place-items: center; width: 40px; height: 40px;
+  border-radius: var(--radius-8); background: var(--ocean-50); color: var(--tm-teal);
+}
+
+.page { max-width: 1200px; margin: 0 auto; padding: var(--space-32) var(--space-24) var(--space-64); }
+.page-narrow { max-width: 792px; }  /* 8 colonnes de la grille */
+.page-header { margin-bottom: var(--space-32); }
+.page-header .caption { color: var(--tm-teal); margin-bottom: var(--space-8); }
+.page-header p { margin-top: var(--space-8); color: var(--tm-ink); }
+
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0 var(--space-16); }
+@media (max-width: 640px) {
+  .form-row { grid-template-columns: 1fr; }
+  .page { padding: var(--space-24) var(--space-16) var(--space-48); }
+  h1 { font-size: 28px; line-height: 40px; }
+}
+.form-actions { display: flex; gap: var(--space-12); justify-content: flex-end; flex-wrap: wrap; margin-top: var(--space-8); }
+
+/* Messages de feedback : couleur + icone + mot */
+.alert {
+  display: flex; gap: var(--space-12); align-items: flex-start;
+  padding: var(--space-12) var(--space-16); border-radius: var(--radius-8);
+  font-size: 14px; line-height: 20px; margin-bottom: var(--space-16);
+  border-left: 4px solid;
+}
+.alert tm-icon { flex: none; margin-top: 0; }
+.alert-error   { background: var(--tint-error);   border-color: var(--tm-error);   color: var(--tm-ink); }
+.alert-success { background: var(--tint-success); border-color: var(--tm-success); color: var(--tm-ink); }
+.alert-warning { background: var(--tint-warning); border-color: var(--tm-warning); color: var(--tm-ink); }
+.alert-info    { background: var(--tint-info);    border-color: var(--tm-info);    color: var(--tm-ink); }
+
+/* Chips (rayon complet) */
+.chip {
+  display: inline-flex; align-items: center; gap: var(--space-4);
+  padding: 2px var(--space-12); border-radius: var(--radius-full);
+  font-size: 12px; line-height: 20px; font-weight: 500;
+  background: var(--ocean-50); color: var(--ocean-800);
+}
+.chip-navy   { background: var(--tm-mist); color: var(--tm-navy); }
+.chip-ai     { background: var(--tint-ai); color: var(--tm-navy); }
+.chip-off    { background: var(--tint-error); color: var(--tm-ink); }
+.chip-ok     { background: var(--tint-success); color: var(--tm-ink); }
+
+
+/* Ecrans de chargement */
+.center-loader { display: grid; place-items: center; padding: var(--space-64); color: var(--tm-slate); }
+
+/* ---------- Pages Connexion / Inscription (partage) ---------- */
+.auth-page { min-height: 100vh; display: grid; grid-template-columns: 5fr 7fr; }
+.auth-brand {
+  color: #fff; padding: 48px; display: flex; flex-direction: column; justify-content: space-between; gap: 48px;
+  background: radial-gradient(120% 80% at 100% 0%, #10636D 0%, transparent 60%), var(--tm-navy);
+}
+.auth-brand .logo-text { color: #fff; }
+.auth-brand h1 { color: #fff; }
+.auth-brand .tagline { color: var(--ocean-300); margin-bottom: 16px; }
+.auth-brand .lead { margin-top: 16px; color: var(--tm-mist); max-width: 420px; }
+.auth-brand ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 16px; font-size: 14px; color: var(--tm-mist); }
+.auth-brand li { display: flex; align-items: center; gap: 12px; }
+.auth-brand li tm-icon { color: var(--ocean-300); }
+.auth-brand li tm-icon.ai { color: var(--tint-ai-line); }
+.auth-form { display: grid; place-items: center; padding: 48px 24px; }
+.auth-form .box { width: 100%; max-width: 440px; }
+.auth-form h2 { margin-bottom: 8px; }
+.auth-form .sub { color: var(--tm-ink); margin-bottom: 32px; }
+.auth-form .full { width: 100%; margin-top: 8px; }
+.auth-form .switch { margin-top: 24px; text-align: center; font-size: 14px; color: var(--tm-ink); }
+@media (max-width: 900px) {
+  .auth-page { grid-template-columns: 1fr; }
+  .auth-brand { padding: 32px 24px; gap: 24px; }
+  .auth-brand ul, .auth-brand .lead { display: none; }
+}
+
+/* Logo : repere de carte + avion en papier */
+.logo { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; }
+.logo-text { font: 600 20px/28px var(--font-heading); color: var(--tm-navy); }
+.logo:hover { text-decoration: none; }
+
+/* Tableau (page admin) */
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; line-height: 20px; }
+th { text-align: left; font: 600 12px/16px var(--font-body); text-transform: uppercase; letter-spacing: .06em;
+     color: var(--tm-ink); padding: 12px 16px; border-bottom: 1px solid var(--tm-mist); }
+td { padding: 12px 16px; border-bottom: 1px solid var(--tm-mist); vertical-align: middle; }
+tr:last-child td { border-bottom: 0; }
+.icon-badge.danger { background: var(--tint-error); color: var(--tm-error); }

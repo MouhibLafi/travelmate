@@ -1,0 +1,17 @@
+# Backend
+backend/target/
+*.class
+.idea/
+*.iml
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/
+
+.DS_Store
+
+# Reglages personnels des outils (chacun garde les siens)
+.claude/
+.github/modernize/
+.vscode/

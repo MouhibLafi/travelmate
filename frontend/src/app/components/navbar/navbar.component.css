@@ -1,0 +1,28 @@
+.navbar { position: sticky; top: 0; z-index: 10; background: #fff; border-bottom: 1px solid var(--tm-mist); }
+.inner { max-width: 1200px; margin: 0 auto; height: 72px; padding: 0 24px; display: flex; align-items: center; gap: 32px; }
+
+nav { display: flex; gap: 4px; flex: 1; }
+nav a {
+  display: inline-flex; align-items: center; gap: 8px; height: 48px; padding: 0 16px;
+  border-radius: 8px; color: var(--tm-ink); font-size: 14px; font-weight: 500;
+}
+nav a:hover { background: var(--ocean-50); text-decoration: none; }
+nav a.active { background: var(--ocean-100); color: var(--ocean-800); font-weight: 600; }
+
+.account { display: flex; align-items: center; gap: 12px; }
+.avatar {
+  display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%;
+  background: var(--tm-navy); color: #fff; font: 600 14px var(--font-heading);
+}
+.who { display: flex; flex-direction: column; font-size: 14px; line-height: 20px; color: var(--tm-navy); }
+.who small { font-size: 12px; line-height: 16px; color: var(--tm-ink); }
+.logout {
+  display: grid; place-items: center; width: 40px; height: 40px; border: 0; border-radius: 8px;
+  background: none; color: var(--tm-ink); cursor: pointer;
+}
+.logout:hover { background: var(--tm-cloud); color: var(--tm-error); }
+
+@media (max-width: 760px) {
+  .inner { gap: 12px; padding: 0 16px; }
+  nav a span, .who, .logo-text { display: none; }
+}

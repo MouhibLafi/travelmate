@@ -1,0 +1,121 @@
+<div class="page page-narrow">
+  <header class="page-header">
+    <p class="caption">Préférences de voyage</p>
+    <h1>Un voyage qui vous ressemble</h1>
+    <p>Vos centres d'intérêt et votre budget guident toutes les suggestions de TravelMate.</p>
+  </header>
+
+  <!-- ===================== Bloc IA (violet = reserve a l'IA) ===================== -->
+  <section class="ai-card">
+    <div class="ai-inner">
+      <p class="ai-label"><tm-icon name="sparkles" [size]="16"></tm-icon> TravelMate AI</p>
+      <h3>Décrivez-vous en une phrase</h3>
+      <p class="ai-sub">L'IA (llama3, en local) en déduit vos centres d'intérêt et votre budget. Vous vérifiez avant d'enregistrer.</p>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Qui êtes-vous en voyage ?</mat-label>
+        <textarea matInput rows="3" maxlength="500" name="description" [(ngModel)]="preferences.description"
+                  placeholder="Ex. : J'adore la plage et la bonne cuisine, avec un petit budget."></textarea>
+        <mat-hint align="end">{{ preferences.description?.length ?? 0 }} / 500</mat-hint>
+      </mat-form-field>
+
+      <button mat-flat-button class="btn-ai" (click)="analyze()"
+              [disabled]="analyzing || (preferences.description?.length ?? 0) < 10">
+        <tm-icon name="sparkles"></tm-icon>
+        {{ analyzing ? 'Analyse en cours…' : "Analyser avec l'IA" }}
+      </button>
+
+      @if (analyzing) {
+        <mat-progress-bar mode="indeterminate" class="ai-progress"></mat-progress-bar>
+        <p class="small muted">Le premier appel peut prendre quelques secondes (chargement du modèle).</p>
+      }
+
+      @if (aiError) {
+        <div class="alert alert-error"><tm-icon name="alert"></tm-icon> {{ aiError }}</div>
+      }
+
+      <!-- Resultat de l'IA : une SUGGESTION que l'utilisateur accepte ou ignore -->
+      @if (suggestion) {
+        <div class="suggestion">
+          <h4>Suggestion de l'IA</h4>
+
+          <p class="caption muted">Centres d'intérêt</p>
+          <div class="chips">
+            @for (interest of suggestion.interests; track interest) {
+              <span class="chip chip-ai">{{ getInterestLabel(interest) }}</span>
+            } @empty {
+              <span class="small muted">Aucun centre d'intérêt détecté</span>
+            }
+          </div>
+
+          <p class="caption muted">Budget</p>
+          <span class="chip chip-ai">{{ getBudgetLabel(suggestion.budgetLevel) }}</span>
+
+          <p class="caption muted">Confiance du modèle : {{ getConfidencePercent() }} %</p>
+          <div class="meter"><span [style.width.%]="getConfidencePercent()"></span></div>
+
+          @if (suggestion.explanation) {
+            <p class="explanation">« {{ suggestion.explanation }} »</p>
+          }
+
+          <div class="form-actions">
+            <button mat-stroked-button (click)="ignoreSuggestion()">Ignorer</button>
+            <button mat-flat-button class="btn-ai" (click)="applySuggestion()">
+              <tm-icon name="check"></tm-icon> Appliquer la suggestion
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+  </section>
+
+  <!-- ===================== Preferences ===================== -->
+  <section class="card">
+    <div class="card-header">
+      <span class="icon-badge"><tm-icon name="compass"></tm-icon></span>
+      <div class="grow">
+        <h3>Mes préférences</h3>
+        <p class="small muted">Choisissez librement, ou partez de la suggestion de l'IA.</p>
+      </div>
+      @if (preferences.aiGenerated) {
+        <span class="chip chip-ai"><tm-icon name="sparkles" [size]="14"></tm-icon> Suggéré par l'IA</span>
+      }
+    </div>
+
+    <h4>Centres d'intérêt</h4>
+    <div class="interests">
+      @for (interest of interestsList; track interest.value) {
+        <button type="button" class="interest" [class.selected]="isSelected(interest.value)"
+                (click)="toggleInterest(interest.value)">
+          <tm-icon [name]="isSelected(interest.value) ? 'check' : interest.icon" [size]="18"></tm-icon>
+          {{ interest.label }}
+        </button>
+      }
+    </div>
+
+    <h4>Niveau de budget</h4>
+    <div class="budgets">
+      @for (budget of budgetsList; track budget.value) {
+        <button type="button" class="budget" [class.selected]="preferences.budgetLevel === budget.value"
+                (click)="selectBudget(budget.value)">
+          <tm-icon name="wallet"></tm-icon>
+          <strong>{{ budget.label }}</strong>
+          <small>{{ budget.hint }}</small>
+        </button>
+      }
+    </div>
+
+    @if (successMessage) {
+      <div class="alert alert-success"><tm-icon name="check"></tm-icon> {{ successMessage }}</div>
+    }
+    @if (errorMessage) {
+      <div class="alert alert-error"><tm-icon name="alert"></tm-icon> {{ errorMessage }}</div>
+    }
+
+    <div class="form-actions">
+      <button mat-flat-button (click)="save()" [disabled]="saving">
+        {{ saving ? 'Enregistrement…' : 'Enregistrer mes préférences' }}
+      </button>
+    </div>
+  </section>
+</div>

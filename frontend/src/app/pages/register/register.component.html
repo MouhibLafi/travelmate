@@ -1,0 +1,70 @@
+<div class="auth-page">
+  <aside class="auth-brand">
+    <div class="logo">
+      <img src="favicon.svg" width="40" height="40" alt="" />
+      <span class="logo-text">TravelMate</span>
+    </div>
+    <div>
+      <p class="caption tagline">Plan smarter, travel better.</p>
+      <h1>Votre prochain chapitre commence ici.</h1>
+      <p class="lead">Créez votre compte puis décrivez-vous en une phrase : l'IA fait le reste.</p>
+    </div>
+    <ul>
+      <li><tm-icon name="map-pin"></tm-icon> Vos envies de voyage au même endroit</li>
+      <li><tm-icon name="wallet"></tm-icon> Un budget adapté à votre façon de voyager</li>
+      <li><tm-icon name="sparkles" class="ai"></tm-icon> Des préférences suggérées par l'IA, validées par vous</li>
+    </ul>
+  </aside>
+
+  <main class="auth-form">
+    <div class="box">
+      <h2>Créer votre compte</h2>
+      <p class="sub">Quelques secondes, et votre prochain voyage commence ici.</p>
+
+      @if (errorMessage) {
+        <div class="alert alert-error"><tm-icon name="alert"></tm-icon> {{ errorMessage }}</div>
+      }
+
+      <form #registerForm="ngForm" (ngSubmit)="register()">
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Prénom</mat-label>
+            <input matInput name="firstName" [(ngModel)]="user.firstName" required />
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Nom</mat-label>
+            <input matInput name="lastName" [(ngModel)]="user.lastName" required />
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Email</mat-label>
+          <input matInput type="email" name="email" [(ngModel)]="user.email" required email />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Téléphone (optionnel)</mat-label>
+          <input matInput type="tel" name="phone" [(ngModel)]="user.phone" placeholder="+216 20 123 456" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Mot de passe</mat-label>
+          <input matInput type="password" name="password" [(ngModel)]="user.password" required minlength="6" />
+          <mat-hint>Au moins 6 caractères</mat-hint>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Confirmer le mot de passe</mat-label>
+          <input matInput type="password" name="confirmPassword" [(ngModel)]="confirmPassword" required />
+        </mat-form-field>
+
+        <!-- Coral = bouton de conversion (texte navy, comme dans la charte) -->
+        <button mat-flat-button class="full btn-coral" type="submit" [disabled]="registerForm.invalid || loading">
+          {{ loading ? 'Création…' : 'Créer mon compte' }}
+        </button>
+      </form>
+
+      <p class="switch">Déjà inscrit ? <a routerLink="/login">Se connecter</a></p>
+    </div>
+  </main>
+</div>
