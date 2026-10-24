@@ -6,7 +6,7 @@
 
 .search { display: flex; gap: 16px; align-items: flex-start; }
 .search mat-form-field { flex: 1; max-width: 480px; }
-.search button { margin-top: 4px; }
+.search button { margin-top: 32px; }   /* aligne avec le champ (label au-dessus : 28px + 4px) */
 
 .person { display: flex; align-items: center; gap: 12px; }
 .avatar {

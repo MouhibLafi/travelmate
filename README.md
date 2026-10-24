@@ -42,13 +42,26 @@ mvn spring-boot:run
 ```
 L'API démarre sur `http://localhost:8080`.
 
-Comptes créés automatiquement au démarrage :
+### Base de démonstration
 
-| Email | Mot de passe | Rôle |
-|---|---|---|
-| admin@travelmate.tn | admin123 | ADMIN |
-| yasmine@example.com | password123 | VOYAGEUR |
-| karim@example.com | password123 | VOYAGEUR |
+Au démarrage, le backend crée une base de test complète (seulement ce qui manque) :
+**20 utilisateurs**, leurs préférences et **22 voyages** (dates calculées à partir d'aujourd'hui).
+
+| Email | Mot de passe | Rôle | Pour tester |
+|---|---|---|---|
+| admin@travelmate.tn | admin123 | ADMIN | Administration |
+| mouhib@travelmate.tn | password123 | ADMIN | 2e administrateur |
+| yasmine@travelmate.tn | password123 | VOYAGEUR | Profil complet, 1 voyage à venir + 1 terminé |
+| karim@travelmate.tn | password123 | VOYAGEUR | Montagne, 2 voyages |
+| oussama@travelmate.tn | password123 | VOYAGEUR | Nouvel inscrit : préférences vides, aucun voyage |
+| bilel@travelmate.tn | password123 | VOYAGEUR | **Compte désactivé** : la connexion est refusée |
+
+Les 14 autres voyageurs (amira, mehdi, ines, youssef, nour, hamza, rania, mariem, aymen, sarra,
+fares, lina, walid, emna `@travelmate.tn`) ont tous le mot de passe `password123`.
+Données : `backend/.../users/config/DataSeeder.java` (module 1) et `trips/config/TripDataSeeder.java` (module 2).
+
+La même base existe en SQL dans `docs/travelmate-demo.sql`, à importer dans phpMyAdmin (onglet **Importer**).
+Ses dates sont figées au jour de l'export ; pour des dates à jour, laissez plutôt le backend créer la base.
 
 ### d) Le frontend
 ```

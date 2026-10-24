@@ -39,7 +39,7 @@
         </mat-form-field>
         <mat-form-field appearance="outline">
           <mat-label>Téléphone</mat-label>
-          <input matInput type="tel" name="phone" [(ngModel)]="phone" />
+          <input matInput type="tel" name="phone" [(ngModel)]="phone" placeholder="+216 20 123 456" />
         </mat-form-field>
       </div>
       <div class="form-actions">
@@ -65,11 +65,11 @@
       <div class="form-row">
         <mat-form-field appearance="outline">
           <mat-label>Mot de passe actuel</mat-label>
-          <input matInput type="password" name="currentPassword" [(ngModel)]="currentPassword" required />
+          <input matInput type="password" name="currentPassword" [(ngModel)]="currentPassword" required placeholder="Votre mot de passe actuel" />
         </mat-form-field>
         <mat-form-field appearance="outline">
           <mat-label>Nouveau mot de passe</mat-label>
-          <input matInput type="password" name="newPassword" [(ngModel)]="newPassword" required minlength="6" />
+          <input matInput type="password" name="newPassword" [(ngModel)]="newPassword" required minlength="6" placeholder="Au moins 6 caractères" />
         </mat-form-field>
       </div>
       <div class="form-actions">

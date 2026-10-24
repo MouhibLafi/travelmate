@@ -2,7 +2,7 @@
   <!-- Panneau de gauche : la marque -->
   <aside class="auth-brand">
     <div class="logo">
-      <img src="favicon.svg" width="40" height="40" alt="" />
+      <img src="logo-white.svg" width="40" height="40" alt="" />
       <span class="logo-text">TravelMate</span>
     </div>
     <div>
@@ -30,12 +30,12 @@
       <form #loginForm="ngForm" (ngSubmit)="login()">
         <mat-form-field appearance="outline">
           <mat-label>Email</mat-label>
-          <input matInput type="email" name="email" [(ngModel)]="email" required email />
+          <input matInput type="email" name="email" [(ngModel)]="email" required email placeholder="vous@exemple.com" />
         </mat-form-field>
 
         <mat-form-field appearance="outline">
           <mat-label>Mot de passe</mat-label>
-          <input matInput type="password" name="password" [(ngModel)]="password" required />
+          <input matInput type="password" name="password" [(ngModel)]="password" required placeholder="Votre mot de passe" />
         </mat-form-field>
 
         <button mat-flat-button class="full" type="submit" [disabled]="loginForm.invalid || loading">
@@ -47,7 +47,7 @@
 
       <div class="alert alert-info small">
         <tm-icon name="info"></tm-icon>
-        <span>Comptes de test : admin&#64;travelmate.tn / admin123 — yasmine&#64;example.com / password123</span>
+        <span>Comptes de test : admin&#64;travelmate.tn / admin123 — yasmine&#64;travelmate.tn / password123</span>
       </div>
     </div>
   </main>

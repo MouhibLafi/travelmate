@@ -27,6 +27,7 @@ const ICONS: { [name: string]: string } = {
   moon: '<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>',
   bike: '<circle cx="18.5" cy="17.5" r="3.5"/><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="15" cy="5" r="1"/><path d="M12 17.5V14l-3-3 4-3 2 3h2"/>',
   plus: '<path d="M5 12h14"/><path d="M12 5v14"/>',
+  calendar: '<path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/>',
   edit: '<path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/>',
 };
 
@@ -35,12 +36,13 @@ const ICONS: { [name: string]: string } = {
   template: `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
          stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-         [attr.width]="size" [attr.height]="size" [innerHTML]="svgContent"></svg>
+         [attr.width]="size" [attr.height]="size" [innerHTML]="svgContent"
+         aria-hidden="true" focusable="false"></svg>
   `,
   styles: `:host { display: inline-flex; line-height: 0; vertical-align: middle; }`,
 })
 export class IconComponent {
-  @Input() size = 20;
+  @Input() size = 24;   // charte : icones Lucide 24 x 24px
   svgContent: SafeHtml = '';
 
   constructor(private sanitizer: DomSanitizer) {}
