@@ -70,6 +70,18 @@ html {
   --mat-sys-on-surface: #1F2933;
   --mat-sys-on-surface-variant: #1F2933;    /* Ink : labels et aides des champs (petit texte essentiel) */
   --mat-sys-outline: #8A94A6;               /* Slate : bordure des champs, contraste 3:1 sur blanc */
+  /* Exemple dans un champ vide : Slate (non essentiel), pour ne pas le confondre avec une valeur saisie */
+  --mat-form-field-outlined-input-text-placeholder-color: #8A94A6;
+  /* Label au-dessus du champ : toujours Ink, comme dans la charte (seule la bordure change d'etat) */
+  --mat-form-field-outlined-label-text-color: #1F2933;
+  --mat-form-field-outlined-hover-label-text-color: #1F2933;
+  --mat-form-field-outlined-focus-label-text-color: #1F2933;
+  --mat-form-field-outlined-error-label-text-color: #1F2933;
+  --mat-form-field-outlined-error-focus-label-text-color: #1F2933;
+  --mat-form-field-outlined-error-hover-label-text-color: #1F2933;
+  /* Bouton contour (charte « View details ») : bordure teal, texte navy */
+  --mat-button-outlined-outline-color: #0E7C86;
+  --mat-button-outlined-label-text-color: #12263A;
   --mat-sys-outline-variant: #E4E8EE;
   --mat-sys-error: #E5484D;
 
@@ -92,6 +104,7 @@ html {
 html, body { height: 100%; }
 body {
   margin: 0;
+  overflow-x: clip;   /* le bandeau navy (100vw) ne doit pas creer de defilement horizontal */
   background: var(--tm-cloud);
   color: var(--tm-ink);
   font: 400 16px/24px var(--font-body);
@@ -122,12 +135,23 @@ a:hover { color: var(--ocean-700); text-decoration: underline; }
 .mat-mdc-button-base tm-icon { margin-right: var(--space-8); }
 .mat-mdc-button-base:focus-visible { outline: 2px solid var(--tm-teal); outline-offset: 2px; }
 
+/* Bouton principal (charte) : Default ocean-600, Hover ocean-700, Pressed ocean-800.
+   On retire le voile clair de Material, qui eclaircirait le bouton au lieu de le foncer. */
+.mat-mdc-unelevated-button:not(.btn-coral):not(.btn-ai) {
+  --mat-button-filled-hover-state-layer-opacity: 0;
+  --mat-button-filled-pressed-state-layer-opacity: 0;
+  --mat-button-filled-ripple-color: transparent;
+}
+.mat-mdc-unelevated-button:not(.btn-coral):not(.btn-ai):not(:disabled):hover { background: var(--ocean-700); }
+.mat-mdc-unelevated-button:not(.btn-coral):not(.btn-ai):not(:disabled):active { background: var(--ocean-800); }
+
 /* CTA de conversion : coral + texte navy (jamais blanc) */
 .btn-coral.mat-mdc-button-base.mdc-button {
   background: var(--tm-coral);
   color: var(--tm-navy);
 }
 .btn-coral.mat-mdc-button-base.mdc-button:hover { box-shadow: var(--shadow-md); }
+.btn-coral.mat-mdc-button-base.mdc-button:disabled { background: var(--tm-mist); color: var(--tm-slate); box-shadow: none; }
 
 /* Bouton IA : degrade violet -> teal, reserve aux fonctions IA */
 .btn-ai.mat-mdc-button-base.mdc-button {
@@ -136,13 +160,15 @@ a:hover { color: var(--ocean-700); text-decoration: underline; }
 }
 .btn-ai.mat-mdc-button-base.mdc-button:disabled { opacity: .55; color: #fff; }
 
-/* Bloc IA (tous les modules) : bordure en degrade violet -> teal */
-.ai-card { padding: 2px; border-radius: var(--radius-16); background: var(--tm-ai-gradient); box-shadow: var(--shadow-md); margin-bottom: var(--space-24); }
-.ai-inner { border-radius: var(--radius-16); padding: var(--space-24); background: linear-gradient(180deg, var(--tint-ai-soft) 0%, #FFFFFF 120px); }
+/* Bloc IA (tous les modules), charte « TravelMate AI » : carte blanche, bordure violette fine,
+   label navy avec l'etincelle violette ; le degrade est reserve au bouton */
+.ai-card { border: 1px solid var(--tm-violet); border-radius: var(--radius-16); background: #fff; margin-bottom: var(--space-24); }
+.ai-inner { padding: var(--space-24); }
 .ai-label {
   display: inline-flex; align-items: center; gap: 8px; margin-bottom: 8px;
-  font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--tm-violet);
+  font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--tm-navy);
 }
+.ai-label tm-icon { color: var(--tm-violet); }
 .ai-sub { color: var(--tm-ink); margin: 8px 0 24px; font-size: 14px; line-height: 20px; }
 .ai-card .btn-ai { margin-top: 8px; }
 .ai-progress { margin: 16px 0 8px; }
@@ -158,9 +184,23 @@ a:hover { color: var(--ocean-700); text-decoration: underline; }
 
 .btn-danger.mat-mdc-button-base.mdc-button { color: var(--tm-error); border-color: var(--tm-error); }
 
-/* Champs : 56px, label persistant, aide/erreur en dessous */
-.mat-mdc-form-field { width: 100%; }
-.mat-mdc-form-field tm-icon { color: var(--tm-slate); }
+/* Champs (charte « Inputs ») : 56px, contour, label AU-DESSUS du champ, aide ou erreur en dessous.
+   Material pose le label sur le bord du champ : on le remonte au-dessus et on referme la bordure. */
+.mat-mdc-form-field { width: 100%; margin-top: 28px; }
+.mat-form-field-appearance-outline .mdc-notched-outline--notched .mdc-notched-outline__notch {
+  border-top-style: solid; border-top-width: 1px;
+}
+.mat-form-field-appearance-outline.mat-focused .mdc-notched-outline--notched .mdc-notched-outline__notch { border-top-width: 2px; }
+.mat-mdc-form-field.mat-form-field-appearance-outline .mat-mdc-text-field-wrapper.mdc-text-field--outlined
+  .mdc-notched-outline--upgraded .mdc-floating-label--float-above {
+  --mat-mdc-form-field-label-transform: translateY(-48px) scale(1);
+  transform: var(--mat-mdc-form-field-label-transform);
+  font-size: 13px; font-weight: 500;
+}
+/* Icone dans le champ : teal, rouge en cas d'erreur */
+.mat-mdc-form-field tm-icon { color: var(--tm-teal); }
+.mat-mdc-form-field.mat-form-field-invalid tm-icon { color: var(--tm-error); }
+.mat-mdc-form-field .mat-mdc-form-field-icon-prefix { padding: 0 4px 0 16px; }
 
 /* Cartes : rayon 16, padding 24, ombre sm */
 .card {
@@ -178,9 +218,16 @@ a:hover { color: var(--ocean-700); text-decoration: underline; }
 
 .page { max-width: 1200px; margin: 0 auto; padding: var(--space-32) var(--space-24) var(--space-64); }
 .page-narrow { max-width: 792px; }  /* 8 colonnes de la grille */
-.page-header { margin-bottom: var(--space-32); }
-.page-header .caption { color: var(--tm-teal); margin-bottom: var(--space-8); }
-.page-header p { margin-top: var(--space-8); color: var(--tm-ink); }
+/* Titre de page : bandeau navy pleine largeur, comme la couverture de la charte.
+   Les marges negatives l'etendent a tout l'ecran ; le padding garde le texte aligne avec le contenu. */
+.page-header {
+  margin: calc(-1 * var(--space-32)) calc(50% - 50vw) var(--space-32);
+  padding: var(--space-48) calc(50vw - 50%) var(--space-48);
+  background: var(--tm-navy);
+}
+.page-header .caption { color: var(--ocean-300); margin-bottom: var(--space-8); }
+.page-header h1 { color: #fff; }
+.page-header p { margin-top: var(--space-8); color: var(--tm-mist); }
 
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0 var(--space-16); }
 @media (max-width: 640px) {
@@ -190,18 +237,19 @@ a:hover { color: var(--ocean-700); text-decoration: underline; }
 }
 .form-actions { display: flex; gap: var(--space-12); justify-content: flex-end; flex-wrap: wrap; margin-top: var(--space-8); }
 
-/* Messages de feedback : couleur + icone + mot */
+/* Messages de feedback (charte « Itinerary saved ») : surface blanche, icone de couleur + mot.
+   La couleur reste un accent (icone) : le texte est en Ink. */
 .alert {
-  display: flex; gap: var(--space-12); align-items: flex-start;
-  padding: var(--space-12) var(--space-16); border-radius: var(--radius-8);
+  display: flex; gap: var(--space-12); align-items: center;
+  padding: var(--space-16); border-radius: var(--radius-8);
   font-size: 14px; line-height: 20px; margin-bottom: var(--space-16);
-  border-left: 4px solid;
+  background: #fff; border: 1px solid var(--tm-mist); color: var(--tm-ink);
 }
-.alert tm-icon { flex: none; margin-top: 0; }
-.alert-error   { background: var(--tint-error);   border-color: var(--tm-error);   color: var(--tm-ink); }
-.alert-success { background: var(--tint-success); border-color: var(--tm-success); color: var(--tm-ink); }
-.alert-warning { background: var(--tint-warning); border-color: var(--tm-warning); color: var(--tm-ink); }
-.alert-info    { background: var(--tint-info);    border-color: var(--tm-info);    color: var(--tm-ink); }
+.alert tm-icon { flex: none; }
+.alert-error tm-icon   { color: var(--tm-error); }
+.alert-success tm-icon { color: var(--tm-success); }
+.alert-warning tm-icon { color: var(--tm-warning); }
+.alert-info tm-icon    { color: var(--tm-info); }
 
 /* Chips (rayon complet) */
 .chip {

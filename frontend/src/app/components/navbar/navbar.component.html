@@ -1,26 +1,30 @@
 <header class="navbar">
   <div class="inner">
-    <a routerLink="/preferences" class="logo">
-      <img src="favicon.svg" width="32" height="32" alt="" />
+    <a routerLink="/preferences" class="logo" aria-label="TravelMate, accueil">
+      <img src="logo-white.svg" width="32" height="32" alt="" />
       <span class="logo-text">TravelMate</span>
     </a>
 
-    <nav>
-      <a routerLink="/preferences" routerLinkActive="active">
+    <!-- Sur mobile seule l'icone reste : title = infobulle, aria-label = nom lu par les lecteurs d'ecran (charte) -->
+    <nav aria-label="Menu principal">
+      <a routerLink="/preferences" routerLinkActive="active" ariaCurrentWhenActive="page"
+         title="Préférences" aria-label="Préférences">
         <tm-icon name="compass"></tm-icon> <span>Préférences</span>
       </a>
-      <a routerLink="/profil" routerLinkActive="active">
+      <a routerLink="/profil" routerLinkActive="active" ariaCurrentWhenActive="page"
+         title="Mon profil" aria-label="Mon profil">
         <tm-icon name="user"></tm-icon> <span>Mon profil</span>
       </a>
       @if (authService.isAdmin()) {
-        <a routerLink="/admin" routerLinkActive="active">
+        <a routerLink="/admin" routerLinkActive="active" ariaCurrentWhenActive="page"
+           title="Administration" aria-label="Administration">
           <tm-icon name="users"></tm-icon> <span>Administration</span>
         </a>
       }
     </nav>
 
     <div class="account">
-      <span class="avatar">{{ getInitials() }}</span>
+      <span class="avatar" aria-hidden="true">{{ getInitials() }}</span>
       <span class="who">
         <strong>{{ authService.getUser()?.firstName }}</strong>
         <small>{{ authService.isAdmin() ? 'Administrateur' : 'Voyageur' }}</small>

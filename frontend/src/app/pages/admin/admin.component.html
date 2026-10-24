@@ -18,7 +18,8 @@
     <form class="search" (ngSubmit)="loadUsers()">
       <mat-form-field appearance="outline">
         <mat-label>Rechercher (nom, prénom, email)</mat-label>
-        <input matInput name="search" [(ngModel)]="search" />
+        <tm-icon matPrefix name="search"></tm-icon>
+        <input matInput name="search" [(ngModel)]="search" placeholder="Ex. : Yasmine, karim@travelmate.tn" />
       </mat-form-field>
       <button mat-flat-button type="submit"><tm-icon name="search"></tm-icon> Rechercher</button>
     </form>
