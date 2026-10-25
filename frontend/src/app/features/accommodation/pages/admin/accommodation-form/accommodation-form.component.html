@@ -1,0 +1,125 @@
+<div class="tm-container narrow">
+  <a mat-button routerLink="/accommodations/admin" class="back"><mat-icon>arrow_back</mat-icon> Back to list</a>
+  <h1>{{ isEdit ? 'Edit accommodation' : 'New accommodation' }}</h1>
+
+  <div class="progress">@if (loading() || saving()) { <mat-progress-bar mode="indeterminate" /> }</div>
+
+  <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+    <section class="tm-card block">
+      <h2>General</h2>
+      <div class="grid">
+        <mat-form-field appearance="outline" class="span-2">
+          <mat-label>Name</mat-label>
+          <input matInput formControlName="name" maxlength="150">
+          @if (error('name')) { <mat-error>{{ error('name') }}</mat-error> }
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Type</mat-label>
+          <mat-select formControlName="type">
+            @for (t of types; track t) {
+              <mat-option [value]="t"><mat-icon>{{ typeMeta[t].icon }}</mat-icon>{{ typeMeta[t].label }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="span-3">
+          <mat-label>Description</mat-label>
+          <textarea matInput formControlName="description" rows="4" maxlength="4000"></textarea>
+          <mat-hint align="end">{{ form.controls.description.value.length }} / 4000</mat-hint>
+          @if (error('description')) { <mat-error>{{ error('description') }}</mat-error> }
+        </mat-form-field>
+      </div>
+    </section>
+
+    <section class="tm-card block">
+      <h2>Location</h2>
+      <div class="grid">
+        <mat-form-field appearance="outline">
+          <mat-label>City</mat-label>
+          <input matInput formControlName="city">
+          @if (error('city')) { <mat-error>{{ error('city') }}</mat-error> }
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Country</mat-label>
+          <input matInput formControlName="country">
+          @if (error('country')) { <mat-error>{{ error('country') }}</mat-error> }
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Destination id (optional)</mat-label>
+          <input matInput type="number" formControlName="destinationId">
+          <mat-hint>Link to the Destinations module</mat-hint>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="span-3">
+          <mat-label>Address</mat-label>
+          <input matInput formControlName="address">
+          @if (error('address')) { <mat-error>{{ error('address') }}</mat-error> }
+        </mat-form-field>
+      </div>
+    </section>
+
+    <section class="tm-card block">
+      <h2>Pricing & capacity</h2>
+      <div class="grid four">
+        <mat-form-field appearance="outline">
+          <mat-label>Price per night</mat-label>
+          <input matInput type="number" formControlName="pricePerNight" min="1" step="0.01">
+          <span matTextSuffix>€</span>
+          @if (error('pricePerNight')) { <mat-error>{{ error('pricePerNight') }}</mat-error> }
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Max guests</mat-label>
+          <input matInput type="number" formControlName="maxGuests" min="1" max="30">
+          @if (error('maxGuests')) { <mat-error>{{ error('maxGuests') }}</mat-error> }
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Stars</mat-label>
+          <mat-select formControlName="stars">
+            @for (s of [1, 2, 3, 4, 5]; track s) { <mat-option [value]="s">{{ s }} ★</mat-option> }
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Guest rating (0-5)</mat-label>
+          <input matInput type="number" formControlName="rating" min="0" max="5" step="0.1">
+          @if (error('rating')) { <mat-error>{{ error('rating') }}</mat-error> }
+        </mat-form-field>
+      </div>
+    </section>
+
+    <section class="tm-card block">
+      <h2>Amenities</h2>
+      <mat-chip-listbox multiple formControlName="amenities" aria-label="Amenities">
+        @for (a of amenities; track a) {
+          <mat-chip-option [value]="a"><mat-icon matChipAvatar>{{ amenityMeta[a].icon }}</mat-icon>{{ amenityMeta[a].label }}</mat-chip-option>
+        }
+      </mat-chip-listbox>
+    </section>
+
+    <section class="tm-card block">
+      <div class="block-head">
+        <h2>Photos</h2>
+        <button mat-stroked-button color="primary" type="button" (click)="addImage()" [disabled]="imageUrls.length >= 10">
+          <mat-icon>add_photo_alternate</mat-icon> Add photo URL
+        </button>
+      </div>
+      <div formArrayName="imageUrls" class="images">
+        @for (ctrl of imageUrls.controls; track ctrl; let i = $index) {
+          <div class="image-row">
+            <img [tmImg]="ctrl.valid ? ctrl.value : null" alt="">
+            <mat-form-field appearance="outline" subscriptSizing="dynamic">
+              <mat-label>Image URL {{ i + 1 }}</mat-label>
+              <input matInput [formControlName]="i" placeholder="https://…">
+              @if (ctrl.invalid) { <mat-error>Must be a valid http(s) URL</mat-error> }
+            </mat-form-field>
+            <button mat-icon-button type="button" aria-label="Remove image" (click)="removeImage(i)"><mat-icon>delete</mat-icon></button>
+          </div>
+        }
+      </div>
+    </section>
+
+    <div class="actions">
+      <a mat-button routerLink="/accommodations/admin">Cancel</a>
+      <button mat-flat-button color="primary" type="submit" [disabled]="saving() || loading()">
+        <mat-icon>save</mat-icon> {{ isEdit ? 'Save changes' : 'Create' }}
+      </button>
+    </div>
+  </form>
+</div>

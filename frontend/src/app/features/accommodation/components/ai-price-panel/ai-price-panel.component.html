@@ -1,0 +1,179 @@
+<section class="ai-panel" [class.has-result]="status() === 'done'">
+  <header class="ai-header">
+    <div class="ai-title">
+      <span class="ai-icon"><mat-icon>auto_awesome</mat-icon></span>
+      <div>
+        <h3>AI price check</h3>
+        <p class="tm-muted">Is this price fair? Our local AI (llama3) compares it with similar stays.</p>
+      </div>
+    </div>
+    @if (status() === 'done') {
+      <button mat-stroked-button class="reanalyze" (click)="analyze()"><mat-icon>refresh</mat-icon> Re-analyze</button>
+    }
+  </header>
+
+  @switch (status()) {
+    @case ('idle') {
+      <div class="cta">
+        <button mat-flat-button class="tm-ai-button big" (click)="analyze()">
+          <mat-icon>auto_awesome</mat-icon> Analyze price with AI
+        </button>
+        <span class="tm-muted small">Takes a few seconds · runs 100% locally</span>
+      </div>
+    }
+
+    @case ('loading') {
+      <div class="loading" aria-live="polite">
+        <div class="orb"><mat-icon>auto_awesome</mat-icon></div>
+        <p class="message">{{ loadingMessages()[loadingStep()] }}</p>
+        <div class="steps">
+          @for (m of loadingMessages(); track $index) {
+            <span class="step" [class.active]="$index <= loadingStep()"></span>
+          }
+        </div>
+        <div class="ghost">
+          <div class="tm-skeleton g1"></div><div class="tm-skeleton g2"></div><div class="tm-skeleton g3"></div>
+        </div>
+      </div>
+    }
+
+    @case ('error') {
+      <div class="error">
+        <mat-icon>error_outline</mat-icon>
+        <span>{{ error() }}</span>
+        <button mat-button color="primary" (click)="analyze()">Try again</button>
+      </div>
+    }
+
+    @case ('done') {
+      @if (analysis(); as a) {
+        @if (!a.aiAvailable) {
+          <div class="notice">
+            <mat-icon>info</mat-icon>
+            <span>{{ a.aiMessage ?? 'AI unavailable' }} The estimate below comes from comparable listings only.</span>
+          </div>
+        }
+
+        <div class="summary">
+          <div class="fair">
+            <span class="label">Estimated fair price</span>
+            <span class="value">{{ a.aiResult.estimatedFairPrice | currency: 'EUR' : 'symbol' : '1.0-0' }}<small>/night</small></span>
+            <span class="current">Listed at <strong>{{ a.target.pricePerNight | currency: 'EUR' : 'symbol' : '1.0-0' }}</strong></span>
+          </div>
+          <div class="verdict" [class]="'verdict ' + a.aiResult.priceVerdict.toLowerCase()">
+            <span class="verdict-label">{{ verdictLabel() }}</span>
+            <span class="diff">
+              {{ a.aiResult.differencePercent > 0 ? '+' : '' }}{{ a.aiResult.differencePercent | number: '1.0-1' }}%
+              <small>vs fair price</small>
+            </span>
+          </div>
+        </div>
+
+        <div class="gauge" role="img" [attr.aria-label]="verdictLabel() + ', ' + a.aiResult.differencePercent + '% versus fair price'">
+          <div class="track">
+            <span class="zone under"></span><span class="zone fair"></span><span class="zone over"></span>
+            <span class="marker" [style.left.%]="markerPosition()"><mat-icon>arrow_drop_down</mat-icon></span>
+          </div>
+          <div class="labels">
+            <span>Underpriced</span><span>Fair</span><span>Overpriced</span>
+          </div>
+        </div>
+
+        <p class="explanation">
+          @if (a.aiResult.source === 'AI') { <mat-icon class="spark">auto_awesome</mat-icon> }
+          {{ a.aiResult.explanation }}
+        </p>
+
+        @if (a.aiResult.keyFactors.length) {
+          <mat-chip-set class="factors" aria-label="Key factors">
+            @for (f of a.aiResult.keyFactors; track f) {
+              <mat-chip disableRipple>{{ f }}</mat-chip>
+            }
+          </mat-chip-set>
+        }
+
+        <mat-expansion-panel class="baseline">
+          <mat-expansion-panel-header>
+            <mat-panel-title><mat-icon>bar_chart</mat-icon> How was this computed?</mat-panel-title>
+          </mat-expansion-panel-header>
+          <div class="baseline-stats">
+            <div><span>Statistical baseline</span><strong>{{ a.baseline.baselinePrice | currency: 'EUR' }}</strong></div>
+            @if (a.baseline.medianComparablePrice !== null) {
+              <div><span>Median of comparables</span><strong>{{ a.baseline.medianComparablePrice | currency: 'EUR' }}</strong></div>
+              <div><span>Range</span><strong>{{ a.baseline.minComparablePrice | currency: 'EUR' : 'symbol' : '1.0-0' }} – {{ a.baseline.maxComparablePrice | currency: 'EUR' : 'symbol' : '1.0-0' }}</strong></div>
+            }
+            <div><span>Comparables</span><strong>{{ a.baseline.comparablesCount }} ({{ a.baseline.scope === 'CITY' ? 'same city' : a.baseline.scope === 'COUNTRY' ? 'same country' : 'same country, all types' }})</strong></div>
+          </div>
+          @if (a.baseline.comparables.length) {
+            <table class="comparables">
+              <thead><tr><th>Listing</th><th>Stars</th><th>Rating</th><th>Amenities</th><th>Price</th></tr></thead>
+              <tbody>
+                @for (c of a.baseline.comparables; track c.id) {
+                  <tr>
+                    <td><a [routerLink]="['/accommodations', c.id]">{{ c.name }}</a></td>
+                    <td>{{ c.stars }}★</td>
+                    <td>{{ c.rating | number: '1.1-1' }}</td>
+                    <td>{{ c.amenitiesCount }}</td>
+                    <td>{{ c.pricePerNight | currency: 'EUR' : 'symbol' : '1.0-0' }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          }
+          <p class="method tm-muted">
+            Baseline = median of comparable prices, each adjusted to this listing's stars (±12%/star), rating (±6%/point)
+            and amenities (±2% each). The AI estimate is capped at ±40% of this baseline.
+          </p>
+        </mat-expansion-panel>
+
+        <div class="alternatives">
+          <div class="alt-header">
+            <h4>Similar but cheaper</h4>
+            @if (a.alternatives.length > 2) {
+              <div class="arrows">
+                <button mat-icon-button aria-label="Previous" (click)="scrollCarousel(-1)"><mat-icon>chevron_left</mat-icon></button>
+                <button mat-icon-button aria-label="Next" (click)="scrollCarousel(1)"><mat-icon>chevron_right</mat-icon></button>
+              </div>
+            }
+          </div>
+          @if (a.alternatives.length) {
+            <div class="carousel" #carousel>
+              @for (alt of a.alternatives; track alt.id) {
+                <a class="alt-card" [routerLink]="['/accommodations', alt.id]"
+                   [queryParams]="{ checkIn: a.checkIn, checkOut: a.checkOut }">
+                  <div class="alt-media">
+                    <img [tmImg]="alt.mainImageUrl" [alt]="alt.name">
+                    <span class="tm-badge coral save">Save {{ alt.savingsPerNight | currency: 'EUR' : 'symbol' : '1.0-0' }}/night</span>
+                  </div>
+                  <div class="alt-body">
+                    <div class="alt-name">{{ alt.name }}</div>
+                    <div class="alt-meta">
+                      <tm-star-rating [stars]="alt.stars" />
+                      <span>{{ typeMeta[alt.type].label }} · {{ alt.city }}</span>
+                    </div>
+                    <p class="reason">
+                      @if (a.aiAvailable) { <mat-icon>auto_awesome</mat-icon> }
+                      {{ alt.reason }}
+                    </p>
+                    <div class="alt-price">
+                      <strong>{{ alt.pricePerNight | currency: 'EUR' : 'symbol' : '1.0-0' }}</strong><small>/night</small>
+                      <span class="match" matTooltip="Similarity with this listing">{{ alt.similarityScore | percent }} match</span>
+                    </div>
+                  </div>
+                </a>
+              }
+            </div>
+          } @else {
+            <p class="tm-muted">No cheaper similar stay found{{ a.checkIn ? ' for these dates' : '' }} — this may already be one of the best deals.</p>
+          }
+        </div>
+
+        <footer class="meta tm-muted">
+          Generated {{ a.generatedAt | date: 'shortTime' }}
+          @if (a.aiResult.model) { · {{ a.aiResult.model }} · {{ (a.aiResult.durationMs ?? 0) / 1000 | number: '1.1-1' }} s }
+          @if (a.aiResult.clamped) { · AI estimate capped }
+        </footer>
+      }
+    }
+  }
+</section>

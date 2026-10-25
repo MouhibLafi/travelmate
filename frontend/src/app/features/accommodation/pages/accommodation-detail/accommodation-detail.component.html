@@ -1,0 +1,94 @@
+@let a = accommodation();
+<div class="tm-container">
+  <a mat-button routerLink="/accommodations" class="back"><mat-icon>arrow_back</mat-icon> Back to stays</a>
+
+  @if (loading() && !accommodation()) {
+    <div class="tm-skeleton head-skeleton"></div>
+    <div class="tm-skeleton gallery-skeleton"></div>
+  } @else if (notFound()) {
+    <div class="tm-card empty">
+      <mat-icon>search_off</mat-icon>
+      <h2>This stay does not exist</h2>
+      <a mat-flat-button color="primary" routerLink="/accommodations">Browse stays</a>
+    </div>
+  } @else if (a) {
+    <header class="head">
+      <div>
+        <div class="badges">
+          <span class="tm-badge"><mat-icon>{{ typeMeta[a.type].icon }}</mat-icon>{{ typeMeta[a.type].label }}</span>
+          <tm-star-rating [stars]="a.stars" />
+        </div>
+        <h1>{{ a.name }}</h1>
+        <p class="location"><mat-icon>place</mat-icon>{{ a.address ? a.address + ', ' : '' }}{{ a.city }}, {{ a.country }}</p>
+      </div>
+      <div class="rating-box" matTooltip="Average guest rating">
+        <strong>{{ a.rating | number: '1.1-1' }}</strong>
+        <span>{{ a.rating >= 4.5 ? 'Exceptional' : a.rating >= 4 ? 'Very good' : a.rating >= 3.5 ? 'Good' : 'Fair' }}</span>
+      </div>
+    </header>
+
+    <section class="gallery">
+      <div class="main-image">
+        <img [tmImg]="mainImage()" [alt]="a.name">
+        @if (images().length > 1) {
+          <button mat-mini-fab class="nav prev" aria-label="Previous photo" (click)="nextImage(-1)"><mat-icon>chevron_left</mat-icon></button>
+          <button mat-mini-fab class="nav next" aria-label="Next photo" (click)="nextImage(1)"><mat-icon>chevron_right</mat-icon></button>
+          <span class="counter">{{ activeImage() + 1 }} / {{ images().length }}</span>
+        }
+      </div>
+      @if (images().length > 1) {
+        <div class="thumbs">
+          @for (img of images(); track $index) {
+            <button class="thumb" [class.active]="$index === activeImage()" (click)="selectImage($index)" [attr.aria-label]="'Photo ' + ($index + 1)">
+              <img [tmImg]="img" alt="">
+            </button>
+          }
+        </div>
+      }
+    </section>
+
+    <div class="layout">
+      <div class="main">
+        <section class="tm-card block">
+          <h2>About this stay</h2>
+          <p class="description">{{ a.description || 'No description yet.' }}</p>
+          <div class="facts">
+            <span><mat-icon>group</mat-icon>Up to {{ a.maxGuests }} guests</span>
+            <span><mat-icon>{{ typeMeta[a.type].icon }}</mat-icon>{{ typeMeta[a.type].label }}</span>
+            <span><mat-icon>star</mat-icon>{{ a.stars }}-star</span>
+          </div>
+        </section>
+
+        <section class="tm-card block">
+          <h2>Amenities</h2>
+          @if (a.amenities.length) {
+            <div class="amenities">
+              @for (am of a.amenities; track am) {
+                <div class="amenity"><mat-icon>{{ amenityMeta[am].icon }}</mat-icon>{{ amenityMeta[am].label }}</div>
+              }
+            </div>
+          } @else {
+            <p class="tm-muted">No amenities listed.</p>
+          }
+        </section>
+
+        <tm-ai-price-panel
+          [accommodationId]="a.id" [city]="a.city"
+          [checkIn]="checkInIso()" [checkOut]="checkOutIso()" [guests]="guests()" />
+
+        <section class="tm-card block">
+          <h2>Availability</h2>
+          <p class="tm-muted small">Pick your check-in and check-out days. Struck-through days are already booked.</p>
+          <tm-availability-calendar [bookedDates]="bookedDates()" [(checkIn)]="checkIn" [(checkOut)]="checkOut" />
+        </section>
+      </div>
+
+      <aside class="side">
+        <tm-stay-cost-calculator
+          [accommodationId]="a.id" [pricePerNight]="a.pricePerNight" [maxGuests]="a.maxGuests"
+          [bookedDates]="bookedDates()"
+          [(checkIn)]="checkIn" [(checkOut)]="checkOut" [(guests)]="guests" />
+      </aside>
+    </div>
+  }
+</div>

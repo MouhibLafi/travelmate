@@ -1,0 +1,26 @@
+@use '../../../../../styles/variables' as v;
+
+.filters { padding: 16px 18px; }
+
+header {
+  display: flex; align-items: center; justify-content: space-between; min-height: 40px;
+  h3 { display: flex; align-items: center; gap: 6px; font-size: 17px; mat-icon { color: v.$tm-teal; } }
+}
+
+section {
+  padding: 14px 0;
+  border-top: 1px solid v.$tm-border;
+  h4 { font-family: v.$tm-font-body; font-size: 13px; font-weight: 600; text-transform: uppercase;
+       letter-spacing: .05em; color: v.$tm-text-muted; margin-bottom: 10px; }
+}
+
+.price-values { display: flex; justify-content: space-between; font-weight: 600; color: v.$tm-navy; font-size: 14px; }
+.slider { width: calc(100% - 16px); margin: 0 8px; }
+
+mat-chip-option mat-icon { font-size: 18px; }
+
+.amenities { display: grid; grid-template-columns: 1fr; }
+.amenity {
+  display: inline-flex; align-items: center; gap: 6px; font-size: 14px;
+  mat-icon { font-size: 18px; width: 18px; height: 18px; color: v.$tm-teal; }
+}

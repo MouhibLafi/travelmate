@@ -1,0 +1,26 @@
+@use '../../../../../styles/variables' as v;
+
+.search-bar {
+  display: grid;
+  grid-template-columns: 1.3fr 1.4fr 0.6fr auto;
+  gap: 12px;
+  align-items: center;
+  background: white;
+  padding: 14px;
+  border-radius: v.$tm-radius-lg;
+  box-shadow: v.$tm-shadow-lg;
+}
+
+mat-form-field { width: 100%; }
+mat-icon[matPrefix] { color: v.$tm-teal; margin: 0 4px 0 8px; }
+
+.submit { height: 56px; padding: 0 28px; font-weight: 600; font-size: 15px; }
+
+@media (max-width: v.$tm-bp-md) {
+  .search-bar { grid-template-columns: 1fr 1fr; }
+  .city, .dates { grid-column: span 2; }
+}
+@media (max-width: v.$tm-bp-sm) {
+  .search-bar { grid-template-columns: 1fr; }
+  .city, .dates { grid-column: auto; }
+}

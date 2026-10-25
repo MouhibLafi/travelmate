@@ -1,0 +1,37 @@
+<form class="search-bar" [formGroup]="form" (ngSubmit)="submit()">
+  <mat-form-field appearance="outline" class="city" subscriptSizing="dynamic">
+    <mat-label>Where to?</mat-label>
+    <mat-icon matPrefix>place</mat-icon>
+    <input matInput formControlName="city" [matAutocomplete]="auto" placeholder="Rome, Paris, Djerba…">
+    @if (form.controls.city.value) {
+      <button mat-icon-button matSuffix type="button" aria-label="Clear city" (click)="clearCity()">
+        <mat-icon>close</mat-icon>
+      </button>
+    }
+    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="submit()">
+      @for (c of filteredCities(); track c) {
+        <mat-option [value]="c">{{ c }}</mat-option>
+      }
+    </mat-autocomplete>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="dates" subscriptSizing="dynamic">
+    <mat-label>Check-in – Check-out</mat-label>
+    <mat-date-range-input [rangePicker]="picker" [min]="minDate">
+      <input matStartDate formControlName="checkIn" placeholder="Check-in">
+      <input matEndDate formControlName="checkOut" placeholder="Check-out">
+    </mat-date-range-input>
+    <mat-datepicker-toggle matIconSuffix [for]="picker" />
+    <mat-date-range-picker #picker />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="guests" subscriptSizing="dynamic">
+    <mat-label>Guests</mat-label>
+    <mat-icon matPrefix>group</mat-icon>
+    <input matInput type="number" min="1" max="30" formControlName="guests">
+  </mat-form-field>
+
+  <button mat-flat-button color="accent" class="submit" type="submit">
+    <mat-icon>search</mat-icon> Search
+  </button>
+</form>

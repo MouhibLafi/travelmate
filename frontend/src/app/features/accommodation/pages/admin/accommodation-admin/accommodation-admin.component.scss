@@ -1,0 +1,22 @@
+@use '../../../../../../styles/variables' as v;
+
+.page-head {
+  display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 20px; flex-wrap: wrap;
+  h1 { font-size: 28px; }
+  p { margin: 4px 0 0; }
+}
+
+.table-card { overflow: hidden; }
+.table-toolbar { display: flex; align-items: center; gap: 16px; padding: 16px; .search { flex: 1; max-width: 420px; } }
+mat-icon[matPrefix] { color: v.$tm-teal; margin: 0 4px 0 8px; }
+.progress { height: 4px; }
+.table-scroll { overflow-x: auto; }
+
+table { width: 100%; min-width: 860px; }
+th.mat-mdc-header-cell { font-weight: 600; color: v.$tm-text-muted; background: v.$tm-bg; }
+.thumb { width: 56px; height: 40px; object-fit: cover; border-radius: 6px; display: block; }
+.name { font-weight: 600; color: v.$tm-navy; text-decoration: none; &:hover { color: v.$tm-teal; } }
+.actions { white-space: nowrap; text-align: right; }
+.delete mat-icon { color: #E53935; }
+.no-data { padding: 32px; text-align: center; color: v.$tm-text-muted; }
+tr.mat-mdc-row:hover { background: #FAFCFD; }
