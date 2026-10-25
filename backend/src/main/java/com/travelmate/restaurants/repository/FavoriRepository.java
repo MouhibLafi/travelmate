@@ -18,4 +18,7 @@ public interface FavoriRepository extends JpaRepository<Favori, Long> {
     List<Long> findRestaurantIdsByUtilisateurEmail(@Param("email") String email);
 
     void deleteByUtilisateurId(Long utilisateurId);
+
+    // Utilisé quand l'admin supprime un restaurant (voir RestaurantAdminService.supprimer)
+    void deleteByRestaurantId(Long restaurantId);
 }

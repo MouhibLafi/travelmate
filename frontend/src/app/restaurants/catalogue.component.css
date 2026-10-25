@@ -13,6 +13,9 @@
 
 /* Integration : bouton "Mes favoris" sous les chiffres */
 .catalogue-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
   margin-top: 20px;
 }
 

@@ -143,6 +143,7 @@ La logique est dans `TripService` (voyages) et `TripAiService` (tâche IA).
 | GET / POST | `/api/restaurants/{id}/avis` | connecté | Module 4 : avis (**sentiment analysé par l'IA**) |
 | GET | `/api/restaurants/{id}/analyse-avis`, `/recommandations` | connecté | **Tâches IA du module 4** (synthèse des avis, recommandations) |
 | GET / POST / DELETE | `/api/restaurants/favoris` | connecté | Module 4 : favoris |
+| GET / POST / PUT / DELETE | `/api/admin/restaurants` | ADMIN | Module 4 : gestion du catalogue (page `/admin/restaurants`) |
 | POST / PUT / DELETE | `/api/accommodations`, `/api/accommodations/{id}/periods` | ADMIN | Module 5 : gestion du catalogue |
 
 Les requêtes protégées doivent contenir l'en-tête `Authorization: Bearer <jeton>`.

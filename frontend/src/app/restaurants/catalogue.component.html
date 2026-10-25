@@ -20,6 +20,10 @@
         </svg>
         Mes favoris
       </a>
+      @if (isAdmin) {
+        <!-- Raccourci admin (module 1) vers la gestion du catalogue -->
+        <a class="btn btn-primary" routerLink="/admin/restaurants">Gérer les restaurants</a>
+      }
     </div>
   </div>
 </section>

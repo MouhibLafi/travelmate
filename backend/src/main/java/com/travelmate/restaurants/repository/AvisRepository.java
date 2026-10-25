@@ -23,4 +23,7 @@ public interface AvisRepository extends JpaRepository<Avis, Long> {
     List<Avis> findByAuteurId(Long auteurId);
 
     void deleteByAuteurId(Long auteurId);
+
+    // Utilisé quand l'admin supprime un restaurant (voir RestaurantAdminService.supprimer)
+    void deleteByRestaurantId(Long restaurantId);
 }

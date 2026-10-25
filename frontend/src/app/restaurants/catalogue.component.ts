@@ -5,6 +5,7 @@ import { RouterLink } from '@angular/router';
 import { Subject, debounceTime, startWith } from 'rxjs';
 
 import { getErrorMessage } from '../services/api';
+import { AuthService } from '../services/auth.service';
 import { MetaFiltres, Restaurant } from './restaurant.model';
 import { RestaurantService } from './restaurant.service';
 import { RestaurantCardComponent } from './restaurant-card.component';
@@ -21,6 +22,9 @@ export class CatalogueComponent {
   private readonly service = inject(RestaurantService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly rafraichir$ = new Subject<void>();
+
+  // Integration module 1 : seul l'admin voit le bouton "Gerer les restaurants"
+  protected readonly isAdmin = inject(AuthService).isAdmin();
 
   protected readonly restaurants = signal<Restaurant[]>([]);
   protected readonly meta = signal<MetaFiltres | null>(null);
