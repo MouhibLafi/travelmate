@@ -20,6 +20,11 @@ utilisez la branche **`main`**, qui contient tous les modules intégrés.
   initial vient des préférences du profil
 - Favoris : ajout / retrait et liste des restaurants favoris de l'utilisateur connecté
 - Suppression automatique des avis et favoris quand un utilisateur supprime son compte
+- **Page admin** (`/admin/restaurants`, rôle ADMIN) : ajouter, modifier et supprimer un
+  restaurant du catalogue ; la suppression retire aussi ses avis et ses favoris. La note
+  moyenne n'est jamais saisie : elle vient des avis des voyageurs
+- Deux espaces séparés : le **voyageur** a ses pages (catalogue, fiche, recommandations,
+  favoris) ; l'**admin** a en plus sa page de gestion (bouton « Gérer les restaurants »)
 
 ## Fichiers
 
@@ -56,6 +61,8 @@ Toutes les routes sont préfixées par `/api/restaurants`.
 | POST / DELETE | `/api/restaurants/favoris/{restaurantId}` | **JWT** — ajouter / retirer un favori |
 | GET | `/api/restaurants/ia/statut` | Disponibilité d'Ollama et nom du modèle |
 | POST | `/api/restaurants/ia/reanalyser-avis` | Réanalyser tous les avis avec Ollama |
+| GET / POST | `/api/admin/restaurants` | **ADMIN** — lister / ajouter un restaurant |
+| PUT / DELETE | `/api/admin/restaurants/{id}` | **ADMIN** — modifier / supprimer (avec ses avis et favoris) |
 
 ## Les tâches IA
 
