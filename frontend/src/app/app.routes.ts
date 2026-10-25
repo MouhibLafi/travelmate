@@ -6,6 +6,7 @@ import { PreferencesComponent } from './pages/preferences/preferences.component'
 import { ProfileComponent } from './pages/profile/profile.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { TripsComponent } from './trips/trips.component';
+import { RESTAURANTS_ROUTES } from './restaurants/restaurants.routes';
 
 export const routes: Routes = [
   // ----- Module 1 : utilisateurs -----
@@ -25,7 +26,10 @@ export const routes: Routes = [
     loadChildren: () => import('./features/accommodation/accommodation.routes').then(m => m.ACCOMMODATION_ROUTES),
   },
 
-  // ----- Modules 3, 4 et 6 : ajoutez vos routes ici, avec canActivate: [authGuard] -----
+  // ----- Module 4 : restaurants (catalogue, recommandations, favoris, fiche) -----
+  ...RESTAURANTS_ROUTES,
+
+  // ----- Modules 3 et 6 : ajoutez vos routes ici, avec canActivate: [authGuard] -----
 
   { path: '', redirectTo: 'preferences', pathMatch: 'full' },
   { path: '**', redirectTo: 'preferences' },

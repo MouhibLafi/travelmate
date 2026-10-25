@@ -1,0 +1,361 @@
+@if (chargement()) {
+  <div class="container detail-chargement">
+    <div class="skeleton detail-chargement__hero"></div>
+    <div class="detail-corps">
+      <div class="skeleton detail-chargement__bloc"></div>
+      <div class="skeleton detail-chargement__aside"></div>
+    </div>
+  </div>
+} @else if (erreur()) {
+  <div class="container page">
+    <div class="empty-state">
+      <div class="empty-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+          <circle cx="11" cy="11" r="7" />
+          <path d="m20 20-3.2-3.2M8.5 11h5" stroke-linecap="round" />
+        </svg>
+      </div>
+      <h2>Restaurant introuvable</h2>
+      <p>{{ erreur() }}</p>
+      <a class="btn btn-primary" routerLink="/restaurants">Retour au catalogue</a>
+    </div>
+  </div>
+} @else {
+  @if (restaurant(); as resto) {
+    <section class="detail-hero">
+      @if (resto.imageUrl) {
+        <img class="detail-hero__img" [src]="resto.imageUrl" [alt]="'Photo de ' + resto.nom" />
+      } @else {
+        <div class="detail-hero__img detail-hero__img--fallback"></div>
+      }
+      <div class="detail-hero__voile"></div>
+
+      <div class="container detail-hero__contenu">
+        <a class="detail-retour" routerLink="/restaurants">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M19 12H5M11 6l-6 6 6 6" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          Toutes les tables
+        </a>
+
+        <div class="detail-hero__badges">
+          <span class="badge badge-teal">{{ resto.cuisine }}</span>
+          <span class="badge badge-coral">{{ resto.fourchettePrix }} · {{ resto.prixMoyen | number: '1.0-2' }} € / pers.</span>
+        </div>
+
+        <h1>{{ resto.nom }}</h1>
+
+        <div class="detail-hero__meta">
+          <span class="rating rating--hero">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="m12 2.8 2.9 5.9 6.5.9-4.7 4.6 1.1 6.5-5.8-3-5.8 3 1.1-6.5-4.7-4.6 6.5-.9Z" />
+            </svg>
+            {{ resto.noteMoyenne.toFixed(1) }}
+            <span class="muted">({{ resto.nombreAvis }} avis)</span>
+          </span>
+          <span class="detail-hero__lieu">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+              <path d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11Z" />
+              <circle cx="12" cy="10" r="2.6" />
+            </svg>
+            {{ resto.ville }} · {{ resto.adresse }}
+          </span>
+        </div>
+
+        <button
+          type="button"
+          class="btn btn-favori"
+          [class.est-favori]="favoris.estFavori(resto.id)"
+          [attr.aria-pressed]="favoris.estFavori(resto.id)"
+          (click)="favoris.basculer(resto.id)"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              d="M12 20.7 4.8 13.9a4.9 4.9 0 0 1 0-7.1 5.2 5.2 0 0 1 7.2 0 5.2 5.2 0 0 1 7.2 0 4.9 4.9 0 0 1 0 7.1Z"
+              [attr.fill]="favoris.estFavori(resto.id) ? 'currentColor' : 'none'"
+            />
+          </svg>
+          {{ favoris.estFavori(resto.id) ? 'Dans mes favoris' : 'Ajouter aux favoris' }}
+        </button>
+      </div>
+    </section>
+
+    <div class="container">
+      <div class="detail-corps">
+        <div class="detail-principal">
+          <section class="card panel analyse">
+            <header class="analyse__tete">
+              <div>
+                <span class="eyebrow on-ai">Analyse IA des avis</span>
+                <h2>Ce que disent les voyageurs</h2>
+              </div>
+              @if (ia.statut(); as statut) {
+                <span [class]="statut.disponible ? 'badge badge-success' : 'badge badge-warning'">
+                  {{ statut.disponible ? 'Llama 3 · Ollama' : 'Moteur local' }}
+                </span>
+              }
+            </header>
+
+            @if (analyse(); as stats) {
+              @if (stats.nombreAvis === 0) {
+                <p class="muted">Aucun avis pour le moment : soyez le premier à partager votre expérience.</p>
+              } @else {
+                <div class="analyse__resume">
+                  <div class="analyse__score">
+                    <strong>{{ pourcentage(stats.pourcentagePositifs) }}</strong>
+                    <span>des avis sont positifs</span>
+                  </div>
+                  <div class="analyse__note">
+                    <span class="rating">
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="m12 2.8 2.9 5.9 6.5.9-4.7 4.6 1.1 6.5-5.8-3-5.8 3 1.1-6.5-4.7-4.6 6.5-.9Z" />
+                      </svg>
+                      {{ stats.noteMoyenne.toFixed(1) }} / 5
+                    </span>
+                    <span class="muted small">{{ stats.nombreAvis }} avis analysés</span>
+                  </div>
+                </div>
+
+                <div class="analyse__barres">
+                  <div class="analyse__ligne">
+                    <span>Positifs</span>
+                    <div class="bar"><span class="remplissage remplissage--positif" [style.width.%]="stats.pourcentagePositifs"></span></div>
+                    <strong>{{ pourcentage(stats.pourcentagePositifs) }}</strong>
+                  </div>
+                  <div class="analyse__ligne">
+                    <span>Neutres</span>
+                    <div class="bar"><span class="remplissage remplissage--neutre" [style.width.%]="stats.pourcentageNeutres"></span></div>
+                    <strong>{{ pourcentage(stats.pourcentageNeutres) }}</strong>
+                  </div>
+                  <div class="analyse__ligne">
+                    <span>Négatifs</span>
+                    <div class="bar"><span class="remplissage remplissage--negatif" [style.width.%]="stats.pourcentageNegatifs"></span></div>
+                    <strong>{{ pourcentage(stats.pourcentageNegatifs) }}</strong>
+                  </div>
+                </div>
+
+                <div class="analyse__points">
+                  <div class="analyse__points-colonne">
+                    <h3>
+                      <span class="pastille pastille--positif">+</span>
+                      Points forts
+                    </h3>
+                    @if (stats.pointsForts.length) {
+                      <ul>
+                        @for (point of stats.pointsForts; track point) {
+                          <li>{{ point }}</li>
+                        }
+                      </ul>
+                    } @else {
+                      <p class="muted small">Pas de point fort marquant identifié.</p>
+                    }
+                  </div>
+                  <div class="analyse__points-colonne">
+                    <h3>
+                      <span class="pastille pastille--negatif">−</span>
+                      Points d'amélioration
+                    </h3>
+                    @if (stats.pointsFaibles.length) {
+                      <ul>
+                        @for (point of stats.pointsFaibles; track point) {
+                          <li>{{ point }}</li>
+                        }
+                      </ul>
+                    } @else {
+                      <p class="muted small">Aucun point faible récurrent.</p>
+                    }
+                  </div>
+                </div>
+
+                @if (ia.statut(); as statut) {
+                  @if (!statut.disponible) {
+                    <p class="analyse__note-local">
+                      {{ statut.message }}
+                    </p>
+                  }
+                }
+              }
+            } @else {
+              <p class="muted">L'analyse des avis n'est pas disponible pour le moment.</p>
+            }
+          </section>
+
+          <section class="card panel avis">
+            <header class="avis__tete">
+              <h2>Avis récents</h2>
+              <span class="badge badge-muted">{{ avis().length }} avis</span>
+            </header>
+
+            @if (avis().length) {
+              <ul class="avis__liste">
+                @for (item of avis(); track item.id) {
+                  <li class="avis__item">
+                    <div class="avis__avatar">{{ item.auteur.charAt(0).toUpperCase() }}</div>
+                    <div class="avis__contenu">
+                      <div class="avis__entete">
+                        <div>
+                          <strong>{{ item.auteur }}</strong>
+                          <span class="muted small avis__date">{{ dateLisible(item.dateCreation) }}</span>
+                        </div>
+                        <div class="avis__droite">
+                          <span class="stars" aria-hidden="true">
+                            @for (n of [1, 2, 3, 4, 5]; track n) {
+                              <svg viewBox="0 0 24 24" [class.off]="n > item.note">
+                                <path d="m12 2.8 2.9 5.9 6.5.9-4.7 4.6 1.1 6.5-5.8-3-5.8 3 1.1-6.5-4.7-4.6 6.5-.9Z" />
+                              </svg>
+                            }
+                          </span>
+                          <span [class]="classeSentiment(item.sentiment)">
+                            {{ libelleSentiment(item.sentiment) }}
+                          </span>
+                        </div>
+                      </div>
+                      <p class="avis__texte">{{ item.commentaire }}</p>
+                      <span class="avis__source">
+                        {{ item.sourceSentiment === 'OLLAMA' ? 'Analysé par Llama 3' : 'Analysé par le moteur local' }}
+                        · score {{ item.scoreSentiment.toFixed(2) }}
+                      </span>
+                    </div>
+                  </li>
+                }
+              </ul>
+            } @else {
+              <p class="muted">Aucun avis pour l'instant.</p>
+            }
+          </section>
+
+          <section class="card panel avis-form">
+            <h2>Partagez votre expérience</h2>
+            <p class="muted small avis-form__intro">
+              Votre avis sera analysé automatiquement : sentiment positif, négatif ou neutre.
+            </p>
+            <p class="avis-form__identite">
+              Vous publiez en tant que
+              <strong>{{ auth.getUser()?.firstName }} {{ auth.getUser()?.lastName }}</strong>.
+            </p>
+
+            @if (succes()) {
+              <div class="alert alert-success" role="status">{{ succes() }}</div>
+            }
+            @if (erreurFormulaire()) {
+              <div class="alert alert-error" role="alert">{{ erreurFormulaire() }}</div>
+            }
+
+            <form class="avis-form__form" (submit)="envoyerAvis($event)">
+              <div class="field">
+                <span class="field-label">Votre note</span>
+                <div class="etoiles-choix">
+                  @for (n of [1, 2, 3, 4, 5]; track n) {
+                    <button
+                      type="button"
+                      class="etoile"
+                      [class.active]="n <= note()"
+                      [attr.aria-label]="n + ' étoile' + (n > 1 ? 's' : '')"
+                      [attr.aria-pressed]="note() === n"
+                      (click)="note.set(n)"
+                    >
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="m12 2.8 2.9 5.9 6.5.9-4.7 4.6 1.1 6.5-5.8-3-5.8 3 1.1-6.5-4.7-4.6 6.5-.9Z" />
+                      </svg>
+                    </button>
+                  }
+                  <span class="etoiles-choix__valeur">{{ note() }}/5</span>
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="avis-commentaire">Votre commentaire</label>
+                <textarea
+                  id="avis-commentaire"
+                  class="textarea"
+                  rows="4"
+                  maxlength="1000"
+                  placeholder="Le repas, le service, l'ambiance… dites-nous tout."
+                  [value]="commentaire()"
+                  (input)="commentaire.set($any($event.target).value)"
+                ></textarea>
+              </div>
+
+              <button type="submit" class="btn btn-primary" [disabled]="envoi()">
+                @if (envoi()) {
+                  Analyse en cours…
+                } @else {
+                  Publier mon avis
+                }
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true">
+                  <path d="m4 12 16-8-6 16-3-6-7-2Z" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </button>
+            </form>
+          </section>
+        </div>
+
+        <aside class="detail-aside">
+          <section class="card panel infos">
+            <h2>Informations</h2>
+            <dl class="infos__liste">
+              <div>
+                <dt>Cuisine</dt>
+                <dd>{{ resto.cuisine }}</dd>
+              </div>
+              <div>
+                <dt>Budget moyen</dt>
+                <dd>{{ resto.prixMoyen | number: '1.0-2' }} € · {{ resto.fourchettePrix }}</dd>
+              </div>
+              <div>
+                <dt>Ville</dt>
+                <dd>{{ resto.ville }}</dd>
+              </div>
+              <div>
+                <dt>Adresse</dt>
+                <dd>{{ resto.adresse }}</dd>
+              </div>
+              <div>
+                <dt>Note</dt>
+                <dd>{{ resto.noteMoyenne.toFixed(1) }} / 5 · {{ resto.nombreAvis }} avis</dd>
+              </div>
+            </dl>
+
+            @if (resto.optionsAlimentaires.length) {
+              <div class="infos__options">
+                <span class="field-label">Options alimentaires</span>
+                <div class="chips">
+                  @for (option of resto.optionsAlimentaires; track option) {
+                    <span class="chip-static">{{ option }}</span>
+                  }
+                </div>
+              </div>
+            }
+
+            <button
+              type="button"
+              class="btn btn-secondary btn-block"
+              [attr.aria-pressed]="favoris.estFavori(resto.id)"
+              (click)="favoris.basculer(resto.id)"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  d="M12 20.7 4.8 13.9a4.9 4.9 0 0 1 0-7.1 5.2 5.2 0 0 1 7.2 0 5.2 5.2 0 0 1 7.2 0 4.9 4.9 0 0 1 0 7.1Z"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.9"
+                  stroke-linejoin="round"
+                />
+              </svg>
+              {{ favoris.estFavori(resto.id) ? 'Retirer des favoris' : 'Ajouter aux favoris' }}
+            </button>
+          </section>
+
+          <section class="carte-ia">
+            <span class="eyebrow on-ai">Recommandation IA</span>
+            <h3>Envie d'autres idées ?</h3>
+            <p>
+              L'IA classe les restaurants selon votre budget, vos goûts et le sentiment des avis.
+            </p>
+            <a class="btn btn-ai btn-sm" routerLink="/restaurants/recommandations">Voir mes recommandations</a>
+          </section>
+        </aside>
+      </div>
+    </div>
+  }
+}

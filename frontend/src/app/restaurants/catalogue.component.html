@@ -1,0 +1,228 @@
+<section class="page-hero catalogue-hero">
+  <div class="container">
+    <span class="eyebrow on-dark">Module 4 · Restaurants</span>
+    <h1>Le catalogue des meilleures tables.</h1>
+    <p class="lead">
+      Filtrez par cuisine, budget ou régime alimentaire, puis laissez l'IA vous recommander
+      l'adresse idéale pour votre prochain repas.
+    </p>
+    <div class="catalogue-hero__stats">
+      <span><strong>{{ restaurants().length }}</strong> adresses</span>
+      <span><strong>{{ meta()?.cuisines?.length ?? 0 }}</strong> cuisines</span>
+      <span><strong>{{ meta()?.villes?.length ?? 0 }}</strong> villes</span>
+      <span><strong>{{ meta()?.optionsAlimentaires?.length ?? 0 }}</strong> options alimentaires</span>
+    </div>
+    <!-- Integration : acces direct aux favoris (un seul lien "Restaurants" dans le menu) -->
+    <div class="catalogue-hero__actions">
+      <a class="btn btn-secondary" routerLink="/restaurants/favoris">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        Mes favoris
+      </a>
+    </div>
+  </div>
+</section>
+
+<div class="container catalogue">
+  <section class="filtres panel" aria-label="Filtres de recherche">
+    <div class="filtres__recherche">
+      <div class="input-icon filtres__q">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true">
+          <circle cx="11" cy="11" r="7" />
+          <path d="m20 20-3.2-3.2" stroke-linecap="round" />
+        </svg>
+        <input
+          class="input"
+          type="search"
+          placeholder="Rechercher un restaurant, une cuisine, une ville…"
+          aria-label="Rechercher un restaurant"
+          [value]="recherche()"
+          (input)="rechercher($any($event.target).value)"
+        />
+      </div>
+
+      <button
+        type="button"
+        class="btn btn-secondary filtres__toggle"
+        [attr.aria-expanded]="filtresOuverts()"
+        (click)="filtresOuverts.set(!filtresOuverts())"
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+          <path d="M4 6h16M7 12h10M10 18h4" stroke-linecap="round" />
+        </svg>
+        Filtres
+        @if (filtresActifs() > 0) {
+          <span class="filtres__compteur">{{ filtresActifs() }}</span>
+        }
+      </button>
+    </div>
+
+    <div class="filtres__grille" [class.ouvert]="filtresOuverts()">
+      <div class="field">
+        <label for="filtre-cuisine">Cuisine</label>
+        <select
+          id="filtre-cuisine"
+          class="select"
+          (change)="changerCuisine($any($event.target).value)"
+        >
+          <option value="" [selected]="cuisine() === ''">Toutes les cuisines</option>
+          @for (item of meta()?.cuisines ?? []; track item) {
+            <option [value]="item" [selected]="cuisine() === item">{{ item }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="filtre-ville">Ville</label>
+        <select
+          id="filtre-ville"
+          class="select"
+          (change)="changerVille($any($event.target).value)"
+        >
+          <option value="" [selected]="ville() === ''">Toutes les villes</option>
+          @for (item of meta()?.villes ?? []; track item) {
+            <option [value]="item" [selected]="ville() === item">{{ item }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="filtre-note">Note minimale</label>
+        <select
+          id="filtre-note"
+          class="select"
+          (change)="changerNote($any($event.target).value)"
+        >
+          <option value="0" [selected]="noteMin() === 0">Toutes les notes</option>
+          <option value="3" [selected]="noteMin() === 3">3 étoiles et +</option>
+          <option value="3.5" [selected]="noteMin() === 3.5">3,5 étoiles et +</option>
+          <option value="4" [selected]="noteMin() === 4">4 étoiles et +</option>
+          <option value="4.5" [selected]="noteMin() === 4.5">4,5 étoiles et +</option>
+        </select>
+      </div>
+
+      <div class="field filtres__budget">
+        <label for="filtre-budget">
+          Budget max.
+          <strong>{{ budgetMax() < 50 ? budgetMax() + ' €' : 'Tous budgets' }}</strong>
+        </label>
+        <input
+          id="filtre-budget"
+          type="range"
+          min="10"
+          max="50"
+          step="5"
+          [value]="budgetMax()"
+          (input)="changerBudget($any($event.target).value)"
+        />
+      </div>
+
+      <div class="filtres__options">
+        <span class="field-label">Options alimentaires</span>
+        <div class="chips">
+          @for (option of meta()?.optionsAlimentaires ?? []; track option) {
+            <button
+              type="button"
+              class="chip"
+              [class.active]="options().includes(option)"
+              [attr.aria-pressed]="options().includes(option)"
+              (click)="basculerOption(option)"
+            >
+              {{ option }}
+            </button>
+          }
+        </div>
+      </div>
+
+      @if (filtresActifs() > 0) {
+        <div class="filtres__pied">
+          <span class="muted small">{{ filtresActifs() }} filtre(s) actif(s)</span>
+          <button type="button" class="btn btn-ghost btn-sm" (click)="reinitialiser()">
+            Tout réinitialiser
+          </button>
+        </div>
+      }
+    </div>
+  </section>
+
+  <div class="resultats-tete">
+    <div>
+      <h2 class="section-title">Toutes les tables</h2>
+      <p class="muted small">
+        {{ resultats().length }} restaurant{{ resultats().length > 1 ? 's' : '' }} trouvé{{ resultats().length > 1 ? 's' : '' }}
+      </p>
+    </div>
+
+    <label class="tri">
+      <span>Trier par</span>
+      <select class="select" (change)="tri.set($any($event.target).value)">
+        <option value="note" [selected]="tri() === 'note'">Meilleures notes</option>
+        <option value="prix-asc" [selected]="tri() === 'prix-asc'">Prix croissant</option>
+        <option value="prix-desc" [selected]="tri() === 'prix-desc'">Prix décroissant</option>
+        <option value="nom" [selected]="tri() === 'nom'">Nom (A → Z)</option>
+      </select>
+    </label>
+  </div>
+
+  @if (chargement()) {
+    <div class="grille" aria-busy="true" aria-label="Chargement des restaurants">
+      @for (n of [1, 2, 3, 4, 5, 6]; track n) {
+        <div class="skeleton-card">
+          <div class="skeleton skeleton-card__image"></div>
+          <div class="skeleton-card__body">
+            <div class="skeleton skeleton-card__titre"></div>
+            <div class="skeleton skeleton-card__ligne"></div>
+            <div class="skeleton skeleton-card__ligne skeleton-card__ligne--longue"></div>
+          </div>
+        </div>
+      }
+    </div>
+  } @else if (erreur()) {
+    <div class="empty-state">
+      <div class="empty-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+          <path d="M12 9v4m0 4h.01M10.3 3.9 2.5 17.4A2 2 0 0 0 4.2 20h15.6a2 2 0 0 0 1.7-2.6L13.7 3.9a2 2 0 0 0-3.4 0Z" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </div>
+      <h2>Le serveur ne répond pas</h2>
+      <p>{{ erreur() }}</p>
+      <button type="button" class="btn btn-primary" (click)="charger()">Réessayer</button>
+    </div>
+  } @else if (resultats().length === 0) {
+    <div class="empty-state">
+      <div class="empty-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+          <circle cx="11" cy="11" r="7" />
+          <path d="m20 20-3.2-3.2M8.5 11h5" stroke-linecap="round" />
+        </svg>
+      </div>
+      <h2>Aucun restaurant ne correspond</h2>
+      <p>Essayez d'élargir votre budget ou de retirer une option alimentaire pour découvrir d'autres adresses.</p>
+      <button type="button" class="btn btn-primary" (click)="reinitialiser()">Réinitialiser les filtres</button>
+    </div>
+  } @else {
+    <div class="grille">
+      @for (restaurant of resultats(); track restaurant.id) {
+        <tm-restaurant-card [restaurant]="restaurant" />
+      }
+    </div>
+  }
+
+  <a class="ai-banner" routerLink="/restaurants/recommandations">
+    <span class="ai-banner__icone">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+        <path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M18.4 5.6l-2.8 2.8M8.4 15.6l-2.8 2.8" stroke-linecap="round" />
+      </svg>
+    </span>
+    <div class="ai-banner__texte">
+      <span class="eyebrow on-ai">Recommandation intelligente</span>
+      <h3>Vous hésitez ? Laissez l'IA choisir.</h3>
+      <p>
+        Budget, cuisine préférée et sentiment des avis : l'IA classe les meilleures tables
+        pour vous, avec une explication pour chaque choix.
+      </p>
+    </div>
+    <span class="btn btn-ai">Mes recommandations</span>
+  </a>
+</div>

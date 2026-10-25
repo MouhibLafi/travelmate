@@ -2,14 +2,15 @@
 
 Mini-projet *IA for Software Engineering* · Groupe 6
 
-Ce dépôt contient **le socle du projet** et trois modules intégrés :
-le module 1 (gestion des utilisateurs), le module 2 (planification des voyages)
+Ce dépôt contient **le socle du projet** et quatre modules intégrés :
+le module 1 (gestion des utilisateurs), le module 2 (planification des voyages),
+le module 4 (restaurants, voir [docs/module-4-restaurant.md](docs/module-4-restaurant.md))
 et le module 5 (hébergements, voir [docs/module-5-hebergements.md](docs/module-5-hebergements.md)).
 **Membres du groupe : lisez [INTEGRATION.md](INTEGRATION.md) pour ajouter votre module.**
 
 Branches : `main` = intégration de tous les modules (**c'est elle qu'on lance**) ·
 `module-1-users` = module 1 seul (socle) · `module-2-trips` = module 2 seul ·
-`module-hebergements` = module 5 seul · une branche par module.
+`module-4-restaurant` = module 4 seul · `module-hebergements` = module 5 seul · une branche par module.
 
 - **Backend** : Spring Boot 3.5 (Java 21), Spring Security + JWT, JPA + MySQL (XAMPP)
 - **Frontend** : Angular 20 + Angular Material, thème de la charte TravelMate
@@ -138,6 +139,10 @@ La logique est dans `TripService` (voyages) et `TripAiService` (tâche IA).
 | GET | `/api/accommodations/{id}/availability`, `/booked-dates` | connecté | Module 5 : disponibilités |
 | POST | `/api/accommodations/{id}/stay-cost` | connecté | Module 5 : coût du séjour |
 | GET | `/api/accommodations/{id}/price-analysis` | connecté | **Tâche IA du module 5** (juste prix + alternatives) |
+| GET | `/api/restaurants`, `/api/restaurants/{id}`, `/filtres` | connecté | Module 4 : catalogue, recherche, filtres, fiche |
+| GET / POST | `/api/restaurants/{id}/avis` | connecté | Module 4 : avis (**sentiment analysé par l'IA**) |
+| GET | `/api/restaurants/{id}/analyse-avis`, `/recommandations` | connecté | **Tâches IA du module 4** (synthèse des avis, recommandations) |
+| GET / POST / DELETE | `/api/restaurants/favoris` | connecté | Module 4 : favoris |
 | POST / PUT / DELETE | `/api/accommodations`, `/api/accommodations/{id}/periods` | ADMIN | Module 5 : gestion du catalogue |
 
 Les requêtes protégées doivent contenir l'en-tête `Authorization: Bearer <jeton>`.
@@ -210,8 +215,8 @@ Si l'IA ne trouve aucun centre d'intérêt, le formulaire garde ceux des préfé
 ### Les tests
 
 Les étapes 3 des tâches IA sont testées **sans lancer Ollama** : `AiServiceTest.java` (module 1),
-`TripAiServiceTest.java` (module 2) et les tests du module 5 (`backend/src/test/.../accommodation/`).
-41 tests au total.
+`TripAiServiceTest.java` (module 2), `SentimentServiceTest.java` (module 4) et les tests du module 5
+(`backend/src/test/.../accommodation/`). 47 tests au total.
 ```
 cd backend
 mvn test

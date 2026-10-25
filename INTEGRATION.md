@@ -18,7 +18,7 @@ backend/src/main/java/com/travelmate/
 ├── users/         Module 1  Gestion des utilisateurs     (termine)
 ├── trips/         Module 2  Planification des voyages    (termine)
 ├── activities/    Module 3  Destinations et activités
-├── restaurants/   Module 4  Restaurants
+├── restaurants/   Module 4  Restaurants          (intégré)
 ├── accommodation/ Module 5  Hébergements        (intégré)
 └── itinerary/     Module 6  Itinéraire et budget
 
@@ -129,7 +129,7 @@ Dépôt : https://github.com/MouhibLafi/travelmate
 | `module-1-users` | Module 1 seul, qui est aussi le socle (security, exception, ai, styles) |
 | `module-2-trips` | **Uniquement** le code du module 2 (`trips/`) + `docs/module-2-trips.md` |
 | `module-3-activities` | **Uniquement** le code du module 3 (à créer) |
-| `module-4-restaurants` | **Uniquement** le code du module 4 (à créer) |
+| `module-4-restaurant` | **Uniquement** le code du module 4 (Oumayma) — intégré dans `main` |
 | `module-hebergements` | **Uniquement** le code du module 5 (Anas) — intégré dans `main` |
 | `module-6-itinerary` | **Uniquement** le code du module 6 (à créer) |
 
