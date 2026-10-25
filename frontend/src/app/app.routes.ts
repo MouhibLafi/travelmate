@@ -9,6 +9,8 @@ import { TripsComponent } from './trips/trips.component';
 import { RESTAURANTS_ROUTES } from './restaurants/restaurants.routes';
 import { AdminRestaurantsComponent } from './restaurants/admin-restaurants.component';
 import { DecouvrirLayoutComponent } from './decouvrir/decouvrir-layout.component';
+import { ItinerariesComponent } from './itinerary/itineraries.component';
+import { ItineraryDetailComponent } from './itinerary/itinerary-detail.component';
 
 export const routes: Routes = [
   // ----- Module 1 : utilisateurs -----
@@ -50,7 +52,9 @@ export const routes: Routes = [
     ],
   },
 
-  // ----- Module 6 : ajoutez vos routes ici, avec canActivate: [authGuard] -----
+  // ----- Module 6 : itineraire et budget (Badiss) -----
+  { path: 'itineraires', component: ItinerariesComponent, canActivate: [authGuard] },
+  { path: 'itineraires/:id', component: ItineraryDetailComponent, canActivate: [authGuard] },
 
   { path: '', redirectTo: 'preferences', pathMatch: 'full' },
   { path: '**', redirectTo: 'preferences' },

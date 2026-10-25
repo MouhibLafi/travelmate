@@ -20,7 +20,7 @@ backend/src/main/java/com/travelmate/
 ├── activites/     Module 3  Destinations et activités  (intégré)
 ├── restaurants/   Module 4  Restaurants          (intégré)
 ├── accommodation/ Module 5  Hébergements        (intégré)
-└── itinerary/     Module 6  Itinéraire et budget
+└── itinerary/     Module 6  Itinéraire et budget         (intégré)
 
 frontend/src/app/
 ├── (dossiers du module 1 : pages, services, guards, interceptors, components)
@@ -131,7 +131,7 @@ Dépôt : https://github.com/MouhibLafi/travelmate
 | `module-3-activites` | **Uniquement** le code du module 3 (Fatma) — intégré dans `main` |
 | `module-4-restaurant` | **Uniquement** le code du module 4 (Oumayma) — intégré dans `main` |
 | `module-hebergements` | **Uniquement** le code du module 5 (Anas) — intégré dans `main` |
-| `module-6-itinerary` | **Uniquement** le code du module 6 (à créer) |
+| `itineraires` | **Uniquement** le code du module 6 (Badiss) — intégré dans `main` |
 
 Une branche de module ne contient **que les dossiers de ce module** : on voit clairement le travail
 de chacun. Elle ne se lance pas seule (elle a besoin du module 1) ; c'est `main` qui assemble tout.

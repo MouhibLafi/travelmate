@@ -1,0 +1,102 @@
+@if (errorMessage) { <div class="alert alert-error"><tm-icon name="alert"></tm-icon> {{ errorMessage }}</div> }
+
+@if (summary; as s) {
+  <div class="kpis">
+    <div class="card kpi">
+      <span class="caption muted">Budget</span>
+      <strong>{{ formatEuros(s.budget) }}</strong>
+    </div>
+    <div class="card kpi">
+      <span class="caption muted">Prévu</span>
+      <strong>{{ formatEuros(s.estimatedTotal) }}</strong>
+      <span class="small" [class.over]="s.overBudget" [class.ok]="!s.overBudget">
+        {{ s.overBudget ? 'Dépassement : ' + formatEuros(-s.remainingEstimated) : 'Reste : ' + formatEuros(s.remainingEstimated) }}
+      </span>
+    </div>
+    <div class="card kpi">
+      <span class="caption muted">Déjà dépensé</span>
+      <strong>{{ formatEuros(s.spentTotal) }}</strong>
+      <span class="small" [class.over]="s.remainingActual < 0">Reste : {{ formatEuros(s.remainingActual) }}</span>
+    </div>
+  </div>
+
+  <section class="card">
+    <h3>Par catégorie</h3>
+    <div class="legend">
+      <span><i class="swatch planned"></i> Prévu</span>
+      <span><i class="swatch spent"></i> Dépensé</span>
+    </div>
+    @for (c of s.categories; track c.category) {
+      <div class="row">
+        <span class="label">{{ getTypeLabel(c.category) }}</span>
+        <div class="bars">
+          <div class="bar planned" [style.width.%]="percent(c.estimated)"></div>
+          <div class="bar spent" [style.width.%]="percent(c.spent)"></div>
+        </div>
+        <span class="values">{{ formatEuros(c.estimated) }} / {{ formatEuros(c.spent) }}</span>
+      </div>
+    } @empty {
+      <p class="muted">Rien de prévu pour le moment.</p>
+    }
+  </section>
+}
+
+<section class="card">
+  <h3>Mes dépenses</h3>
+  <p class="small muted">Notez ce que vous dépensez pendant le voyage pour suivre votre budget.</p>
+
+  <form #expenseForm="ngForm" (ngSubmit)="addExpense(expenseForm)" class="expense-form">
+    <mat-form-field appearance="outline">
+      <mat-label>Catégorie</mat-label>
+      <select matNativeControl name="category" [(ngModel)]="category">
+        @for (t of types; track t.value) {
+          <option [value]="t.value">{{ t.label }}</option>
+        }
+      </select>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Montant (€)</mat-label>
+      <input matInput type="number" min="0.01" step="0.5" name="amount" [(ngModel)]="amount" required />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Date</mat-label>
+      <input matInput type="date" name="date" [(ngModel)]="date" />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Description</mat-label>
+      <input matInput name="description" [(ngModel)]="description" placeholder="Ex. : dîner au port" />
+    </mat-form-field>
+    <div class="form-actions">
+      <button mat-flat-button type="submit" [disabled]="expenseForm.invalid">
+        <tm-icon name="plus"></tm-icon> Ajouter la dépense
+      </button>
+    </div>
+  </form>
+
+  @if (expenses.length > 0) {
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Date</th><th>Catégorie</th><th>Description</th><th class="right">Montant</th><th></th></tr>
+        </thead>
+        <tbody>
+          @for (e of expenses; track e.id) {
+            <tr>
+              <td>{{ formatDate(e.date) }}</td>
+              <td>{{ getTypeLabel(e.category) }}</td>
+              <td>{{ e.description }}</td>
+              <td class="right">{{ formatEuros(e.amount) }}</td>
+              <td class="right">
+                <button class="icon-btn danger" (click)="deleteExpense(e)" title="Supprimer" aria-label="Supprimer la dépense">
+                  <tm-icon name="trash"></tm-icon>
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  } @else {
+    <p class="muted empty-note">Aucune dépense pour le moment.</p>
+  }
+</section>

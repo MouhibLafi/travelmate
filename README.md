@@ -2,16 +2,17 @@
 
 Mini-projet *IA for Software Engineering* · Groupe 6
 
-Ce dépôt contient **le socle du projet** et cinq modules intégrés :
+Ce dépôt contient **le socle du projet** et les six modules intégrés :
 le module 1 (gestion des utilisateurs), le module 2 (planification des voyages),
 le module 3 (destinations et activités, voir [docs/module-3-activites.md](docs/module-3-activites.md)),
 le module 4 (restaurants, voir [docs/module-4-restaurant.md](docs/module-4-restaurant.md))
-et le module 5 (hébergements, voir [docs/module-5-hebergements.md](docs/module-5-hebergements.md)).
+le module 5 (hébergements, voir [docs/module-5-hebergements.md](docs/module-5-hebergements.md))
+et le module 6 (itinéraire et budget, voir [docs/module-6-itinerary.md](docs/module-6-itinerary.md)).
 **Membres du groupe : lisez [INTEGRATION.md](INTEGRATION.md) pour ajouter votre module.**
 
 Branches : `main` = intégration de tous les modules (**c'est elle qu'on lance**) ·
 `module-1-users` = module 1 seul (socle) · `module-2-trips` = module 2 seul ·
-`module-3-activites` = module 3 seul · `module-4-restaurant` = module 4 seul · `module-hebergements` = module 5 seul · une branche par module.
+`module-3-activites` = module 3 seul · `module-4-restaurant` = module 4 seul · `module-hebergements` = module 5 seul · `itineraires` = module 6 seul · une branche par module.
 
 - **Backend** : Spring Boot 3.5 (Java 21), Spring Security + JWT, JPA + MySQL (XAMPP)
 - **Frontend** : Angular 20 + Angular Material, thème de la charte TravelMate
@@ -147,6 +148,9 @@ La logique est dans `TripService` (voyages) et `TripAiService` (tâche IA).
 | GET | `/api/destinations`, `/api/activites`, `/api/categories` | connecté | Module 3 : destinations, activités (filtres, tri), catégories |
 | GET | `/api/activites/recommandations?interets=…` | connecté | **Tâche IA du module 3** (recommandation d'activités) |
 | GET / POST / DELETE | `/api/favoris` | connecté | Module 3 : activités favorites de l'utilisateur connecté |
+| GET / POST | `/api/itinerary`, `/api/itinerary/generate` | connecté | Module 6 : mes itinéraires, **tâche IA** (génération jour par jour) |
+| POST | `/api/itinerary/{id}/optimize` | connecté | **Tâche IA du module 6** : alternatives moins chères si le budget est dépassé |
+| GET / POST | `/api/itinerary/{id}/budget`, `/expenses`, `/pdf` | connecté | Module 6 : suivi du budget, dépenses, export PDF |
 | GET / POST / PUT / DELETE | `/api/admin/restaurants` | ADMIN | Module 4 : gestion du catalogue (page `/admin/restaurants`) |
 | POST / PUT / DELETE | `/api/accommodations`, `/api/accommodations/{id}/periods` | ADMIN | Module 5 : gestion du catalogue |
 
@@ -221,7 +225,7 @@ Si l'IA ne trouve aucun centre d'intérêt, le formulaire garde ceux des préfé
 
 Les étapes 3 des tâches IA sont testées **sans lancer Ollama** : `AiServiceTest.java` (module 1),
 `TripAiServiceTest.java` (module 2), `SentimentServiceTest.java` (module 4) et les tests du module 5
-(`backend/src/test/.../accommodation/`). 47 tests au total.
+(`backend/src/test/.../accommodation/`). Module 6 : 32 tests (`backend/src/test/.../itinerary/`). 79 tests au total.
 ```
 cd backend
 mvn test

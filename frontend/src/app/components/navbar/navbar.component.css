@@ -37,13 +37,13 @@ nav a:focus-visible, .logout:focus-visible, .logo:focus-visible {
    a cote de l'avatar, et on resserre les liens, pour que tout tienne sur une ligne */
 @media (max-width: 1600px) {
   .who { display: none; }
-  .inner { gap: 16px; }
-  nav { gap: 2px; }
-  nav a { padding: 0 10px; }
+  .inner { gap: 12px; }
+  nav { gap: 0; }
+  nav a { padding: 0 8px; gap: 6px; }   /* 8 a 9 liens (admin) : on gagne la place du bouton de deconnexion */
 }
 
 /* Ordinateur portable : icones seules (le nom reste en infobulle et pour les lecteurs d'ecran) */
-@media (max-width: 1360px) {
+@media (max-width: 1420px) {
   nav a span { display: none; }
   nav a { padding: 0 12px; }
 }

@@ -1,0 +1,76 @@
+<section class="card item-form">
+  <div class="card-header">
+    <span class="icon-badge"><tm-icon [name]="item ? 'edit' : 'plus'"></tm-icon></span>
+    <div>
+      <h3>{{ item ? 'Modifier l’élément' : 'Ajouter un élément' }}</h3>
+      <p class="small muted">Jour {{ day.dayNumber }} · {{ day.title }}</p>
+    </div>
+  </div>
+
+  @if (errorMessage) { <div class="alert alert-error"><tm-icon name="alert"></tm-icon> {{ errorMessage }}</div> }
+
+  <form #itemForm="ngForm" (ngSubmit)="save()">
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Type</mat-label>
+        <select matNativeControl name="type" [(ngModel)]="type" (ngModelChange)="onTypeChange()">
+          @for (t of types; track t.value) {
+            <option [value]="t.value">{{ t.label }}</option>
+          }
+        </select>
+      </mat-form-field>
+
+      @if (hasCatalog()) {
+        <mat-form-field appearance="outline">
+          <mat-label>Choisir dans le catalogue</mat-label>
+          <select matNativeControl name="refId" [(ngModel)]="refId" (ngModelChange)="onCatalogChange()">
+            <option [ngValue]="null">Hors catalogue</option>
+            @for (c of catalog; track c.id) {
+              <option [ngValue]="c.id">{{ c.name }} · {{ formatEuros(c.price) }}</option>
+            }
+          </select>
+        </mat-form-field>
+      }
+    </div>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Nom</mat-label>
+      <input matInput name="name" [(ngModel)]="name" required placeholder="Ex. : taxi pour l'aéroport" />
+    </mat-form-field>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Début</mat-label>
+        <input matInput type="time" name="startTime" [(ngModel)]="startTime" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Fin</mat-label>
+        <input matInput type="time" name="endTime" [(ngModel)]="endTime" />
+      </mat-form-field>
+    </div>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Prix unitaire (€)</mat-label>
+        <input matInput type="number" min="0" step="0.5" name="unitPrice" [(ngModel)]="unitPrice" required />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Quantité</mat-label>
+        <input matInput type="number" min="1" name="quantity" [(ngModel)]="quantity" required />
+        <mat-hint>Ex. : nombre de nuits</mat-hint>
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Notes</mat-label>
+      <textarea matInput rows="2" name="notes" [(ngModel)]="notes"></textarea>
+    </mat-form-field>
+
+    <div class="form-actions">
+      <button mat-stroked-button type="button" (click)="cancelled.emit()">Annuler</button>
+      <button mat-flat-button type="submit" [disabled]="itemForm.invalid || saving">
+        {{ saving ? 'Enregistrement…' : 'Enregistrer' }}
+      </button>
+    </div>
+  </form>
+</section>
