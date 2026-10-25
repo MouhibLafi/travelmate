@@ -11,6 +11,14 @@
   font-size: 13.5px;
 }
 
+/* Integration : bouton "Mes favoris" sous les chiffres */
+.catalogue-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 20px;
+}
+
 .catalogue-hero__stats strong {
   color: #fff;
   font-family: var(--font-titre, 'Poppins', sans-serif);

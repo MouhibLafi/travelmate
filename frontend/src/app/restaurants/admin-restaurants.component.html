@@ -1,0 +1,133 @@
+<div class="page">
+  <header class="page-header">
+    <p class="caption">Administration · Module 4</p>
+    <h1>Restaurants</h1>
+    <p>Ajoutez, modifiez et supprimez les restaurants du catalogue. Les notes viennent des avis des voyageurs.</p>
+  </header>
+
+  @if (successMessage) { <div class="alert alert-success"><tm-icon name="check"></tm-icon> {{ successMessage }}</div> }
+  @if (errorMessage) { <div class="alert alert-error"><tm-icon name="alert"></tm-icon> {{ errorMessage }}</div> }
+
+  <!-- ===================== Formulaire : ajouter ou modifier ===================== -->
+  <section class="card">
+    <div class="card-header">
+      <span class="icon-badge"><tm-icon [name]="editingId === null ? 'plus' : 'edit'"></tm-icon></span>
+      <div>
+        <h3>{{ editingId === null ? 'Ajouter un restaurant' : 'Modifier le restaurant' }}</h3>
+        <p class="small muted">Les champs marqués * sont obligatoires.</p>
+      </div>
+    </div>
+
+    <form #restaurantForm="ngForm" (ngSubmit)="enregistrer()">
+      <div class="form-row">
+        <mat-form-field>
+          <mat-label>Nom</mat-label>
+          <input matInput name="nom" [(ngModel)]="form.nom" required maxlength="120" placeholder="Dar El Jeld" />
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Cuisine</mat-label>
+          <input matInput name="cuisine" [(ngModel)]="form.cuisine" required maxlength="60"
+                 placeholder="Tunisienne" list="cuisines-existantes" />
+          <mat-hint>Choisissez une cuisine existante ou écrivez-en une nouvelle</mat-hint>
+        </mat-form-field>
+      </div>
+      <datalist id="cuisines-existantes">
+        @for (cuisine of cuisines; track cuisine) { <option [value]="cuisine"></option> }
+      </datalist>
+
+      <mat-form-field>
+        <mat-label>Description</mat-label>
+        <textarea matInput rows="2" name="description" [(ngModel)]="form.description" required maxlength="1000"
+                  placeholder="Cuisine tunisienne raffinée dans un palais de la Médina."></textarea>
+      </mat-form-field>
+
+      <div class="form-row">
+        <mat-form-field>
+          <mat-label>Adresse</mat-label>
+          <tm-icon matPrefix name="map-pin"></tm-icon>
+          <input matInput name="adresse" [(ngModel)]="form.adresse" required maxlength="200" placeholder="5 rue Dar El Jeld" />
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Ville</mat-label>
+          <input matInput name="ville" [(ngModel)]="form.ville" required maxlength="80" placeholder="Tunis" list="villes-existantes" />
+        </mat-form-field>
+      </div>
+      <datalist id="villes-existantes">
+        @for (ville of villes; track ville) { <option [value]="ville"></option> }
+      </datalist>
+
+      <div class="form-row">
+        <mat-form-field>
+          <mat-label>Prix moyen par personne (€)</mat-label>
+          <input matInput type="number" min="1" max="1000" name="prixMoyen" [(ngModel)]="form.prixMoyen" required placeholder="25" />
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Photo (adresse de l'image)</mat-label>
+          <input matInput type="url" name="imageUrl" [(ngModel)]="form.imageUrl" maxlength="500" placeholder="https://…" />
+          <mat-hint>Optionnel</mat-hint>
+        </mat-form-field>
+      </div>
+
+      <h4>Options alimentaires</h4>
+      <div class="chips">
+        @for (option of options; track option) {
+          <button type="button" class="option" [class.selected]="form.optionsAlimentaires.includes(option)"
+                  (click)="basculerOption(option)">
+            @if (form.optionsAlimentaires.includes(option)) { <tm-icon name="check" [size]="18"></tm-icon> }
+            {{ option }}
+          </button>
+        }
+      </div>
+
+      <div class="form-actions">
+        @if (editingId !== null) {
+          <button mat-stroked-button type="button" (click)="annuler()">Annuler</button>
+        }
+        <button mat-flat-button type="submit" [disabled]="restaurantForm.invalid">
+          {{ editingId === null ? 'Ajouter le restaurant' : 'Enregistrer les modifications' }}
+        </button>
+      </div>
+    </form>
+  </section>
+
+  <!-- ===================== Liste des restaurants ===================== -->
+  <section class="card">
+    <div class="list-head">
+      <h3>Catalogue ({{ restaurants.length }})</h3>
+      <mat-form-field class="search">
+        <mat-label>Rechercher</mat-label>
+        <tm-icon matPrefix name="search"></tm-icon>
+        <input matInput name="recherche" [(ngModel)]="recherche" placeholder="Nom, cuisine ou ville" />
+      </mat-form-field>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Restaurant</th><th>Cuisine</th><th>Ville</th><th>Prix moyen</th><th>Note</th><th class="actions">Actions</th></tr>
+        </thead>
+        <tbody>
+          @for (r of restaurantsFiltres; track r.id) {
+            <tr [class.editing]="editingId === r.id">
+              <td><a [routerLink]="['/restaurants', r.id]" class="nom">{{ r.nom }}</a></td>
+              <td>{{ r.cuisine }}</td>
+              <td>{{ r.ville }}</td>
+              <td>{{ r.prixMoyen }} €</td>
+              <td>{{ r.nombreAvis > 0 ? r.noteMoyenne + ' / 5 (' + r.nombreAvis + ' avis)' : 'Aucun avis' }}</td>
+              <td class="actions">
+                <button class="icon-btn" type="button" (click)="modifier(r)" title="Modifier" aria-label="Modifier le restaurant">
+                  <tm-icon name="edit"></tm-icon>
+                </button>
+                <button class="icon-btn danger" type="button" (click)="supprimer(r)" title="Supprimer" aria-label="Supprimer le restaurant">
+                  <tm-icon name="trash"></tm-icon>
+                </button>
+              </td>
+            </tr>
+          } @empty {
+            <tr><td colspan="6" class="empty">Aucun restaurant ne correspond à la recherche.</td></tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>

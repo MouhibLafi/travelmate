@@ -1,0 +1,33 @@
+/* Page admin des restaurants : styles communs de styles.scss (.page, .card, tableau, alertes) */
+.page > .alert { margin-bottom: 24px; }
+h4 { margin: 16px 0 12px; font-size: 16px; }
+form .form-actions { margin-top: 24px; }
+
+/* Options alimentaires : chips selectionnables */
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.option {
+  display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 16px;
+  border: 1px solid var(--tm-mist); border-radius: var(--radius-full); background: #fff;
+  font: 500 14px var(--font-body); color: var(--tm-ink); cursor: pointer;
+}
+.option:hover { border-color: var(--ocean-300); }
+.option.selected { background: var(--ocean-100); border-color: var(--tm-teal); color: var(--ocean-800); }
+
+/* En-tete du tableau : titre + recherche */
+.list-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.list-head h3 { margin-bottom: 8px; }
+.list-head .search { max-width: 360px; }
+
+.nom { font-weight: 600; color: var(--tm-navy); }
+tr.editing td { background: var(--ocean-50); }
+.actions { text-align: right; white-space: nowrap; }
+.empty { text-align: center; color: var(--tm-ink); padding: 32px; }
+
+.icon-btn {
+  width: 48px; height: 48px; display: inline-grid; place-items: center;
+  border: none; border-radius: var(--radius-8); background: none; color: var(--tm-teal); cursor: pointer;
+}
+.icon-btn:hover { background: var(--ocean-50); }
+.icon-btn.danger { color: var(--tm-error); }
+.icon-btn.danger:hover { background: var(--tint-error); }
+.icon-btn:focus-visible { outline: 2px solid var(--tm-teal); outline-offset: 2px; }
