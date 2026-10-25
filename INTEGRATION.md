@@ -17,7 +17,7 @@ backend/src/main/java/com/travelmate/
 ├── ai/            commun (OllamaClient : appel a llama3)
 ├── users/         Module 1  Gestion des utilisateurs     (termine)
 ├── trips/         Module 2  Planification des voyages    (termine)
-├── activities/    Module 3  Destinations et activités
+├── activites/     Module 3  Destinations et activités  (intégré)
 ├── restaurants/   Module 4  Restaurants          (intégré)
 ├── accommodation/ Module 5  Hébergements        (intégré)
 └── itinerary/     Module 6  Itinéraire et budget
@@ -25,7 +25,7 @@ backend/src/main/java/com/travelmate/
 frontend/src/app/
 ├── (dossiers du module 1 : pages, services, guards, interceptors, components)
 ├── trips/         Module 2
-├── activities/    Module 3
+├── destinations/, activites/, favoris/, recommandations/  Module 3
 ├── restaurants/   Module 4
 ├── features/accommodation/  Module 5
 └── itinerary/     Module 6
@@ -128,7 +128,7 @@ Dépôt : https://github.com/MouhibLafi/travelmate
 | `main` | **Intégration** : le socle + tous les modules + leur branchement (routes, menu). C'est la version qu'on lance et qu'on présente. |
 | `module-1-users` | Module 1 seul, qui est aussi le socle (security, exception, ai, styles) |
 | `module-2-trips` | **Uniquement** le code du module 2 (`trips/`) + `docs/module-2-trips.md` |
-| `module-3-activities` | **Uniquement** le code du module 3 (à créer) |
+| `module-3-activites` | **Uniquement** le code du module 3 (Fatma) — intégré dans `main` |
 | `module-4-restaurant` | **Uniquement** le code du module 4 (Oumayma) — intégré dans `main` |
 | `module-hebergements` | **Uniquement** le code du module 5 (Anas) — intégré dans `main` |
 | `module-6-itinerary` | **Uniquement** le code du module 6 (à créer) |

@@ -8,6 +8,7 @@ import { RegisterComponent } from './pages/register/register.component';
 import { TripsComponent } from './trips/trips.component';
 import { RESTAURANTS_ROUTES } from './restaurants/restaurants.routes';
 import { AdminRestaurantsComponent } from './restaurants/admin-restaurants.component';
+import { DecouvrirLayoutComponent } from './decouvrir/decouvrir-layout.component';
 
 export const routes: Routes = [
   // ----- Module 1 : utilisateurs -----
@@ -32,7 +33,24 @@ export const routes: Routes = [
   // Page admin du module 4 : gestion du catalogue des restaurants
   { path: 'admin/restaurants', component: AdminRestaurantsComponent, canActivate: [authGuard, adminGuard] },
 
-  // ----- Modules 3 et 6 : ajoutez vos routes ici, avec canActivate: [authGuard] -----
+  // ----- Module 3 : destinations et activites (Fatma) -----
+  // Composant parent sans adresse : garde les adresses du module (/destinations, /activites...)
+  // et ajoute un sous-menu commun a ses pages.
+  {
+    path: '',
+    component: DecouvrirLayoutComponent,
+    canActivate: [authGuard],
+    children: [
+      { path: 'destinations', loadComponent: () => import('./destinations/destinations.component').then(m => m.DestinationsComponent) },
+      { path: 'destinations/:id', loadComponent: () => import('./destinations/destination-detail/destination-detail.component').then(m => m.DestinationDetailComponent) },
+      { path: 'activites', loadComponent: () => import('./activites/activites.component').then(m => m.ActivitesComponent) },
+      { path: 'activites/:id', loadComponent: () => import('./activites/activite-detail/activite-detail.component').then(m => m.ActiviteDetailComponent) },
+      { path: 'recommandations', loadComponent: () => import('./recommandations/recommandations.component').then(m => m.RecommandationsComponent) },
+      { path: 'favoris', loadComponent: () => import('./favoris/favoris.component').then(m => m.FavorisComponent) },
+    ],
+  },
+
+  // ----- Module 6 : ajoutez vos routes ici, avec canActivate: [authGuard] -----
 
   { path: '', redirectTo: 'preferences', pathMatch: 'full' },
   { path: '**', redirectTo: 'preferences' },

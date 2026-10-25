@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { IconComponent } from '../icon/icon.component';
 
@@ -11,7 +11,12 @@ import { IconComponent } from '../icon/icon.component';
 })
 export class NavbarComponent {
 
-  constructor(public authService: AuthService) {}
+  constructor(public authService: AuthService, private router: Router) {}
+
+  // Module 3 : le lien "Destinations" reste actif sur ses 4 pages (destinations, activites, recommandations, favoris)
+  estDansDecouvrir(): boolean {
+    return /^\/(destinations|activites|recommandations|favoris)(\/|\?|$)/.test(this.router.url);
+  }
 
   // Initiales pour l'avatar, ex : "Mouhib Lafi" -> "ML"
   getInitials(): string {

@@ -33,9 +33,19 @@ nav a:focus-visible, .logout:focus-visible, .logo:focus-visible {
   outline: 2px solid var(--ocean-300); outline-offset: 2px; border-radius: 8px;
 }
 
-/* Ecran moyen : on cache le nom et le role a cote de l'avatar pour laisser la place aux liens */
-@media (max-width: 1280px) {
+/* Le menu a maintenant 7 liens (modules 1 a 5) : sous 1600px on cache le nom et le role
+   a cote de l'avatar, et on resserre les liens, pour que tout tienne sur une ligne */
+@media (max-width: 1600px) {
   .who { display: none; }
+  .inner { gap: 16px; }
+  nav { gap: 2px; }
+  nav a { padding: 0 10px; }
+}
+
+/* Ordinateur portable : icones seules (le nom reste en infobulle et pour les lecteurs d'ecran) */
+@media (max-width: 1360px) {
+  nav a span { display: none; }
+  nav a { padding: 0 12px; }
 }
 
 @media (max-width: 760px) {

@@ -2,15 +2,16 @@
 
 Mini-projet *IA for Software Engineering* · Groupe 6
 
-Ce dépôt contient **le socle du projet** et quatre modules intégrés :
+Ce dépôt contient **le socle du projet** et cinq modules intégrés :
 le module 1 (gestion des utilisateurs), le module 2 (planification des voyages),
+le module 3 (destinations et activités, voir [docs/module-3-activites.md](docs/module-3-activites.md)),
 le module 4 (restaurants, voir [docs/module-4-restaurant.md](docs/module-4-restaurant.md))
 et le module 5 (hébergements, voir [docs/module-5-hebergements.md](docs/module-5-hebergements.md)).
 **Membres du groupe : lisez [INTEGRATION.md](INTEGRATION.md) pour ajouter votre module.**
 
 Branches : `main` = intégration de tous les modules (**c'est elle qu'on lance**) ·
 `module-1-users` = module 1 seul (socle) · `module-2-trips` = module 2 seul ·
-`module-4-restaurant` = module 4 seul · `module-hebergements` = module 5 seul · une branche par module.
+`module-3-activites` = module 3 seul · `module-4-restaurant` = module 4 seul · `module-hebergements` = module 5 seul · une branche par module.
 
 - **Backend** : Spring Boot 3.5 (Java 21), Spring Security + JWT, JPA + MySQL (XAMPP)
 - **Frontend** : Angular 20 + Angular Material, thème de la charte TravelMate
@@ -143,6 +144,9 @@ La logique est dans `TripService` (voyages) et `TripAiService` (tâche IA).
 | GET / POST | `/api/restaurants/{id}/avis` | connecté | Module 4 : avis (**sentiment analysé par l'IA**) |
 | GET | `/api/restaurants/{id}/analyse-avis`, `/recommandations` | connecté | **Tâches IA du module 4** (synthèse des avis, recommandations) |
 | GET / POST / DELETE | `/api/restaurants/favoris` | connecté | Module 4 : favoris |
+| GET | `/api/destinations`, `/api/activites`, `/api/categories` | connecté | Module 3 : destinations, activités (filtres, tri), catégories |
+| GET | `/api/activites/recommandations?interets=…` | connecté | **Tâche IA du module 3** (recommandation d'activités) |
+| GET / POST / DELETE | `/api/favoris` | connecté | Module 3 : activités favorites de l'utilisateur connecté |
 | GET / POST / PUT / DELETE | `/api/admin/restaurants` | ADMIN | Module 4 : gestion du catalogue (page `/admin/restaurants`) |
 | POST / PUT / DELETE | `/api/accommodations`, `/api/accommodations/{id}/periods` | ADMIN | Module 5 : gestion du catalogue |
 
