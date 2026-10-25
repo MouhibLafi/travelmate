@@ -3,6 +3,12 @@
   <div class="tm-container hero-inner">
     <h1>{{ title() }}</h1>
     <p>Hotels, apartments, hostels and guesthouses — with an AI check that the price is fair.</p>
+    @if (isAdmin) {
+      <!-- Raccourci admin vers la gestion du catalogue (ajouter, modifier, supprimer) -->
+      <a mat-flat-button class="manage" routerLink="/accommodations/admin">
+        <mat-icon>edit</mat-icon> Gérer les hébergements
+      </a>
+    }
     <tm-search-bar [value]="state().search" [cities]="cities()" (search)="onSearch($event)" />
   </div>
 </section>

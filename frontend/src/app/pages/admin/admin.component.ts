@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { RouterLink } from '@angular/router';
 import { IconComponent } from '../../components/icon/icon.component';
 import { Role, User } from '../../models/user.model';
 import { AdminService } from '../../services/admin.service';
@@ -11,7 +12,7 @@ import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'tm-admin',
-  imports: [FormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, IconComponent],
+  imports: [FormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, IconComponent, RouterLink],
   templateUrl: './admin.component.html',
   styleUrl: './admin.component.css',
 })

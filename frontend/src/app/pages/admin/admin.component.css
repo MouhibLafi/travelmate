@@ -4,6 +4,12 @@
 .stat strong { font: 600 28px/40px var(--font-heading); color: var(--tm-navy); }
 .stat + .stat { margin-top: 0; }
 
+/* Carte "Hebergements" : raccourci vers la gestion du catalogue (module 5) */
+.catalog .card-header { align-items: center; margin-bottom: 0; }
+.catalog .grow { flex: 1; }
+.catalog p { margin-top: 4px; }
+@media (max-width: 760px) { .catalog .card-header { flex-wrap: wrap; } }
+
 .search { display: flex; gap: 16px; align-items: flex-start; }
 .search mat-form-field { flex: 1; max-width: 480px; }
 .search button { margin-top: 32px; }   /* aligne avec le champ (label au-dessus : 28px + 4px) */

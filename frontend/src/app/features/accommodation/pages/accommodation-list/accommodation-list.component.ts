@@ -1,6 +1,7 @@
 import { Component, DestroyRef, OnInit, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router, RouterLink } from '@angular/router';
+import { AuthService } from '../../../../services/auth.service';
 import { catchError, map, of, switchMap, tap } from 'rxjs';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
@@ -30,7 +31,7 @@ const DEFAULT_SIZE = 12;
 @Component({
   selector: 'tm-accommodation-list',
   standalone: true,
-  imports: [MatPaginatorModule, MatSelectModule, MatFormFieldModule, MatButtonModule, MatIconModule,
+  imports: [MatPaginatorModule, MatSelectModule, MatFormFieldModule, MatButtonModule, MatIconModule, RouterLink,
     SearchBarComponent, FiltersPanelComponent, AccommodationCardComponent, SkeletonCardComponent],
   templateUrl: './accommodation-list.component.html',
   styleUrl: './accommodation-list.component.scss',
@@ -41,6 +42,9 @@ export class AccommodationListComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
+
+  // Integration avec le module 1 : seul un admin voit le bouton de gestion du catalogue
+  readonly isAdmin = inject(AuthService).isAdmin();
 
   readonly sortOptions = [
     { value: 'pricePerNight,asc', label: 'Price: low to high' },
