@@ -1,0 +1,68 @@
+<section class="page-hero favoris-hero">
+  <div class="container">
+    <span class="eyebrow on-dark">Votre sélection</span>
+    <h1>Vos tables préférées.</h1>
+    <p class="lead">
+      Retrouvez ici les restaurants que vous avez mis de côté pour votre prochain voyage
+      ou votre prochaine soirée.
+    </p>
+    <span class="badge badge-coral favoris-hero__compteur">
+      {{ favoris.nombre() }} favori{{ favoris.nombre() > 1 ? 's' : '' }}
+    </span>
+  </div>
+</section>
+
+<div class="container favoris-page">
+  @if (chargement()) {
+    <div class="grille" aria-busy="true" aria-label="Chargement des favoris">
+      @for (n of [1, 2, 3]; track n) {
+        <div class="skeleton-card">
+          <div class="skeleton skeleton-card__image"></div>
+          <div class="skeleton-card__body">
+            <div class="skeleton skeleton-card__titre"></div>
+            <div class="skeleton skeleton-card__ligne"></div>
+            <div class="skeleton skeleton-card__ligne skeleton-card__ligne--longue"></div>
+          </div>
+        </div>
+      }
+    </div>
+  } @else if (erreur()) {
+    <div class="empty-state">
+      <div class="empty-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+          <path d="M12 9v4m0 4h.01M10.3 3.9 2.5 17.4A2 2 0 0 0 4.2 20h15.6a2 2 0 0 0 1.7-2.6L13.7 3.9a2 2 0 0 0-3.4 0Z" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </div>
+      <h2>Favoris indisponibles</h2>
+      <p>{{ erreur() }}</p>
+      <button type="button" class="btn btn-primary" (click)="charger()">Réessayer</button>
+    </div>
+  } @else if (visibles().length === 0) {
+    <div class="empty-state">
+      <div class="empty-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+          <path d="M12 20.7 4.8 13.9a4.9 4.9 0 0 1 0-7.1 5.2 5.2 0 0 1 7.2 0 5.2 5.2 0 0 1 7.2 0 4.9 4.9 0 0 1 0 7.1Z" stroke-linejoin="round" />
+        </svg>
+      </div>
+      <h2>Aucun favori pour le moment</h2>
+      <p>
+        Parcourez le catalogue et cliquez sur le cœur d'un restaurant pour le retrouver ici.
+      </p>
+      <a class="btn btn-primary" routerLink="/restaurants">Explorer les restaurants</a>
+    </div>
+  } @else {
+    <div class="favoris-entete">
+      <h2 class="section-title">Votre carnet de bonnes adresses</h2>
+      <p class="muted small">
+        {{ visibles().length }} adresse{{ visibles().length > 1 ? 's' : '' }} enregistrée{{ visibles().length > 1 ? 's' : '' }}.
+        Cliquez à nouveau sur un cœur pour retirer un restaurant.
+      </p>
+    </div>
+
+    <div class="grille">
+      @for (restaurant of visibles(); track restaurant.id) {
+        <tm-restaurant-card [restaurant]="restaurant" />
+      }
+    </div>
+  }
+</div>

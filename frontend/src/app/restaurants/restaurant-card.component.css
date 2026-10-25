@@ -1,0 +1,253 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+.resto-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  background: #fff;
+  border: 1px solid var(--tm-mist);
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+}
+
+.resto-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--kelp-200);
+  box-shadow: var(--shadow-lg);
+}
+
+.resto-card__media {
+  position: relative;
+  display: block;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: var(--kelp-100);
+}
+
+.resto-card__media-lien {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.resto-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.resto-card:hover .resto-card__media img {
+  transform: scale(1.05);
+}
+
+.resto-card__fallback {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  font-family: var(--font-titre);
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--kelp-600);
+  background: linear-gradient(135deg, var(--kelp-100), var(--kelp-200));
+}
+
+.resto-card__cuisine,
+.resto-card__prix {
+  position: absolute;
+  top: 12px;
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 600;
+  backdrop-filter: blur(6px);
+}
+
+.resto-card__cuisine {
+  left: 12px;
+  color: var(--kelp-800);
+  background: rgb(255 255 255 / 0.92);
+}
+
+.resto-card__prix {
+  right: 56px;
+  color: #fff;
+  background: rgb(18 38 58 / 0.78);
+}
+
+.resto-card__favori {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  color: var(--kelp-800);
+  background: rgb(255 255 255 / 0.92);
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: color 0.18s ease, transform 0.18s ease;
+}
+
+.resto-card__favori:hover {
+  transform: scale(1.08);
+}
+
+.resto-card__favori.est-favori {
+  color: var(--coral);
+}
+
+.resto-card__favori svg {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+  stroke-width: 1.9;
+  stroke-linejoin: round;
+}
+
+.resto-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+  padding: 18px 20px 20px;
+}
+
+.resto-card__top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.resto-card__titre {
+  font-family: var(--font-titre);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.resto-card__titre:hover {
+  color: var(--kelp-600);
+  text-decoration: none;
+}
+
+.resto-card__note {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--kelp-800);
+}
+
+.resto-card__note svg {
+  width: 15px;
+  height: 15px;
+  fill: var(--warning);
+}
+
+.resto-card__note small {
+  font-weight: 400;
+  color: var(--slate);
+}
+
+.resto-card__lieu {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--slate);
+}
+
+.resto-card__lieu svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+}
+
+.resto-card__desc {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  margin: 0;
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: var(--slate);
+}
+
+.resto-card__options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.resto-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: auto;
+  padding-top: 12px;
+  border-top: 1px solid var(--cloud);
+}
+
+.resto-card__budget {
+  font-size: 0.8rem;
+  color: var(--slate);
+}
+
+.resto-card__budget strong {
+  font-size: 1rem;
+  color: var(--ink);
+}
+
+.resto-card__lien {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--kelp-600);
+  text-decoration: none;
+}
+
+.resto-card__lien:hover {
+  text-decoration: none;
+}
+
+.resto-card__lien svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 0.18s ease;
+}
+
+.resto-card__lien:hover svg {
+  transform: translateX(3px);
+}

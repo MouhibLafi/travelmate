@@ -1,0 +1,80 @@
+<article class="resto-card">
+  <div class="resto-card__media">
+    <a class="resto-card__media-lien" [routerLink]="['/restaurants', restaurant.id]">
+      @if (restaurant.imageUrl) {
+        <img [src]="restaurant.imageUrl" [alt]="'Photo de ' + restaurant.nom" loading="lazy" />
+      } @else {
+        <span class="resto-card__fallback">{{ restaurant.nom.charAt(0) }}</span>
+      }
+
+      <span class="resto-card__cuisine">{{ restaurant.cuisine }}</span>
+      <span class="resto-card__prix">{{ restaurant.fourchettePrix }}</span>
+    </a>
+
+    <button
+      type="button"
+      class="resto-card__favori"
+      [class.est-favori]="favoris.estFavori(restaurant.id)"
+      [attr.aria-label]="
+        favoris.estFavori(restaurant.id)
+          ? 'Retirer ' + restaurant.nom + ' des favoris'
+          : 'Ajouter ' + restaurant.nom + ' aux favoris'
+      "
+      [attr.aria-pressed]="favoris.estFavori(restaurant.id)"
+      (click)="basculerFavori($event)"
+    >
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path
+          d="M12 20.7 4.8 13.9a4.9 4.9 0 0 1 0-7.1 5.2 5.2 0 0 1 7.2 0 5.2 5.2 0 0 1 7.2 0 4.9 4.9 0 0 1 0 7.1Z"
+          [attr.fill]="favoris.estFavori(restaurant.id) ? 'currentColor' : 'none'"
+        />
+      </svg>
+    </button>
+  </div>
+
+  <div class="resto-card__body">
+    <div class="resto-card__top">
+      <a class="resto-card__titre" [routerLink]="['/restaurants', restaurant.id]">{{ restaurant.nom }}</a>
+      <span class="resto-card__note">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="m12 2.8 2.9 5.9 6.5.9-4.7 4.6 1.1 6.5-5.8-3-5.8 3 1.1-6.5-4.7-4.6 6.5-.9Z" />
+        </svg>
+        {{ restaurant.noteMoyenne.toFixed(1) }}
+        <small>({{ restaurant.nombreAvis }})</small>
+      </span>
+    </div>
+
+    <p class="resto-card__lieu">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11Z" />
+        <circle cx="12" cy="10" r="2.6" />
+      </svg>
+      {{ restaurant.ville }} · {{ restaurant.adresse }}
+    </p>
+
+    <p class="resto-card__desc">{{ restaurant.description }}</p>
+
+    @if (restaurant.optionsAlimentaires.length) {
+      <ul class="resto-card__options">
+        @for (option of restaurant.optionsAlimentaires.slice(0, 3); track option) {
+          <li class="chip-static">{{ option }}</li>
+        }
+        @if (restaurant.optionsAlimentaires.length > 3) {
+          <li class="chip-static">+{{ restaurant.optionsAlimentaires.length - 3 }}</li>
+        }
+      </ul>
+    }
+
+    <div class="resto-card__footer">
+      <span class="resto-card__budget">
+        <strong>{{ restaurant.prixMoyen | number: '1.0-2' }} €</strong> / pers.
+      </span>
+      <a class="resto-card__lien" [routerLink]="['/restaurants', restaurant.id]">
+        Découvrir
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M5 12h14M13 6l6 6-6 6" />
+        </svg>
+      </a>
+    </div>
+  </div>
+</article>

@@ -1,0 +1,281 @@
+<section class="page-hero reco-hero">
+  <div class="container">
+    <span class="eyebrow on-dark">Module 4 · Recommandation IA</span>
+    <h1>L'IA choisit votre prochaine table.</h1>
+    <p class="lead">
+      Score, budget et sentiment des avis : chaque adresse est classée sur 100 et accompagnée
+      d'une explication claire pour vous aider à décider.
+    </p>
+    <div class="reco-hero__poids">
+      <span><strong>45 %</strong> note moyenne</span>
+      <span><strong>35 %</strong> satisfaction des avis</span>
+      <span><strong>20 %</strong> respect du budget</span>
+    </div>
+  </div>
+</section>
+
+<div class="container reco-page">
+  @if (ia.statut(); as statut) {
+    <div class="ia-statut" [class.ia-statut--off]="!statut.disponible">
+      <span class="ia-statut__pastille" [class.off]="!statut.disponible"></span>
+      <div class="ia-statut__texte">
+        <strong>{{ statut.disponible ? 'Llama 3 connecté via Ollama' : 'Mode local activé' }}</strong>
+        <p>{{ statut.message }}</p>
+      </div>
+      @if (statut.disponible) {
+        <button type="button" class="btn btn-secondary btn-sm" [disabled]="reanalyse()" (click)="reanalyser()">
+          {{ reanalyse() ? 'Réanalyse en cours…' : 'Réanalyser les avis' }}
+        </button>
+      }
+    </div>
+  } @else {
+    <div class="ia-statut">
+      <span class="ia-statut__pastille"></span>
+      <div class="ia-statut__texte">
+        <strong>Vérification de l'IA…</strong>
+        <p>Contrôle de la disponibilité d'Ollama.</p>
+      </div>
+    </div>
+  }
+
+  @if (messageReanalyse()) {
+    <div class="alert alert-success reco-alerte" role="status">{{ messageReanalyse() }}</div>
+  }
+  @if (erreurReanalyse()) {
+    <div class="alert alert-error reco-alerte" role="alert">{{ erreurReanalyse() }}</div>
+  }
+
+  <div class="reco-layout">
+    <aside class="reco-filtres card panel">
+      <span class="eyebrow on-ai">Vos préférences</span>
+      <h2>Affinez vos envies</h2>
+
+      <form class="reco-form" (submit)="lancerRecherche($event)">
+        <div class="field">
+          <label for="reco-budget">
+            Budget maximum
+            <strong class="reco-form__valeur">{{ budgetMax() }} €</strong>
+          </label>
+          <input
+            id="reco-budget"
+            type="range"
+            min="10"
+            max="60"
+            step="5"
+            [value]="budgetMax()"
+            (input)="changerBudget($any($event.target).value)"
+          />
+          <span class="muted small">Par personne · budget initialisé depuis votre profil</span>
+        </div>
+
+        <div class="field">
+          <label for="reco-cuisine">Cuisine</label>
+          <select id="reco-cuisine" class="select" (change)="cuisine.set($any($event.target).value)">
+            <option value="" [selected]="cuisine() === ''">Toutes les cuisines</option>
+            @for (item of meta()?.cuisines ?? []; track item) {
+              <option [value]="item" [selected]="cuisine() === item">{{ item }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="reco-ville">Ville</label>
+          <select id="reco-ville" class="select" (change)="ville.set($any($event.target).value)">
+            <option value="" [selected]="ville() === ''">Toutes les villes</option>
+            @for (item of meta()?.villes ?? []; track item) {
+              <option [value]="item" [selected]="ville() === item">{{ item }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="field">
+          <span class="field-label">Options alimentaires</span>
+          <div class="chips">
+            @for (option of meta()?.optionsAlimentaires ?? []; track option) {
+              <button
+                type="button"
+                class="chip"
+                [class.active]="options().includes(option)"
+                [attr.aria-pressed]="options().includes(option)"
+                (click)="basculerOption(option)"
+              >
+                {{ option }}
+              </button>
+            }
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="reco-limite">Nombre de résultats</label>
+          <select id="reco-limite" class="select" (change)="changerLimite($any($event.target).value)">
+            <option [value]="3" [selected]="limite() === 3">Top 3</option>
+            <option [value]="5" [selected]="limite() === 5">Top 5</option>
+            <option [value]="8" [selected]="limite() === 8">Top 8</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn btn-ai btn-block">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+            <path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M18.4 5.6l-2.8 2.8M8.4 15.6l-2.8 2.8" stroke-linecap="round" />
+          </svg>
+          Actualiser le classement
+        </button>
+
+        <button type="button" class="btn btn-ghost btn-sm btn-block" (click)="reinitialiser()">
+          Réinitialiser
+        </button>
+      </form>
+    </aside>
+
+    <div class="reco-resultats">
+      <div class="reco-resultats__tete">
+        <div>
+          <span class="eyebrow on-ai">Classement personnalisé</span>
+          <h2 class="section-title">Le top de l'IA pour vous</h2>
+          <p class="muted small">
+            {{ recommandations().length }} recommandation{{ recommandations().length > 1 ? 's' : '' }}
+            pour un budget de {{ budgetMax() }} € maximum.
+          </p>
+        </div>
+      </div>
+
+      @if (chargement()) {
+        <div class="reco-liste" aria-busy="true">
+          @for (n of [1, 2, 3]; track n) {
+            <div class="reco-skeleton">
+              <div class="skeleton reco-skeleton__media"></div>
+              <div class="reco-skeleton__corps">
+                <div class="skeleton reco-skeleton__titre"></div>
+                <div class="skeleton reco-skeleton__ligne"></div>
+                <div class="skeleton reco-skeleton__ligne reco-skeleton__ligne--courte"></div>
+              </div>
+            </div>
+          }
+        </div>
+      } @else if (erreur()) {
+        <div class="empty-state">
+          <div class="empty-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+              <path d="M12 9v4m0 4h.01M10.3 3.9 2.5 17.4A2 2 0 0 0 4.2 20h15.6a2 2 0 0 0 1.7-2.6L13.7 3.9a2 2 0 0 0-3.4 0Z" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </div>
+          <h2>Classement indisponible</h2>
+          <p>{{ erreur() }}</p>
+          <button type="button" class="btn btn-primary" (click)="lancerRecherche($event)">Réessayer</button>
+        </div>
+      } @else if (recommandations().length === 0) {
+        <div class="empty-state">
+          <div class="empty-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+              <path d="M4 20V10M10 20V4M16 20v-7M22 20H2" stroke-linecap="round" />
+            </svg>
+          </div>
+          <h2>Aucune correspondance</h2>
+          <p>Essayez d'augmenter votre budget ou de retirer une option alimentaire.</p>
+          <button type="button" class="btn btn-primary" (click)="reinitialiser()">Réinitialiser les critères</button>
+        </div>
+      } @else {
+        <div class="reco-liste">
+          @for (reco of recommandations(); track reco.restaurant.id; let i = $index) {
+            <article class="reco-item" [class.reco-item--top]="i === 0">
+              <span class="reco-item__rang">{{ i + 1 }}</span>
+
+              <a class="reco-item__media" [routerLink]="['/restaurants', reco.restaurant.id]">
+                @if (reco.restaurant.imageUrl) {
+                  <img [src]="reco.restaurant.imageUrl" [alt]="'Photo de ' + reco.restaurant.nom" loading="lazy" />
+                } @else {
+                  <span class="reco-item__fallback">{{ reco.restaurant.nom.charAt(0) }}</span>
+                }
+              </a>
+
+              <div class="reco-item__corps">
+                <div class="reco-item__entete">
+                  <div class="reco-item__infos">
+                    <div class="reco-item__badges">
+                      @if (i === 0) {
+                        <span class="badge badge-coral">Meilleur choix</span>
+                      }
+                      <span class="badge badge-teal">{{ reco.restaurant.cuisine }}</span>
+                      <span class="badge badge-muted">{{ reco.restaurant.ville }}</span>
+                    </div>
+                    <h3>
+                      <a [routerLink]="['/restaurants', reco.restaurant.id]">{{ reco.restaurant.nom }}</a>
+                    </h3>
+                    <p class="muted small">
+                      {{ reco.restaurant.prixMoyen.toFixed(0) }} € / pers. ·
+                      {{ reco.restaurant.fourchettePrix }} ·
+                      {{ reco.restaurant.noteMoyenne.toFixed(1) }} ★
+                      ({{ reco.restaurant.nombreAvis }} avis)
+                    </p>
+                  </div>
+
+                  <div class="reco-item__score">
+                    <strong>{{ (reco.score * 100).toFixed(0) }}</strong>
+                    <span>score / 100</span>
+                  </div>
+                </div>
+
+                <p class="reco-item__raison">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                    <path d="M12 3v4M12 17v4M3 12h4M17 12h4" stroke-linecap="round" />
+                    <circle cx="12" cy="12" r="3.2" />
+                  </svg>
+                  {{ reco.raison }}
+                </p>
+
+                <div class="reco-item__pied">
+                  <span [class]="reco.dansBudget ? 'badge badge-success' : 'badge badge-warning'">
+                    {{ reco.dansBudget ? 'Dans votre budget' : 'Légèrement au-dessus' }}
+                  </span>
+                  <a class="btn btn-secondary btn-sm" [routerLink]="['/restaurants', reco.restaurant.id]">
+                    Voir la fiche
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                      <path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                  </a>
+                </div>
+              </div>
+            </article>
+          }
+        </div>
+      }
+
+      <section class="card panel methode">
+        <span class="eyebrow on-ai">Transparence</span>
+        <h2>Comment le score est calculé</h2>
+        <p class="muted small methode__intro">
+          Chaque restaurant obtient une note sur 100 grâce à trois critères pondérés.
+        </p>
+
+        <div class="methode__grille">
+          <div class="methode__critere">
+            <div class="methode__titre">
+              <strong>Note moyenne</strong>
+              <span>45 %</span>
+            </div>
+            <div class="bar"><span class="methode__barre methode__barre--note"></span></div>
+            <p>La qualité perçue par les voyageurs, sur 5 étoiles.</p>
+          </div>
+
+          <div class="methode__critere">
+            <div class="methode__titre">
+              <strong>Satisfaction des avis</strong>
+              <span>35 %</span>
+            </div>
+            <div class="bar"><span class="methode__barre methode__barre--sentiment"></span></div>
+            <p>La part d'avis positifs analysés par l'IA (Llama 3 ou moteur local).</p>
+          </div>
+
+          <div class="methode__critere">
+            <div class="methode__titre">
+              <strong>Respect du budget</strong>
+              <span>20 %</span>
+            </div>
+            <div class="bar"><span class="methode__barre methode__barre--budget"></span></div>
+            <p>Plus le prix moyen est proche de votre budget, plus le score grimpe.</p>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>

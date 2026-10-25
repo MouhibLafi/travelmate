@@ -1,0 +1,64 @@
+.favoris-hero {
+  padding-bottom: 64px;
+}
+
+.favoris-hero__compteur {
+  margin-top: 22px;
+}
+
+.favoris-page {
+  padding: 36px 0 64px;
+}
+
+.favoris-entete {
+  margin-bottom: 22px;
+}
+
+.favoris-entete p {
+  margin-top: 4px;
+}
+
+.grille {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+.skeleton-card {
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  background: #fff;
+  border: 1px solid var(--mist);
+}
+
+.skeleton-card__image {
+  aspect-ratio: 16 / 10;
+  border-radius: 0;
+}
+
+.skeleton-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px;
+}
+
+.skeleton-card__titre {
+  width: 55%;
+  height: 20px;
+}
+
+.skeleton-card__ligne {
+  width: 38%;
+  height: 13px;
+}
+
+.skeleton-card__ligne--longue {
+  width: 88%;
+}
+
+@media (max-width: 480px) {
+  .grille {
+    grid-template-columns: 1fr;
+  }
+}
