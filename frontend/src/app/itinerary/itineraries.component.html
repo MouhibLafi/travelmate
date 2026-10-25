@@ -1,0 +1,80 @@
+<div class="page">
+  <header class="page-header">
+    <p class="caption">Itinéraire et budget</p>
+    <h1>Mes itinéraires</h1>
+    <p>Un programme jour par jour pour chacun de vos voyages, avec son coût estimé et le suivi de vos dépenses.</p>
+  </header>
+
+  <!-- ===================== Bloc IA (violet = reserve a l'IA) ===================== -->
+  <section class="ai-card">
+    <div class="ai-inner">
+      <p class="ai-label"><tm-icon name="sparkles"></tm-icon> TravelMate AI</p>
+      <h3>Un itinéraire sur mesure, dans votre budget</h3>
+      <p class="ai-sub">
+        L'IA (llama3, en local) choisit les activités, les repas et l'hébergement selon vos centres d'intérêt.
+        Si le budget est dépassé, elle remplace automatiquement des éléments par des options moins chères.
+      </p>
+      @if (generatingTripId !== null) {
+        <mat-progress-bar mode="indeterminate" class="ai-progress"></mat-progress-bar>
+        <p class="small muted">L'IA prépare votre voyage… {{ seconds }} s. Comptez 15 à 40 secondes, gardez la page ouverte.</p>
+      }
+    </div>
+  </section>
+
+  @if (errorMessage) { <div class="alert alert-error"><tm-icon name="alert"></tm-icon> {{ errorMessage }}</div> }
+
+  @if (loading) {
+    <div class="center-loader">Chargement…</div>
+  } @else {
+    <h2 class="list-title">Mes voyages ({{ trips.length }})</h2>
+    <div class="trip-grid">
+      @for (trip of trips; track trip.id) {
+        @let it = itineraryByTrip[trip.id];
+        <article class="card trip-card">
+          <p class="caption trip-caption"><tm-icon name="compass"></tm-icon> {{ trip.destination }}</p>
+          <h3>{{ getDuration(trip) }} jours à {{ trip.destination }}</h3>
+          <p class="trip-meta">
+            <tm-icon name="calendar"></tm-icon> {{ formatRange(trip) }}
+            @if (trip.budget) { · {{ formatEuros(trip.budget) }} }
+          </p>
+          <div class="chips">
+            @for (interest of trip.interests; track interest) {
+              <span class="chip chip-cloud">{{ getInterestLabel(interest) }}</span>
+            }
+          </div>
+
+          @if (it) {
+            <p class="status" [class.over]="it.overBudget">
+              <tm-icon name="wallet"></tm-icon>
+              Prévu : {{ formatEuros(it.totalEstimatedCost) }} sur {{ formatEuros(it.budget) }}
+              · {{ it.overBudget ? 'budget dépassé' : 'dans le budget' }}
+            </p>
+            @if (!it.generatedByAi) {
+              <span class="chip chip-navy" title="Ollama était indisponible : plan construit par des règles simples">Plan sans IA</span>
+            }
+          }
+
+          <div class="trip-actions">
+            @if (generatingTripId === trip.id) {
+              <button mat-flat-button class="btn-ai" disabled>
+                <tm-icon name="sparkles"></tm-icon> Préparation… {{ seconds }} s
+              </button>
+            } @else if (it) {
+              <button mat-stroked-button (click)="generate(trip)" [disabled]="generatingTripId !== null">Régénérer</button>
+              <a mat-flat-button [routerLink]="['/itineraires', it.id]">Voir l'itinéraire</a>
+            } @else {
+              <button mat-flat-button class="btn-ai" (click)="generate(trip)" [disabled]="generatingTripId !== null">
+                <tm-icon name="sparkles"></tm-icon> Générer avec l'IA
+              </button>
+            }
+          </div>
+        </article>
+      } @empty {
+        <section class="card empty">
+          <span class="icon-badge"><tm-icon name="map-pin"></tm-icon></span>
+          <p>Aucun voyage pour le moment. Créez d'abord un voyage dans <a routerLink="/voyages">Mes voyages</a>.</p>
+        </section>
+      }
+    </div>
+  }
+</div>

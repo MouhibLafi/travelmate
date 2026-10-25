@@ -1,0 +1,85 @@
+/* Le bloc IA (.ai-card, .suggestion, .btn-ai...) est dans styles.scss */
+.back { display: inline-block; margin-bottom: var(--space-16); color: var(--ocean-300); }
+.page > .alert { margin-bottom: var(--space-24); }
+
+/* ----- Resume du budget ----- */
+.summary { margin-bottom: var(--space-24); }
+.summary-head { display: flex; justify-content: space-between; align-items: center; gap: var(--space-12); flex-wrap: wrap; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip tm-icon { color: var(--tm-violet); margin-right: 4px; }
+.actions { display: flex; gap: var(--space-8); flex-wrap: wrap; }
+
+.figures { display: flex; gap: var(--space-24); flex-wrap: wrap; margin: var(--space-24) 0 var(--space-8); }
+.figures strong { color: var(--tm-navy); }
+.figures .over, .figures .over strong { color: var(--tm-error); }
+
+.gauge { height: 10px; border-radius: var(--radius-full); background: var(--ocean-50); overflow: hidden; }
+.gauge span { display: block; height: 100%; background: var(--tm-teal); transition: width .4s; }
+.gauge span.over { background: var(--tm-error); }
+.summary .small { margin-top: var(--space-8); }
+
+/* ----- Resultat de l'IA ----- */
+.suggestion-head { display: flex; justify-content: space-between; align-items: center; gap: var(--space-12); }
+.swaps { list-style: none; margin: var(--space-16) 0 0; padding: 0; display: grid; gap: var(--space-12); }
+.swaps li { padding-bottom: var(--space-12); border-bottom: 1px solid var(--tint-ai-line); }
+.swaps li:last-child { border-bottom: none; }
+.swaps .explanation { margin-top: var(--space-4); }
+.saving { margin-left: var(--space-8); font-weight: 600; color: var(--tm-success); }
+
+/* ----- Onglets ----- */
+.tabs { display: flex; gap: var(--space-8); margin: var(--space-32) 0 var(--space-16); border-bottom: 1px solid var(--tm-mist); }
+.tabs button {
+  border: none; background: none; padding: var(--space-12) var(--space-16); cursor: pointer;
+  font: 500 16px var(--font-body); color: var(--tm-ink); border-bottom: 2px solid transparent; margin-bottom: -1px;
+}
+.tabs button.active { color: var(--tm-teal); border-bottom-color: var(--tm-teal); font-weight: 600; }
+.tabs button:focus-visible { outline: 2px solid var(--tm-teal); outline-offset: 2px; }
+
+/* ----- Journees ----- */
+.day-head { display: flex; justify-content: space-between; align-items: flex-start; gap: var(--space-12);
+  padding-bottom: var(--space-12); border-bottom: 1px solid var(--tm-mist); }
+.day-date { margin-top: var(--space-4); text-transform: capitalize; }
+.day-cost { font: 600 18px var(--font-heading); color: var(--tm-teal); white-space: nowrap; }
+
+.timeline { list-style: none; margin: 0; padding: 0; }
+.timeline li {
+  display: grid; grid-template-columns: 56px 14px 1fr auto auto; gap: var(--space-12); align-items: start;
+  padding: var(--space-12) 0; border-bottom: 1px solid var(--tm-cloud);
+}
+.time { font-weight: 600; color: var(--tm-navy); display: flex; flex-direction: column; }
+.time small { font-weight: 400; color: var(--tm-ink); }
+.dot { width: 12px; height: 12px; margin-top: 5px; border-radius: 50%; background: var(--ocean-300); }
+.name { font-weight: 500; }
+.notes { margin-top: var(--space-4); font-size: 14px; font-style: italic; color: var(--tm-ink); }
+.cost { text-align: right; font-weight: 600; white-space: nowrap; display: flex; flex-direction: column; }
+.cost small { font-weight: 400; font-size: 12px; }
+.item-actions { display: flex; gap: var(--space-4); }
+.add { margin-top: var(--space-16); }
+
+/* Couleur par type d'element : teal = activite, coral = restaurant, navy = hebergement (charte) */
+.type-badge {
+  display: inline-block; margin-right: var(--space-8); padding: 2px 8px; border-radius: var(--radius-full);
+  font-size: 11px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; vertical-align: middle;
+  background: var(--ocean-300); color: var(--tm-navy);
+}
+.type-badge[data-type='ACTIVITE'] { background: var(--tm-teal); color: #fff; }
+.type-badge[data-type='RESTAURANT'] { background: var(--tm-coral); color: var(--tm-navy); }
+.type-badge[data-type='HEBERGEMENT'] { background: var(--tm-navy); color: #fff; }
+.type-badge[data-type='TRANSPORT'] { background: var(--tm-mist); color: var(--tm-navy); }
+.dot[data-type='ACTIVITE'] { background: var(--tm-teal); }
+.dot[data-type='RESTAURANT'] { background: var(--tm-coral); }
+.dot[data-type='HEBERGEMENT'] { background: var(--tm-navy); }
+.dot[data-type='TRANSPORT'] { background: var(--tm-slate); }
+
+.icon-btn { width: 40px; height: 40px; display: grid; place-items: center; border: none; border-radius: var(--radius-8);
+  background: none; color: var(--tm-teal); cursor: pointer; }
+.icon-btn:hover { background: var(--ocean-50); }
+.icon-btn.danger { color: var(--tm-error); }
+.icon-btn.danger:hover { background: var(--tint-error); }
+.icon-btn:focus-visible { outline: 2px solid var(--tm-teal); outline-offset: 2px; }
+
+@media (max-width: 720px) {
+  .timeline li { grid-template-columns: 48px 1fr auto; }
+  .dot { display: none; }
+  .item-actions { grid-column: 2 / -1; }
+}

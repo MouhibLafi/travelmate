@@ -1,0 +1,28 @@
+/* Le bloc IA (.ai-card, .ai-progress...) est dans styles.scss ; les cartes reprennent celles du module 2 */
+.page > .alert { margin-bottom: 24px; }
+
+.list-title { margin: var(--space-48) 0 var(--space-16); font-size: 22px; line-height: 32px; }
+.trip-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-24); }
+.trip-grid .card + .card { margin-top: 0; }
+
+.trip-card { display: flex; flex-direction: column; gap: var(--space-12); }
+.trip-caption { display: flex; align-items: center; gap: var(--space-8); color: var(--tm-teal); font-weight: 600; }
+.trip-card h3 { font-size: 22px; line-height: 32px; }
+.trip-meta { display: flex; align-items: center; gap: var(--space-12); font-size: 16px; line-height: 24px; }
+.trip-meta tm-icon { color: var(--tm-teal); }
+
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.trip-card .chip { height: 32px; padding: 0 var(--space-12); font-size: 13px; }
+.chip-cloud { background: var(--tm-cloud); color: var(--tm-ink); }
+.trip-card > .chip { align-self: flex-start; }
+
+.status { display: flex; align-items: center; gap: var(--space-8); font-size: 14px; font-weight: 500; color: var(--tm-success); }
+.status.over { color: var(--tm-error); }
+
+.trip-actions { display: flex; justify-content: flex-end; align-items: center; gap: var(--space-8); margin-top: auto; padding-top: var(--space-8); flex-wrap: wrap; }
+
+.empty { grid-column: 1 / -1; display: flex; align-items: center; gap: var(--space-16); }
+
+@media (max-width: 720px) {
+  .trip-grid { grid-template-columns: 1fr; }
+}

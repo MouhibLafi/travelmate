@@ -1,0 +1,40 @@
+:host { display: flex; flex-direction: column; gap: var(--space-24); }
+:host .card + .card { margin-top: 0; }
+
+.kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-16); }
+.kpi { display: flex; flex-direction: column; gap: var(--space-4); }
+.kpi strong { font: 600 24px/32px var(--font-heading); color: var(--tm-navy); }
+.over { color: var(--tm-error); font-weight: 600; }
+.ok { color: var(--tm-ink); }
+
+.legend { display: flex; gap: var(--space-16); font-size: 14px; margin: var(--space-8) 0 var(--space-16); }
+.swatch { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 6px; vertical-align: middle; }
+.planned { background: var(--tm-teal); }
+.spent { background: var(--tm-coral); }
+
+.row { display: grid; grid-template-columns: 120px 1fr 190px; align-items: center; gap: var(--space-12); padding: 6px 0; }
+.label { font-size: 14px; font-weight: 600; color: var(--tm-navy); }
+.bars { display: flex; flex-direction: column; gap: 4px; }
+.bar { height: 10px; border-radius: var(--radius-full); min-width: 2px; transition: width .4s; }
+.values { text-align: right; font-size: 14px; }
+
+.expense-form { display: grid; grid-template-columns: 1fr 1fr 1fr 2fr; gap: 0 var(--space-12); }
+.expense-form .form-actions { grid-column: 1 / -1; }
+
+table { width: 100%; border-collapse: collapse; margin-top: var(--space-16); font-size: 14px; }
+th, td { padding: 8px; border-bottom: 1px solid var(--tm-mist); text-align: left; }
+th { font-weight: 600; color: var(--tm-navy); }
+.right { text-align: right; }
+.empty-note { margin-top: var(--space-16); }
+
+.icon-btn { width: 40px; height: 40px; display: inline-grid; place-items: center; border: none; border-radius: var(--radius-8);
+  background: none; cursor: pointer; }
+.icon-btn.danger { color: var(--tm-error); }
+.icon-btn.danger:hover { background: var(--tint-error); }
+
+@media (max-width: 720px) {
+  .kpis { grid-template-columns: 1fr; }
+  .row { grid-template-columns: 90px 1fr; }
+  .values { grid-column: 1 / -1; text-align: left; }
+  .expense-form { grid-template-columns: 1fr; }
+}

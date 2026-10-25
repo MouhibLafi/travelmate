@@ -1,0 +1,890 @@
+{
+ "activities": [
+  {
+   "id": 101,
+   "destination": "Rome",
+   "name": "Colosseum & Roman Forum guided tour",
+   "category": "HISTOIRE",
+   "price": 55,
+   "durationMinutes": 180,
+   "rating": 4.8
+  },
+  {
+   "id": 102,
+   "destination": "Rome",
+   "name": "Colosseum self-guided ticket",
+   "category": "HISTOIRE",
+   "price": 18,
+   "durationMinutes": 120,
+   "rating": 4.5
+  },
+  {
+   "id": 103,
+   "destination": "Rome",
+   "name": "Vatican Museums & Sistine Chapel",
+   "category": "CULTURE",
+   "price": 30,
+   "durationMinutes": 210,
+   "rating": 4.7
+  },
+  {
+   "id": 104,
+   "destination": "Rome",
+   "name": "Pantheon visit",
+   "category": "HISTOIRE",
+   "price": 5,
+   "durationMinutes": 45,
+   "rating": 4.6
+  },
+  {
+   "id": 105,
+   "destination": "Rome",
+   "name": "Trastevere food tour",
+   "category": "GASTRONOMIE",
+   "price": 89,
+   "durationMinutes": 240,
+   "rating": 4.9
+  },
+  {
+   "id": 106,
+   "destination": "Rome",
+   "name": "Pasta-making class",
+   "category": "GASTRONOMIE",
+   "price": 65,
+   "durationMinutes": 180,
+   "rating": 4.8
+  },
+  {
+   "id": 107,
+   "destination": "Rome",
+   "name": "Trevi Fountain & Spanish Steps walk",
+   "category": "CULTURE",
+   "price": 0,
+   "durationMinutes": 90,
+   "rating": 4.4
+  },
+  {
+   "id": 108,
+   "destination": "Rome",
+   "name": "Borghese Gallery",
+   "category": "CULTURE",
+   "price": 22,
+   "durationMinutes": 120,
+   "rating": 4.7
+  },
+  {
+   "id": 109,
+   "destination": "Rome",
+   "name": "Catacombs of San Callisto",
+   "category": "HISTOIRE",
+   "price": 10,
+   "durationMinutes": 90,
+   "rating": 4.5
+  },
+  {
+   "id": 110,
+   "destination": "Rome",
+   "name": "Vespa tour of Rome",
+   "category": "AVENTURE",
+   "price": 120,
+   "durationMinutes": 180,
+   "rating": 4.8
+  },
+  {
+   "id": 121,
+   "destination": "Paris",
+   "name": "Louvre Museum",
+   "category": "CULTURE",
+   "price": 22,
+   "durationMinutes": 240,
+   "rating": 4.7
+  },
+  {
+   "id": 122,
+   "destination": "Paris",
+   "name": "Eiffel Tower summit",
+   "category": "DETENTE",
+   "price": 36,
+   "durationMinutes": 120,
+   "rating": 4.6
+  },
+  {
+   "id": 123,
+   "destination": "Paris",
+   "name": "Seine dinner cruise",
+   "category": "DETENTE",
+   "price": 110,
+   "durationMinutes": 150,
+   "rating": 4.5
+  },
+  {
+   "id": 124,
+   "destination": "Paris",
+   "name": "Seine sightseeing cruise",
+   "category": "DETENTE",
+   "price": 17,
+   "durationMinutes": 60,
+   "rating": 4.4
+  },
+  {
+   "id": 125,
+   "destination": "Paris",
+   "name": "Musee d'Orsay",
+   "category": "CULTURE",
+   "price": 16,
+   "durationMinutes": 180,
+   "rating": 4.8
+  },
+  {
+   "id": 126,
+   "destination": "Paris",
+   "name": "Montmartre walking tour",
+   "category": "CULTURE",
+   "price": 0,
+   "durationMinutes": 120,
+   "rating": 4.5
+  },
+  {
+   "id": 127,
+   "destination": "Paris",
+   "name": "French pastry workshop",
+   "category": "GASTRONOMIE",
+   "price": 75,
+   "durationMinutes": 150,
+   "rating": 4.7
+  },
+  {
+   "id": 128,
+   "destination": "Paris",
+   "name": "Palace of Versailles",
+   "category": "HISTOIRE",
+   "price": 32,
+   "durationMinutes": 300,
+   "rating": 4.7
+  },
+  {
+   "id": 141,
+   "destination": "Tunis",
+   "name": "Medina of Tunis guided walk",
+   "category": "CULTURE",
+   "price": 15,
+   "durationMinutes": 150,
+   "rating": 4.6
+  },
+  {
+   "id": 142,
+   "destination": "Tunis",
+   "name": "Bardo National Museum",
+   "category": "HISTOIRE",
+   "price": 4,
+   "durationMinutes": 150,
+   "rating": 4.7
+  },
+  {
+   "id": 143,
+   "destination": "Tunis",
+   "name": "Carthage archaeological site",
+   "category": "HISTOIRE",
+   "price": 4,
+   "durationMinutes": 180,
+   "rating": 4.6
+  },
+  {
+   "id": 144,
+   "destination": "Tunis",
+   "name": "Sidi Bou Said afternoon",
+   "category": "CULTURE",
+   "price": 0,
+   "durationMinutes": 180,
+   "rating": 4.8
+  },
+  {
+   "id": 145,
+   "destination": "Tunis",
+   "name": "Gammarth beach day",
+   "category": "PLAGE",
+   "price": 10,
+   "durationMinutes": 240,
+   "rating": 4.3
+  },
+  {
+   "id": 146,
+   "destination": "Tunis",
+   "name": "Souk shopping tour",
+   "category": "SHOPPING",
+   "price": 8,
+   "durationMinutes": 120,
+   "rating": 4.2
+  },
+  {
+   "id": 147,
+   "destination": "Tunis",
+   "name": "Tunisian cooking class",
+   "category": "GASTRONOMIE",
+   "price": 45,
+   "durationMinutes": 180,
+   "rating": 4.7
+  },
+  {
+   "id": 148,
+   "destination": "Tunis",
+   "name": "Boat trip in the Gulf of Tunis",
+   "category": "PLAGE",
+   "price": 60,
+   "durationMinutes": 240,
+   "rating": 4.4
+  },
+  {
+   "id": 160,
+   "destination": "Djerba",
+   "name": "Plage de Sidi Mahrez",
+   "category": "PLAGE",
+   "price": 0,
+   "durationMinutes": 240,
+   "rating": 4.6
+  },
+  {
+   "id": 161,
+   "destination": "Djerba",
+   "name": "Synagogue de la Ghriba",
+   "category": "HISTOIRE",
+   "price": 3,
+   "durationMinutes": 60,
+   "rating": 4.5
+  },
+  {
+   "id": 162,
+   "destination": "Djerba",
+   "name": "Djerbahood, street art à Erriadh",
+   "category": "CULTURE",
+   "price": 0,
+   "durationMinutes": 90,
+   "rating": 4.6
+  },
+  {
+   "id": 163,
+   "destination": "Djerba",
+   "name": "Souk de Houmt Souk",
+   "category": "SHOPPING",
+   "price": 0,
+   "durationMinutes": 120,
+   "rating": 4.4
+  },
+  {
+   "id": 164,
+   "destination": "Djerba",
+   "name": "Musée Guellala",
+   "category": "CULTURE",
+   "price": 8,
+   "durationMinutes": 90,
+   "rating": 4.3
+  },
+  {
+   "id": 165,
+   "destination": "Djerba",
+   "name": "Sortie en bateau à l'île aux flamants",
+   "category": "PLAGE",
+   "price": 30,
+   "durationMinutes": 360,
+   "rating": 4.4
+  },
+  {
+   "id": 166,
+   "destination": "Djerba",
+   "name": "Balade à cheval sur la plage",
+   "category": "AVENTURE",
+   "price": 25,
+   "durationMinutes": 90,
+   "rating": 4.5
+  },
+  {
+   "id": 167,
+   "destination": "Djerba",
+   "name": "Atelier de poterie à Guellala",
+   "category": "CULTURE",
+   "price": 12,
+   "durationMinutes": 120,
+   "rating": 4.4
+  },
+  {
+   "id": 168,
+   "destination": "Djerba",
+   "name": "Borj El Kebir (fort Ghazi Mustapha)",
+   "category": "HISTOIRE",
+   "price": 4,
+   "durationMinutes": 60,
+   "rating": 4.2
+  },
+  {
+   "id": 169,
+   "destination": "Djerba",
+   "name": "Djerba Explore et parc aux crocodiles",
+   "category": "AVENTURE",
+   "price": 15,
+   "durationMinutes": 180,
+   "rating": 4.1
+  },
+  {
+   "id": 170,
+   "destination": "Marrakech",
+   "name": "Place Jemaa el-Fna",
+   "category": "CULTURE",
+   "price": 0,
+   "durationMinutes": 120,
+   "rating": 4.6
+  },
+  {
+   "id": 171,
+   "destination": "Marrakech",
+   "name": "Jardin Majorelle",
+   "category": "CULTURE",
+   "price": 15,
+   "durationMinutes": 90,
+   "rating": 4.7
+  },
+  {
+   "id": 172,
+   "destination": "Marrakech",
+   "name": "Palais de la Bahia",
+   "category": "HISTOIRE",
+   "price": 7,
+   "durationMinutes": 75,
+   "rating": 4.5
+  },
+  {
+   "id": 173,
+   "destination": "Marrakech",
+   "name": "Souks de la médina",
+   "category": "SHOPPING",
+   "price": 0,
+   "durationMinutes": 150,
+   "rating": 4.5
+  },
+  {
+   "id": 174,
+   "destination": "Marrakech",
+   "name": "Tombeaux saadiens",
+   "category": "HISTOIRE",
+   "price": 7,
+   "durationMinutes": 60,
+   "rating": 4.4
+  },
+  {
+   "id": 175,
+   "destination": "Marrakech",
+   "name": "Medersa Ben Youssef",
+   "category": "HISTOIRE",
+   "price": 5,
+   "durationMinutes": 60,
+   "rating": 4.7
+  },
+  {
+   "id": 176,
+   "destination": "Marrakech",
+   "name": "Cours de cuisine marocaine",
+   "category": "GASTRONOMIE",
+   "price": 40,
+   "durationMinutes": 180,
+   "rating": 4.8
+  },
+  {
+   "id": 177,
+   "destination": "Marrakech",
+   "name": "Excursion dans la vallée de l'Ourika",
+   "category": "AVENTURE",
+   "price": 35,
+   "durationMinutes": 480,
+   "rating": 4.5
+  },
+  {
+   "id": 178,
+   "destination": "Marrakech",
+   "name": "Hammam traditionnel",
+   "category": "DETENTE",
+   "price": 20,
+   "durationMinutes": 90,
+   "rating": 4.4
+  },
+  {
+   "id": 179,
+   "destination": "Marrakech",
+   "name": "Ensemble Artisanal (coopérative d'artisans)",
+   "category": "SHOPPING",
+   "price": 0,
+   "durationMinutes": 60,
+   "rating": 4.2
+  }
+ ],
+ "restaurants": [
+  {
+   "id": 201,
+   "destination": "Rome",
+   "name": "La Pergola",
+   "category": "gastronomique",
+   "price": 70,
+   "durationMinutes": 120,
+   "rating": 4.9
+  },
+  {
+   "id": 202,
+   "destination": "Rome",
+   "name": "Da Enzo al 29",
+   "category": "romaine",
+   "price": 28,
+   "durationMinutes": 75,
+   "rating": 4.7
+  },
+  {
+   "id": 203,
+   "destination": "Rome",
+   "name": "Pizzarium Bonci",
+   "category": "pizzeria",
+   "price": 12,
+   "durationMinutes": 30,
+   "rating": 4.6
+  },
+  {
+   "id": 204,
+   "destination": "Rome",
+   "name": "Roscioli",
+   "category": "romaine",
+   "price": 45,
+   "durationMinutes": 90,
+   "rating": 4.7
+  },
+  {
+   "id": 205,
+   "destination": "Rome",
+   "name": "Trapizzino",
+   "category": "street food",
+   "price": 10,
+   "durationMinutes": 30,
+   "rating": 4.5
+  },
+  {
+   "id": 206,
+   "destination": "Rome",
+   "name": "Armando al Pantheon",
+   "category": "romaine",
+   "price": 40,
+   "durationMinutes": 90,
+   "rating": 4.6
+  },
+  {
+   "id": 207,
+   "destination": "Rome",
+   "name": "Mercato Testaccio stalls",
+   "category": "street food",
+   "price": 14,
+   "durationMinutes": 45,
+   "rating": 4.5
+  },
+  {
+   "id": 208,
+   "destination": "Rome",
+   "name": "Ginger (vegetarian)",
+   "category": "végétarien",
+   "price": 22,
+   "durationMinutes": 60,
+   "rating": 4.3
+  },
+  {
+   "id": 221,
+   "destination": "Paris",
+   "name": "Le Jules Verne",
+   "category": "gastronomique",
+   "price": 95,
+   "durationMinutes": 120,
+   "rating": 4.6
+  },
+  {
+   "id": 222,
+   "destination": "Paris",
+   "name": "Bouillon Chartier",
+   "category": "française",
+   "price": 20,
+   "durationMinutes": 60,
+   "rating": 4.4
+  },
+  {
+   "id": 223,
+   "destination": "Paris",
+   "name": "Le Relais de l'Entrecote",
+   "category": "française",
+   "price": 35,
+   "durationMinutes": 75,
+   "rating": 4.5
+  },
+  {
+   "id": 224,
+   "destination": "Paris",
+   "name": "L'As du Fallafel",
+   "category": "street food",
+   "price": 12,
+   "durationMinutes": 30,
+   "rating": 4.6
+  },
+  {
+   "id": 225,
+   "destination": "Paris",
+   "name": "Cafe de Flore",
+   "category": "café",
+   "price": 30,
+   "durationMinutes": 60,
+   "rating": 4.2
+  },
+  {
+   "id": 226,
+   "destination": "Paris",
+   "name": "Breizh Cafe",
+   "category": "crêperie",
+   "price": 22,
+   "durationMinutes": 60,
+   "rating": 4.5
+  },
+  {
+   "id": 241,
+   "destination": "Tunis",
+   "name": "Dar El Jeld",
+   "category": "tunisienne",
+   "price": 35,
+   "durationMinutes": 90,
+   "rating": 4.7
+  },
+  {
+   "id": 242,
+   "destination": "Tunis",
+   "name": "Fondouk El Attarine",
+   "category": "tunisienne",
+   "price": 20,
+   "durationMinutes": 75,
+   "rating": 4.5
+  },
+  {
+   "id": 243,
+   "destination": "Tunis",
+   "name": "Le Golfe (seafood)",
+   "category": "poissons",
+   "price": 30,
+   "durationMinutes": 90,
+   "rating": 4.5
+  },
+  {
+   "id": 244,
+   "destination": "Tunis",
+   "name": "Lablabi stand, Medina",
+   "category": "street food",
+   "price": 3,
+   "durationMinutes": 20,
+   "rating": 4.4
+  },
+  {
+   "id": 245,
+   "destination": "Tunis",
+   "name": "Cafe des Delices",
+   "category": "café",
+   "price": 8,
+   "durationMinutes": 60,
+   "rating": 4.6
+  },
+  {
+   "id": 246,
+   "destination": "Tunis",
+   "name": "El Ali",
+   "category": "tunisienne",
+   "price": 15,
+   "durationMinutes": 60,
+   "rating": 4.4
+  },
+  {
+   "id": 260,
+   "destination": "Djerba",
+   "name": "Restaurant Haroun",
+   "category": "poissons",
+   "price": 22,
+   "durationMinutes": 90,
+   "rating": 4.4
+  },
+  {
+   "id": 261,
+   "destination": "Djerba",
+   "name": "Fast-food Chez Mohamed, brik et fricassé",
+   "category": "street food",
+   "price": 4,
+   "durationMinutes": 30,
+   "rating": 4.5
+  },
+  {
+   "id": 262,
+   "destination": "Djerba",
+   "name": "Restaurant Ettebsi",
+   "category": "tunisienne",
+   "price": 12,
+   "durationMinutes": 75,
+   "rating": 4.5
+  },
+  {
+   "id": 263,
+   "destination": "Djerba",
+   "name": "Café Ben Damech",
+   "category": "café",
+   "price": 3,
+   "durationMinutes": 45,
+   "rating": 4.3
+  },
+  {
+   "id": 264,
+   "destination": "Djerba",
+   "name": "Restaurant Le Berbère",
+   "category": "tunisienne",
+   "price": 9,
+   "durationMinutes": 60,
+   "rating": 4.2
+  },
+  {
+   "id": 265,
+   "destination": "Djerba",
+   "name": "Pizzeria Del Mare",
+   "category": "pizzeria",
+   "price": 8,
+   "durationMinutes": 60,
+   "rating": 4.1
+  },
+  {
+   "id": 270,
+   "destination": "Marrakech",
+   "name": "Stands de grillades de Jemaa el-Fna",
+   "category": "street food",
+   "price": 6,
+   "durationMinutes": 45,
+   "rating": 4.4
+  },
+  {
+   "id": 271,
+   "destination": "Marrakech",
+   "name": "Café des Épices",
+   "category": "café",
+   "price": 9,
+   "durationMinutes": 60,
+   "rating": 4.4
+  },
+  {
+   "id": 272,
+   "destination": "Marrakech",
+   "name": "Nomad",
+   "category": "marocaine",
+   "price": 18,
+   "durationMinutes": 75,
+   "rating": 4.6
+  },
+  {
+   "id": 273,
+   "destination": "Marrakech",
+   "name": "Le Jardin",
+   "category": "marocaine",
+   "price": 16,
+   "durationMinutes": 75,
+   "rating": 4.5
+  },
+  {
+   "id": 274,
+   "destination": "Marrakech",
+   "name": "Chez Lamine, méchoui",
+   "category": "street food",
+   "price": 8,
+   "durationMinutes": 45,
+   "rating": 4.6
+  },
+  {
+   "id": 275,
+   "destination": "Marrakech",
+   "name": "Al Fassia",
+   "category": "gastronomique",
+   "price": 32,
+   "durationMinutes": 120,
+   "rating": 4.7
+  }
+ ],
+ "hotels": [
+  {
+   "id": 301,
+   "destination": "Rome",
+   "name": "Hotel Artemide (4*)",
+   "category": "hôtel",
+   "price": 210,
+   "durationMinutes": null,
+   "rating": 4.7
+  },
+  {
+   "id": 302,
+   "destination": "Rome",
+   "name": "Hotel Santa Maria (3*)",
+   "category": "hôtel",
+   "price": 140,
+   "durationMinutes": null,
+   "rating": 4.6
+  },
+  {
+   "id": 303,
+   "destination": "Rome",
+   "name": "B&B Trastevere Home",
+   "category": "chambre d'hôtes",
+   "price": 85,
+   "durationMinutes": null,
+   "rating": 4.4
+  },
+  {
+   "id": 304,
+   "destination": "Rome",
+   "name": "The Beehive Hostel",
+   "category": "auberge",
+   "price": 45,
+   "durationMinutes": null,
+   "rating": 4.3
+  },
+  {
+   "id": 321,
+   "destination": "Paris",
+   "name": "Hotel Le Marais (4*)",
+   "category": "hôtel",
+   "price": 230,
+   "durationMinutes": null,
+   "rating": 4.6
+  },
+  {
+   "id": 322,
+   "destination": "Paris",
+   "name": "Hotel Montmartre (3*)",
+   "category": "hôtel",
+   "price": 130,
+   "durationMinutes": null,
+   "rating": 4.3
+  },
+  {
+   "id": 323,
+   "destination": "Paris",
+   "name": "Studio Bastille (Airbnb)",
+   "category": "appartement",
+   "price": 95,
+   "durationMinutes": null,
+   "rating": 4.4
+  },
+  {
+   "id": 324,
+   "destination": "Paris",
+   "name": "Generator Paris Hostel",
+   "category": "auberge",
+   "price": 50,
+   "durationMinutes": null,
+   "rating": 4.1
+  },
+  {
+   "id": 341,
+   "destination": "Tunis",
+   "name": "Dar El Medina (boutique)",
+   "category": "hôtel",
+   "price": 120,
+   "durationMinutes": null,
+   "rating": 4.7
+  },
+  {
+   "id": 342,
+   "destination": "Tunis",
+   "name": "Hotel Africa (4*)",
+   "category": "hôtel",
+   "price": 75,
+   "durationMinutes": null,
+   "rating": 4.2
+  },
+  {
+   "id": 343,
+   "destination": "Tunis",
+   "name": "Dar Ya guesthouse",
+   "category": "chambre d'hôtes",
+   "price": 45,
+   "durationMinutes": null,
+   "rating": 4.5
+  },
+  {
+   "id": 344,
+   "destination": "Tunis",
+   "name": "Hotel Carlton (2*)",
+   "category": "hôtel",
+   "price": 30,
+   "durationMinutes": null,
+   "rating": 3.9
+  },
+  {
+   "id": 360,
+   "destination": "Djerba",
+   "name": "Dar Dhiafa",
+   "category": "chambre d'hôtes",
+   "price": 95,
+   "durationMinutes": null,
+   "rating": 4.7
+  },
+  {
+   "id": 361,
+   "destination": "Djerba",
+   "name": "Hôtel Erriadh",
+   "category": "hôtel",
+   "price": 38,
+   "durationMinutes": null,
+   "rating": 4.3
+  },
+  {
+   "id": 362,
+   "destination": "Djerba",
+   "name": "Auberge de jeunesse de Houmt Souk",
+   "category": "auberge",
+   "price": 14,
+   "durationMinutes": null,
+   "rating": 3.9
+  },
+  {
+   "id": 363,
+   "destination": "Djerba",
+   "name": "Houch Djerba, maison d'hôtes",
+   "category": "chambre d'hôtes",
+   "price": 30,
+   "durationMinutes": null,
+   "rating": 4.4
+  },
+  {
+   "id": 370,
+   "destination": "Marrakech",
+   "name": "Riad Yasmine",
+   "category": "chambre d'hôtes",
+   "price": 120,
+   "durationMinutes": null,
+   "rating": 4.8
+  },
+  {
+   "id": 371,
+   "destination": "Marrakech",
+   "name": "Riad Dar Anika",
+   "category": "chambre d'hôtes",
+   "price": 75,
+   "durationMinutes": null,
+   "rating": 4.6
+  },
+  {
+   "id": 372,
+   "destination": "Marrakech",
+   "name": "Equity Point Hostel",
+   "category": "auberge",
+   "price": 15,
+   "durationMinutes": null,
+   "rating": 4.1
+  },
+  {
+   "id": 373,
+   "destination": "Marrakech",
+   "name": "Hôtel Ali",
+   "category": "hôtel",
+   "price": 35,
+   "durationMinutes": null,
+   "rating": 3.9
+  }
+ ]
+}

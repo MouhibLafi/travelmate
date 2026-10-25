@@ -1,0 +1,170 @@
+<div class="page">
+  @if (errorMessage) {
+    <a routerLink="/itineraires">← Mes itinéraires</a>
+    <div class="alert alert-error"><tm-icon name="alert"></tm-icon> {{ errorMessage }}</div>
+  }
+
+  @if (itinerary; as it) {
+    <header class="page-header">
+      <a routerLink="/itineraires" class="back">← Mes itinéraires</a>
+      <p class="caption">Itinéraire</p>
+      <h1>{{ it.days.length }} jours à {{ it.destination }}</h1>
+      <p>{{ formatDate(it.startDate) }} → {{ formatDate(it.endDate) }}</p>
+    </header>
+
+    <!-- ===================== Budget : jauge et actions ===================== -->
+    <section class="card summary">
+      <div class="summary-head">
+        <div class="chips">
+          @if (it.generatedByAi) {
+            <span class="chip chip-ai"><tm-icon name="sparkles" [size]="16"></tm-icon> Généré par l'IA</span>
+          } @else {
+            <span class="chip chip-navy" title="Ollama était indisponible : plan construit par des règles simples">Plan construit sans IA</span>
+          }
+        </div>
+        <div class="actions">
+          <button mat-stroked-button (click)="downloadPdf()" [disabled]="busy !== null">
+            {{ busy === 'pdf' ? 'Export…' : 'Exporter en PDF' }}
+          </button>
+          <button mat-stroked-button (click)="regenerate()" [disabled]="busy !== null">Régénérer</button>
+          <button mat-stroked-button class="btn-danger" (click)="deleteItinerary()" [disabled]="busy !== null">
+            <tm-icon name="trash"></tm-icon> Supprimer
+          </button>
+        </div>
+      </div>
+
+      <div class="figures">
+        <span>Coût estimé <strong>{{ formatEuros(it.totalEstimatedCost) }}</strong></span>
+        <span>Budget <strong>{{ formatEuros(it.budget) }}</strong></span>
+        <span [class.over]="it.overBudget">
+          @if (it.overBudget) {
+            Dépassement <strong>{{ formatEuros(it.totalEstimatedCost - it.budget) }}</strong>
+          } @else {
+            Reste <strong>{{ formatEuros(it.budget - it.totalEstimatedCost) }}</strong>
+          }
+        </span>
+      </div>
+      <div class="gauge" role="progressbar" [attr.aria-valuenow]="budgetUsage()" aria-valuemin="0" aria-valuemax="100">
+        <span [class.over]="it.overBudget" [style.width.%]="budgetUsage() > 100 ? 100 : budgetUsage()"></span>
+      </div>
+      <p class="small muted">{{ budgetUsage().toFixed(0) }} % du budget</p>
+      @if (busy === 'regenerate') {
+        <mat-progress-bar mode="indeterminate" class="ai-progress"></mat-progress-bar>
+        <p class="small muted">L'IA prépare un nouvel itinéraire… {{ seconds }} s. Comptez 15 à 40 secondes.</p>
+      }
+    </section>
+
+    <!-- ===================== Tache IA : tenir le budget (violet = reserve a l'IA) ===================== -->
+    @if (it.overBudget || optimization) {
+      <section class="ai-card">
+        <div class="ai-inner">
+          <p class="ai-label"><tm-icon name="sparkles"></tm-icon> TravelMate AI</p>
+          @if (it.overBudget) {
+            <h3>Votre itinéraire dépasse le budget</h3>
+            <p class="ai-sub">L'IA peut remplacer des éléments par des alternatives moins chères, en gardant vos centres d'intérêt.</p>
+            <button mat-flat-button class="btn-ai" (click)="optimize()" [disabled]="busy !== null">
+              <tm-icon name="sparkles"></tm-icon> {{ busy === 'optimize' ? 'Recherche d’alternatives…' : 'Ajuster au budget' }}
+            </button>
+            @if (busy === 'optimize') {
+              <mat-progress-bar mode="indeterminate" class="ai-progress"></mat-progress-bar>
+              <p class="small muted">{{ seconds }} s. Comptez une dizaine de secondes.</p>
+            }
+          }
+
+          @if (optimization; as opt) {
+            <div class="suggestion">
+              <div class="suggestion-head">
+                <h4>{{ opt.aiUsed ? 'Budget ajusté par l’IA' : 'Budget ajusté' }}</h4>
+                <button mat-stroked-button (click)="optimization = null">Fermer</button>
+              </div>
+              <p>{{ opt.message }}</p>
+              <p class="small muted">{{ formatEuros(opt.totalBefore) }} → <strong>{{ formatEuros(opt.totalAfter) }}</strong></p>
+              @if (opt.replacements.length > 0) {
+                <ul class="swaps">
+                  @for (r of opt.replacements; track $index) {
+                    <li>
+                      <span class="type-badge" [attr.data-type]="r.type">{{ getTypeLabel(r.type) }}</span>
+                      Jour {{ r.dayNumber }} : <s>{{ r.oldName }}</s> → <strong>{{ r.newName }}</strong>
+                      <span class="saving">−{{ formatEuros(r.oldCost - r.newCost) }}</span>
+                      <p class="explanation">« {{ r.reason }} »</p>
+                    </li>
+                  }
+                </ul>
+              }
+            </div>
+          }
+        </div>
+      </section>
+    }
+
+    <!-- ===================== Onglets ===================== -->
+    <div class="tabs" role="tablist">
+      <button role="tab" [class.active]="tab === 'plan'" [attr.aria-selected]="tab === 'plan'" (click)="tab = 'plan'">
+        Jour par jour
+      </button>
+      <button role="tab" [class.active]="tab === 'budget'" [attr.aria-selected]="tab === 'budget'" (click)="tab = 'budget'">
+        Suivi du budget
+      </button>
+    </div>
+
+    @if (tab === 'plan') {
+      @for (day of it.days; track day.id) {
+        <section class="card day">
+          <div class="day-head">
+            <div>
+              <h3>Jour {{ day.dayNumber }} · {{ day.title }}</h3>
+              <p class="small muted day-date">{{ formatDay(day.date) }}</p>
+            </div>
+            <span class="day-cost">{{ formatEuros(day.dayCost) }}</span>
+          </div>
+
+          <ul class="timeline">
+            @for (item of day.items; track item.id) {
+              <li>
+                <div class="time">
+                  {{ time(item.startTime) }}
+                  @if (item.endTime) { <small>{{ time(item.endTime) }}</small> }
+                </div>
+                <span class="dot" [attr.data-type]="item.type"></span>
+                <div class="content">
+                  <p class="name">
+                    <span class="type-badge" [attr.data-type]="item.type">{{ getTypeLabel(item.type) }}</span>
+                    {{ item.name }}
+                  </p>
+                  @if (item.notes) { <p class="notes">{{ item.notes }}</p> }
+                </div>
+                <div class="cost">
+                  {{ formatEuros(item.estimatedCost) }}
+                  @if (item.quantity > 1) { <small>{{ item.quantity }} × {{ formatEuros(item.unitPrice) }}</small> }
+                </div>
+                <div class="item-actions">
+                  <button class="icon-btn" (click)="openForm(day, item)" title="Modifier" aria-label="Modifier l'élément">
+                    <tm-icon name="edit"></tm-icon>
+                  </button>
+                  <button class="icon-btn danger" (click)="deleteItem(item)" title="Retirer" aria-label="Retirer l'élément">
+                    <tm-icon name="trash"></tm-icon>
+                  </button>
+                </div>
+              </li>
+            } @empty {
+              <li class="muted">Journée libre, rien de prévu.</li>
+            }
+          </ul>
+
+          @if (formDay?.id === day.id) {
+            <tm-item-form [itineraryId]="it.id" [day]="day" [item]="formItem"
+                          (saved)="onItemSaved($event)" (cancelled)="closeForm()"></tm-item-form>
+          } @else {
+            <button mat-stroked-button class="add" (click)="openForm(day, null)">
+              <tm-icon name="plus"></tm-icon> Ajouter un élément
+            </button>
+          }
+        </section>
+      }
+    } @else {
+      <tm-budget-tracking [itinerary]="it"></tm-budget-tracking>
+    }
+  } @else if (!errorMessage) {
+    <div class="center-loader">Chargement…</div>
+  }
+</div>
