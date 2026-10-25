@@ -306,3 +306,29 @@ th { text-align: left; font: 600 12px/16px var(--font-body); text-transform: upp
 td { padding: 12px 16px; border-bottom: 1px solid var(--tm-mist); vertical-align: middle; }
 tr:last-child td { border-bottom: 0; }
 .icon-badge.danger { background: var(--tint-error); color: var(--tm-error); }
+
+/* =====================================================================
+   Module 5 (hebergements) : classes globales utilisees par ses pages
+   (elles etaient dans le styles.scss de son projet d'origine)
+   ===================================================================== */
+.tm-container { max-width: 1200px; margin: 0 auto; padding: 0 var(--space-24); }
+.tm-card { background: var(--tm-white); border-radius: var(--radius-16); box-shadow: var(--shadow-sm); overflow: hidden; }
+.tm-muted { color: var(--tm-ink); }   /* petit texte : Ink (Slate est trop clair, charte) */
+.tm-badge {
+  display: inline-flex; align-items: center; gap: var(--space-4); height: 24px; padding: 0 var(--space-8);
+  border-radius: var(--radius-full); background: var(--ocean-50); color: var(--ocean-800);
+  font: 600 12px/16px var(--font-body);
+}
+.tm-badge.coral { background: var(--tm-coral); color: var(--tm-navy); }   /* coral toujours avec texte navy */
+/* Bouton IA : degrade violet -> teal (reserve a l'IA) */
+.tm-ai-button.mat-mdc-button-base.mdc-button { background: var(--tm-ai-gradient); color: #fff; }
+.tm-ai-button.mat-mdc-button-base.mdc-button:disabled { opacity: .55; color: #fff; }
+/* Bloc gris anime pendant le chargement */
+.tm-skeleton {
+  border-radius: var(--radius-8);
+  background: linear-gradient(90deg, var(--tm-mist) 25%, var(--tm-cloud) 50%, var(--tm-mist) 75%);
+  background-size: 200% 100%;
+  animation: tm-skeleton 1.2s ease-in-out infinite;
+}
+@keyframes tm-skeleton { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+@media (max-width: 640px) { .tm-container { padding: 0 var(--space-16); } }

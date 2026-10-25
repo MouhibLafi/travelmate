@@ -1,0 +1,75 @@
+<div class="tm-container">
+  <header class="page-head">
+    <div>
+      <h1>Manage accommodations</h1>
+      <p class="tm-muted">Create, edit and delete listings, and manage their booked periods.</p>
+    </div>
+    <a mat-flat-button color="primary" routerLink="new"><mat-icon>add</mat-icon> New accommodation</a>
+  </header>
+
+  <div class="tm-card table-card">
+    <div class="table-toolbar">
+      <mat-form-field appearance="outline" subscriptSizing="dynamic" class="search">
+        <mat-icon matPrefix>search</mat-icon>
+        <mat-label>Search by name, city or country</mat-label>
+        <input matInput [formControl]="searchControl">
+      </mat-form-field>
+      <span class="tm-muted">{{ total() }} listings</span>
+    </div>
+
+    <div class="progress">@if (loading()) { <mat-progress-bar mode="indeterminate" /> }</div>
+
+    <div class="table-scroll">
+      <table mat-table [dataSource]="rows()" matSort matSortActive="createdAt" matSortDirection="desc" matSortDisableClear>
+        <ng-container matColumnDef="image">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let r"><img class="thumb" [tmImg]="r.mainImageUrl" alt=""></td>
+        </ng-container>
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+          <td mat-cell *matCellDef="let r"><a [routerLink]="['/accommodations', r.id]" class="name">{{ r.name }}</a></td>
+        </ng-container>
+        <ng-container matColumnDef="type">
+          <th mat-header-cell *matHeaderCellDef>Type</th>
+          <td mat-cell *matCellDef="let r"><span class="tm-badge">{{ typeMeta[r.type].label }}</span></td>
+        </ng-container>
+        <ng-container matColumnDef="city">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>City</th>
+          <td mat-cell *matCellDef="let r">{{ r.city }}<span class="tm-muted">, {{ r.country }}</span></td>
+        </ng-container>
+        <ng-container matColumnDef="stars">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Stars</th>
+          <td mat-cell *matCellDef="let r">{{ r.stars }}★</td>
+        </ng-container>
+        <ng-container matColumnDef="rating">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Rating</th>
+          <td mat-cell *matCellDef="let r">{{ r.rating | number: '1.1-1' }}</td>
+        </ng-container>
+        <ng-container matColumnDef="pricePerNight">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Price / night</th>
+          <td mat-cell *matCellDef="let r"><strong>{{ r.pricePerNight | currency: 'EUR' }}</strong></td>
+        </ng-container>
+        <ng-container matColumnDef="maxGuests">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Guests</th>
+          <td mat-cell *matCellDef="let r">{{ r.maxGuests }}</td>
+        </ng-container>
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let r" class="actions">
+            <button mat-icon-button matTooltip="Availability" aria-label="Availability" (click)="openAvailability(r)"><mat-icon>event</mat-icon></button>
+            <a mat-icon-button matTooltip="Edit" aria-label="Edit" [routerLink]="[r.id, 'edit']"><mat-icon>edit</mat-icon></a>
+            <button mat-icon-button matTooltip="Delete" aria-label="Delete" class="delete" (click)="confirmDelete(r)"><mat-icon>delete</mat-icon></button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="columns; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: columns"></tr>
+        <tr class="mat-row" *matNoDataRow>
+          <td class="no-data" [attr.colspan]="columns.length">{{ loading() ? 'Loading…' : 'No accommodation found.' }}</td>
+        </tr>
+      </table>
+    </div>
+
+    <mat-paginator [length]="total()" [pageSize]="10" [pageSizeOptions]="[10, 25, 50]" showFirstLastButtons />
+  </div>
+</div>

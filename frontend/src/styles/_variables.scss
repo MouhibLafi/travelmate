@@ -1,0 +1,36 @@
+// Variables SCSS du module 5 (hebergements), reliees a la charte TravelMate.
+// Utilisation dans un composant : @use '.../styles/variables' as v;  puis  color: v.$tm-teal;
+// Les valeurs sont les memes que les variables CSS de styles.scss (--tm-teal, --ocean-700...).
+
+// Couleurs de la marque
+$tm-teal: #0E7C86;          // Primary Ocean Teal
+$tm-teal-dark: #10636D;     // ocean-700 (survol)
+$tm-teal-light: #D8EFF0;    // ocean-100 (fonds selectionnes)
+$tm-navy: #12263A;          // Secondary Deep Navy
+$tm-coral: #FF6B4A;         // Accent Sunset Coral
+$tm-coral-light: color-mix(in srgb, #FF6B4A 12%, #FFFFFF);
+$tm-violet: #7C5CFF;        // AI Violet : uniquement pour l'IA
+$tm-violet-light: color-mix(in srgb, #7C5CFF 12%, #FFFFFF);
+$tm-ai-gradient: linear-gradient(90deg, #7C5CFF 0%, #0E7C86 100%);
+
+// Neutres et feedback
+$tm-text: #1F2933;          // Ink
+$tm-text-muted: #1F2933;    // Ink aussi : Slate est trop clair pour le petit texte (charte)
+$tm-border: #E4E8EE;        // Mist
+$tm-bg: #F6F8FA;            // Cloud
+$tm-success: #22A06B;
+
+// Rayons et ombres
+$tm-radius-sm: 8px;
+$tm-radius-lg: 16px;
+$tm-shadow-sm: 0 2px 4px 0 rgba(18, 38, 58, .08);
+$tm-shadow-md: 0 8px 24px 0 rgba(18, 38, 58, .12);
+$tm-shadow-lg: 0 16px 48px 0 rgba(18, 38, 58, .16);
+
+// Polices
+$tm-font-heading: 'Poppins', system-ui, sans-serif;
+$tm-font-body: 'Inter', system-ui, sans-serif;
+
+// Points de rupture (mobile / tablette)
+$tm-bp-sm: 600px;
+$tm-bp-md: 960px;

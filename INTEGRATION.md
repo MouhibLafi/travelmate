@@ -19,7 +19,7 @@ backend/src/main/java/com/travelmate/
 ├── trips/         Module 2  Planification des voyages    (termine)
 ├── activities/    Module 3  Destinations et activités
 ├── restaurants/   Module 4  Restaurants
-├── stays/         Module 5  Hébergements
+├── accommodation/ Module 5  Hébergements        (intégré)
 └── itinerary/     Module 6  Itinéraire et budget
 
 frontend/src/app/
@@ -27,7 +27,7 @@ frontend/src/app/
 ├── trips/         Module 2
 ├── activities/    Module 3
 ├── restaurants/   Module 4
-├── stays/         Module 5
+├── features/accommodation/  Module 5
 └── itinerary/     Module 6
 ```
 
@@ -130,7 +130,7 @@ Dépôt : https://github.com/MouhibLafi/travelmate
 | `module-2-trips` | **Uniquement** le code du module 2 (`trips/`) + `docs/module-2-trips.md` |
 | `module-3-activities` | **Uniquement** le code du module 3 (à créer) |
 | `module-4-restaurants` | **Uniquement** le code du module 4 (à créer) |
-| `module-5-stays` | **Uniquement** le code du module 5 (à créer) |
+| `module-hebergements` | **Uniquement** le code du module 5 (Anas) — intégré dans `main` |
 | `module-6-itinerary` | **Uniquement** le code du module 6 (à créer) |
 
 Une branche de module ne contient **que les dossiers de ce module** : on voit clairement le travail

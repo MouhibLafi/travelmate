@@ -5,8 +5,9 @@
 
 nav { display: flex; gap: 4px; flex: 1; }
 nav a {
-  display: inline-flex; align-items: center; gap: 8px; height: 48px; padding: 0 16px;
+  display: inline-flex; align-items: center; gap: 8px; height: 48px; padding: 0 12px;
   border-radius: 8px; color: var(--tm-mist); font-size: 14px; font-weight: 500;
+  white-space: nowrap;   /* un lien = une seule ligne, meme avec 5 modules dans le menu */
 }
 nav a:hover { background: rgba(255, 255, 255, .08); color: #fff; text-decoration: none; }
 /* Lien actif : teal plein, texte blanc (contraste 4,9:1) */
@@ -30,6 +31,11 @@ nav a.active { background: var(--tm-teal); color: #fff; font-weight: 600; }
 /* Focus clavier : anneau 2px decale de 2px (charte). Sur navy, teal clair (ocean-300) pour rester visible */
 nav a:focus-visible, .logout:focus-visible, .logo:focus-visible {
   outline: 2px solid var(--ocean-300); outline-offset: 2px; border-radius: 8px;
+}
+
+/* Ecran moyen : on cache le nom et le role a cote de l'avatar pour laisser la place aux liens */
+@media (max-width: 1280px) {
+  .who { display: none; }
 }
 
 @media (max-width: 760px) {

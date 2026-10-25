@@ -3,6 +3,7 @@ package com.travelmate.security;
 import com.travelmate.users.repository.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -35,6 +36,13 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/**").permitAll()          // inscription, connexion
                         .requestMatchers("/error").permitAll()                // pages d erreur de Spring
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")    // administration
+                        // Module 5 : documentation Swagger publique
+                        .requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**").permitAll()
+                        // Module 5 : seul l'admin gere le catalogue et les periodes reservees
+                        .requestMatchers(HttpMethod.POST, "/api/accommodations").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/accommodations/*").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/accommodations/*").hasRole("ADMIN")
+                        .requestMatchers("/api/accommodations/*/periods/**").hasRole("ADMIN")
                         .anyRequest().authenticated())                        // tout le reste : connecte
 
                 // Pas connecte -> 401 (au lieu d'une page de login)
@@ -59,6 +67,7 @@ public class SecurityConfig {
         config.setAllowedOrigins(List.of("http://localhost:4200"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
+        config.setExposedHeaders(List.of("Location"));   // module 5 : adresse du nouvel hebergement cree
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);

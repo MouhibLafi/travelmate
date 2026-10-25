@@ -1,0 +1,58 @@
+<aside class="tm-card filters">
+  <header>
+    <h3><mat-icon>tune</mat-icon> Filters</h3>
+    @if (activeCount()) {
+      <button mat-button color="primary" (click)="reset()">Reset ({{ activeCount() }})</button>
+    }
+  </header>
+
+  <section>
+    <h4>Price per night</h4>
+    <div class="price-values">
+      <span>{{ priceLow() | currency: 'EUR' : 'symbol' : '1.0-0' }}</span>
+      <span>{{ priceHigh() >= priceMax ? (priceMax | currency: 'EUR' : 'symbol' : '1.0-0') + '+' : (priceHigh() | currency: 'EUR' : 'symbol' : '1.0-0') }}</span>
+    </div>
+    <mat-slider min="0" [max]="priceMax" step="10" discrete class="slider">
+      <input matSliderStartThumb [ngModel]="priceLow()" (ngModelChange)="priceLow.set($event)" (change)="commitPrice()">
+      <input matSliderEndThumb [ngModel]="priceHigh()" (ngModelChange)="priceHigh.set($event)" (change)="commitPrice()">
+    </mat-slider>
+  </section>
+
+  <section>
+    <h4>Type</h4>
+    <mat-chip-listbox aria-label="Accommodation type" [value]="value().type" (change)="setType($event.value ?? null)">
+      @for (t of types; track t) {
+        <mat-chip-option [value]="t"><mat-icon matChipAvatar>{{ typeMeta[t].icon }}</mat-icon>{{ typeMeta[t].label }}</mat-chip-option>
+      }
+    </mat-chip-listbox>
+  </section>
+
+  <section>
+    <h4>Stars</h4>
+    <mat-chip-listbox aria-label="Minimum stars" [value]="value().minStars" (change)="setStars($event.value ?? null)">
+      @for (s of starOptions; track s) {
+        <mat-chip-option [value]="s">{{ s }}★ +</mat-chip-option>
+      }
+    </mat-chip-listbox>
+  </section>
+
+  <section>
+    <h4>Guest rating</h4>
+    <mat-chip-listbox aria-label="Minimum rating" [value]="value().minRating" (change)="setRating($event.value ?? null)">
+      @for (r of ratingOptions; track r) {
+        <mat-chip-option [value]="r">{{ r }} +</mat-chip-option>
+      }
+    </mat-chip-listbox>
+  </section>
+
+  <section>
+    <h4>Amenities</h4>
+    <div class="amenities">
+      @for (a of amenities; track a) {
+        <mat-checkbox color="primary" [checked]="value().amenities.includes(a)" (change)="toggleAmenity(a, $event.checked)">
+          <span class="amenity"><mat-icon>{{ amenityMeta[a].icon }}</mat-icon>{{ amenityMeta[a].label }}</span>
+        </mat-checkbox>
+      }
+    </div>
+  </section>
+</aside>

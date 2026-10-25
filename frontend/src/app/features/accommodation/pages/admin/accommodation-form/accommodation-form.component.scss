@@ -1,0 +1,30 @@
+@use '../../../../../../styles/variables' as v;
+
+.narrow { max-width: 920px; }
+.back { margin: 0 0 8px -8px; }
+h1 { font-size: 28px; margin-bottom: 12px; }
+.progress { height: 4px; margin-bottom: 12px; }
+
+.block { padding: 20px 22px 8px; margin-bottom: 18px; h2 { font-size: 17px; margin-bottom: 14px; } }
+.block-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; h2 { margin: 0; } }
+
+.grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px 16px; &.four { grid-template-columns: repeat(4, 1fr); } }
+.span-2 { grid-column: span 2; }
+.span-3 { grid-column: span 3; }
+mat-form-field { width: 100%; }
+mat-option mat-icon { color: v.$tm-teal; }
+
+mat-chip-listbox { display: block; padding-bottom: 14px; }
+
+.images { display: flex; flex-direction: column; gap: 12px; padding-bottom: 14px; }
+.image-row {
+  display: grid; grid-template-columns: 80px 1fr auto; gap: 12px; align-items: center;
+  img { width: 80px; height: 56px; object-fit: cover; border-radius: v.$tm-radius-sm; }
+}
+
+.actions { display: flex; justify-content: flex-end; gap: 12px; }
+
+@media (max-width: v.$tm-bp-sm) {
+  .grid, .grid.four { grid-template-columns: 1fr; }
+  .span-2, .span-3 { grid-column: auto; }
+}

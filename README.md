@@ -2,12 +2,14 @@
 
 Mini-projet *IA for Software Engineering* · Groupe 6
 
-Ce dépôt contient **le socle du projet** et deux modules terminés :
-le module 1 (gestion des utilisateurs) et le module 2 (planification des voyages).
+Ce dépôt contient **le socle du projet** et trois modules intégrés :
+le module 1 (gestion des utilisateurs), le module 2 (planification des voyages)
+et le module 5 (hébergements, voir [docs/module-5-hebergements.md](docs/module-5-hebergements.md)).
 **Membres du groupe : lisez [INTEGRATION.md](INTEGRATION.md) pour ajouter votre module.**
 
 Branches : `main` = intégration de tous les modules (**c'est elle qu'on lance**) ·
-`module-1-users` = module 1 seul (socle) · `module-2-trips` = module 2 seul · une branche par module.
+`module-1-users` = module 1 seul (socle) · `module-2-trips` = module 2 seul ·
+`module-hebergements` = module 5 seul · une branche par module.
 
 - **Backend** : Spring Boot 3.5 (Java 21), Spring Security + JWT, JPA + MySQL (XAMPP)
 - **Frontend** : Angular 20 + Angular Material, thème de la charte TravelMate
@@ -132,6 +134,11 @@ La logique est dans `TripService` (voyages) et `TripAiService` (tâche IA).
 | GET / POST | `/api/trips` | connecté | Module 2 : mes voyages / créer un voyage |
 | PUT / DELETE | `/api/trips/{id}` | connecté | Module 2 : modifier / supprimer un de mes voyages |
 | POST | `/api/trips/ai/fill-form` | connecté | **Tâche IA du module 2** |
+| GET | `/api/accommodations`, `/api/accommodations/{id}` | connecté | Module 5 : catalogue, recherche, filtres, détail |
+| GET | `/api/accommodations/{id}/availability`, `/booked-dates` | connecté | Module 5 : disponibilités |
+| POST | `/api/accommodations/{id}/stay-cost` | connecté | Module 5 : coût du séjour |
+| GET | `/api/accommodations/{id}/price-analysis` | connecté | **Tâche IA du module 5** (juste prix + alternatives) |
+| POST / PUT / DELETE | `/api/accommodations`, `/api/accommodations/{id}/periods` | ADMIN | Module 5 : gestion du catalogue |
 
 Les requêtes protégées doivent contenir l'en-tête `Authorization: Bearer <jeton>`.
 
@@ -202,8 +209,9 @@ Si l'IA ne trouve aucun centre d'intérêt, le formulaire garde ceux des préfé
 
 ### Les tests
 
-Les étapes 3 des deux tâches sont testées **sans lancer Ollama** (8 tests) :
-`AiServiceTest.java` (module 1) et `TripAiServiceTest.java` (module 2).
+Les étapes 3 des tâches IA sont testées **sans lancer Ollama** : `AiServiceTest.java` (module 1),
+`TripAiServiceTest.java` (module 2) et les tests du module 5 (`backend/src/test/.../accommodation/`).
+41 tests au total.
 ```
 cd backend
 mvn test

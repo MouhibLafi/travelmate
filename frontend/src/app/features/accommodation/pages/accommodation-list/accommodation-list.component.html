@@ -1,0 +1,68 @@
+@let r = result();
+<section class="hero">
+  <div class="tm-container hero-inner">
+    <h1>{{ title() }}</h1>
+    <p>Hotels, apartments, hostels and guesthouses — with an AI check that the price is fair.</p>
+    <tm-search-bar [value]="state().search" [cities]="cities()" (search)="onSearch($event)" />
+  </div>
+</section>
+
+<div class="tm-container layout">
+  <div class="filters-col" [class.open]="showFilters()">
+    <tm-filters-panel [value]="state().filters" (filtersChange)="onFilters($event)" />
+  </div>
+
+  <main class="results">
+    <div class="toolbar">
+      <div class="count">
+        @if (loading()) {
+          <span class="tm-muted">Searching…</span>
+        } @else if (r) {
+          <strong>{{ r.totalElements }}</strong> {{ r.totalElements === 1 ? 'stay' : 'stays' }} found
+        }
+      </div>
+      <button mat-stroked-button class="filters-toggle" (click)="showFilters.set(!showFilters())">
+        <mat-icon>tune</mat-icon> Filters
+      </button>
+      <mat-form-field appearance="outline" class="sort" subscriptSizing="dynamic">
+        <mat-label>Sort by</mat-label>
+        <mat-select [value]="state().sort" (selectionChange)="onSort($event.value)">
+          @for (o of sortOptions; track o.value) {
+            <mat-option [value]="o.value">{{ o.label }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    @if (loading()) {
+      <div class="grid">
+        @for (s of skeletons; track $index) { <tm-skeleton-card /> }
+      </div>
+    } @else if (failed()) {
+      <div class="tm-card empty">
+        <mat-icon class="big">cloud_off</mat-icon>
+        <h3>We couldn't load the stays</h3>
+        <p class="tm-muted">Check that the backend is running on port 8080, then try again.</p>
+        <button mat-flat-button color="primary" (click)="retry()"><mat-icon>refresh</mat-icon> Retry</button>
+      </div>
+    } @else if (r) {
+      @if (r.content.length) {
+        <div class="grid">
+          @for (a of r.content; track a.id) {
+            <tm-accommodation-card [accommodation]="a" [linkParams]="linkParams()" />
+          }
+        </div>
+        <mat-paginator
+          [length]="r.totalElements" [pageIndex]="r.page" [pageSize]="r.size"
+          [pageSizeOptions]="[6, 12, 24, 48]" showFirstLastButtons (page)="onPage($event)" />
+      } @else {
+        <div class="tm-card empty">
+          <mat-icon class="big">travel_explore</mat-icon>
+          <h3>No stay matches your search</h3>
+          <p class="tm-muted">Try other dates, a wider price range or fewer amenities.</p>
+          <button mat-flat-button color="primary" (click)="resetAll()"><mat-icon>restart_alt</mat-icon> Reset search</button>
+        </div>
+      }
+    }
+  </main>
+</div>

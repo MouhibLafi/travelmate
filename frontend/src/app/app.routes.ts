@@ -18,7 +18,14 @@ export const routes: Routes = [
   // ----- Module 2 : planification des voyages -----
   { path: 'voyages', component: TripsComponent, canActivate: [authGuard] },
 
-  // ----- Modules 3 a 6 : ajoutez vos routes ici, avec canActivate: [authGuard] -----
+  // ----- Module 5 : hebergements (pages chargees a la demande) -----
+  {
+    path: 'accommodations',
+    canActivate: [authGuard],
+    loadChildren: () => import('./features/accommodation/accommodation.routes').then(m => m.ACCOMMODATION_ROUTES),
+  },
+
+  // ----- Modules 3, 4 et 6 : ajoutez vos routes ici, avec canActivate: [authGuard] -----
 
   { path: '', redirectTo: 'preferences', pathMatch: 'full' },
   { path: '**', redirectTo: 'preferences' },
